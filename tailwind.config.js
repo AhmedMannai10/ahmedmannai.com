@@ -25,51 +25,64 @@ module.exports = {
         sans: ['var(--font-space-grotesk)', ...fontFamily.sans],
       },
       colors: {
-        // Design-inspired color palette
+        // Primary color - Orange (for buttons, links, accents)
         primary: {
-          // Orange - main accent color
-          50: '#fff7ed',
-          100: '#ffedd5',
-          200: '#fed7aa',
-          300: '#fdba74',
-          400: '#fb923c',
-          500: '#f97316', // Main orange
-          600: '#ea580c',
-          700: '#c2410c',
-          800: '#9a3412',
-          900: '#7c2d12',
-          950: '#431407',
+          50: '#fff4ed',
+          100: '#ffe4d4',
+          200: '#ffc9a8',
+          300: '#ffa471',
+          400: '#ff7f50',
+          500: '#ff6b35',
+          600: '#ff5722',
+          700: '#e64a19',
+          800: '#c43e15',
+          900: '#a03312',
+          950: '#5a1a09',
         },
-        // Dark green - main dark color
+        // Dark Green (main background)
         darkGreen: {
-          50: '#f0fdf4',
-          100: '#dcfce7',
-          200: '#bbf7d0',
-          300: '#86efac',
-          400: '#4ade80',
-          500: '#22c55e',
-          600: '#16a34a',
-          700: '#15803d',
-          800: '#166534', // Main dark green
-          900: '#14532d',
-          950: '#052e16', // Darkest green
+          50: '#f0f7f4',
+          100: '#d9ede6',
+          200: '#b7dbd0',
+          300: '#88c1b0',
+          400: '#5aa08a',
+          500: '#3d8570',
+          600: '#2d6b5a',
+          700: '#25564a',
+          800: '#21463d',
+          900: '#1d3a33',
+          950: '#0f211c',
         },
-        // Cream - light text color
+        // Cream/Beige (light backgrounds and text)
         cream: {
-          50: '#fffef9',
-          100: '#fffdf3',
-          200: '#fffbe7',
-          300: '#fff9db',
-          400: '#fff7cf',
-          500: '#f5f5dc', // Main cream
-          600: '#e8e8d0',
-          700: '#d4d4b8',
-          800: '#c0c0a0',
-          900: '#acac88',
-          950: '#989870',
+          50: '#fefdfb',
+          100: '#faf8f3',
+          200: '#f5f1e8',
+          300: '#ede5d4',
+          400: '#e2d5bc',
+          500: '#d4c2a0',
+          600: '#c4ab82',
+          700: '#b3946a',
+          800: '#947c5a',
+          900: '#7a684d',
+          950: '#413528',
         },
-        // Yellow - highlight color
-        highlight: {
+        // Brown/Tan (panels and accents)
+        brown: {
+          50: '#faf8f5',
+          100: '#f3efe8',
+          200: '#e6ddd0',
+          300: '#d4c4b0',
+          400: '#bda68b',
+          500: '#a0826d',
+          600: '#8b6f5a',
+          700: '#735a4a',
+          800: '#5f4b3f',
+          900: '#4f4037',
+          950: '#2a211c',
+        },
+        // Yellow (decorative elements, stars)
+        accentYellow: {
           50: '#fffbeb',
           100: '#fef3c7',
           200: '#fde68a',
@@ -82,6 +95,7 @@ module.exports = {
           900: '#78350f',
           950: '#451a03',
         },
+        // Keep gray for compatibility
         gray: colors.gray,
       },
       typography: ({ theme }) => ({

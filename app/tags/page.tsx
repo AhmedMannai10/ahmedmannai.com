@@ -12,9 +12,9 @@ export default async function Page() {
   const sortedTags = tagKeys.sort((a, b) => tagCounts[b] - tagCounts[a])
   return (
     <>
-      <div className="flex flex-col items-start justify-start divide-y divide-darkGreen-200 dark:divide-darkGreen-700 md:mt-24 md:flex-row md:items-center md:justify-center md:space-x-6 md:divide-y-0">
+      <div className="flex flex-col items-start justify-start divide-y divide-brown-200 dark:divide-brown-700 md:mt-24 md:flex-row md:items-center md:justify-center md:space-x-6 md:divide-y-0">
         <div className="space-x-2 pb-8 pt-6 md:space-y-5">
-          <h1 className="text-3xl font-extrabold leading-9 tracking-tight text-darkGreen-950 dark:text-cream-100 sm:text-4xl sm:leading-10 md:border-r-2 md:px-6 md:text-6xl md:leading-14">
+          <h1 className="text-3xl font-extrabold leading-9 tracking-tight text-darkGreen-900 dark:text-cream-100 sm:text-4xl sm:leading-10 md:border-r-2 md:border-brown-300 md:px-6 md:text-6xl md:leading-14 dark:md:border-brown-600">
             Tags
           </h1>
         </div>
@@ -26,7 +26,7 @@ export default async function Page() {
                 <Tag text={t} />
                 <Link
                   href={`/tags/${slug(t)}`}
-                  className="-ml-2 text-sm font-semibold uppercase text-darkGreen-600 dark:text-cream-300"
+                  className="-ml-2 text-sm font-semibold uppercase text-darkGreen-600 dark:text-cream-400"
                   aria-label={`View posts tagged ${t}`}
                 >
                   {` (${tagCounts[t]})`}
