@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import siteMetadata from '@/data/siteMetadata'
 
 async function handler(req: NextRequest) {
-  const provider = siteMetadata.newsletter?.provider
+  const provider = siteMetadata.newsletter?.provider as string | undefined
 
   // Handle Loops.so integration
   if (provider === 'loops') {

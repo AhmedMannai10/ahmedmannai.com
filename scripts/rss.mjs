@@ -1,11 +1,13 @@
-import { writeFileSync, mkdirSync } from 'fs'
+import { writeFileSync, mkdirSync, readFileSync } from 'fs'
 import path from 'path'
 import { slug } from 'github-slugger'
 import { escape } from 'pliny/utils/htmlEscaper.js'
 import siteMetadata from '../data/siteMetadata.js'
-import tagData from '../app/tag-data.json' assert { type: 'json' }
 import { allBlogs } from '../.contentlayer/generated/index.mjs'
 import { sortPosts } from 'pliny/utils/contentlayer.js'
+
+// Read tag data using fs instead of import to avoid assert syntax issues
+const tagData = JSON.parse(readFileSync('./app/tag-data.json', 'utf-8'))
 
 const generateRssItem = (config, post) => `
   <item>

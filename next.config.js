@@ -94,6 +94,22 @@ module.exports = () => {
         use: ['@svgr/webpack'],
       })
 
+      // Fix contentlayer's assert syntax after build
+      if (options.isServer && options.dev === false) {
+        const originalEntry = config.entry
+        config.entry = async () => {
+          const entries = await originalEntry()
+          // Run fix script after contentlayer generates files
+          const { execSync } = require('child_process')
+          try {
+            execSync('node ./scripts/fix-contentlayer.mjs', { stdio: 'inherit' })
+          } catch (e) {
+            // Ignore errors if .contentlayer doesn't exist yet
+          }
+          return entries
+        }
+      }
+
       return config
     },
   })
