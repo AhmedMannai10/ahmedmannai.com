@@ -11,6 +11,7 @@ import Footer from '@/components/Footer'
 import siteMetadata from '@/data/siteMetadata'
 import { ThemeProviders } from './theme-providers'
 import { Metadata } from 'next'
+import { SpeedInsights } from '@vercel/speed-insights/next'
 
 const space_grotesk = Space_Grotesk({
   subsets: ['latin'],
@@ -172,6 +173,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       />
       <body className="bg-cream-50 pl-[calc(100vw-100%)] text-darkGreen-950 antialiased dark:bg-darkGreen-950 dark:text-cream-100">
         <Analytics />
+        <SpeedInsights />
         <ThemeProviders>
           <SectionContainer>
             <div className="flex h-screen flex-col justify-between font-sans">
