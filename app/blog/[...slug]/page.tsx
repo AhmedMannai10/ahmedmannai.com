@@ -50,26 +50,37 @@ export async function generateMetadata({
     }
   })
 
+  const postUrl = `${siteMetadata.siteUrl}/${post.slug}`
+  const canonicalUrl = post.canonicalUrl || postUrl
+
   return {
     title: post.title,
     description: post.summary,
+    keywords: post.tags || siteMetadata.keywords || [],
+    authors:
+      authors.length > 0 ? authors.map((name) => ({ name })) : [{ name: siteMetadata.author }],
     openGraph: {
       title: post.title,
       description: post.summary,
       siteName: siteMetadata.title,
-      locale: 'en_US',
+      locale: siteMetadata.locale || 'en_US',
       type: 'article',
       publishedTime: publishedAt,
       modifiedTime: modifiedAt,
       url: './',
       images: ogImages,
       authors: authors.length > 0 ? authors : [siteMetadata.author],
+      tags: post.tags || [],
     },
     twitter: {
       card: 'summary_large_image',
       title: post.title,
       description: post.summary,
       images: imageList,
+      creator: siteMetadata.x ? `@${siteMetadata.x.split('/').pop()}` : undefined,
+    },
+    alternates: {
+      canonical: canonicalUrl,
     },
   }
 }
@@ -101,8 +112,24 @@ export default async function Page({ params }: { params: { slug: string[] } }) {
     return {
       '@type': 'Person',
       name: author.name,
+      url: siteMetadata.siteUrl,
     }
   })
+  // Add publisher information
+  jsonLd['publisher'] = {
+    '@type': 'Person',
+    name: siteMetadata.author,
+    url: siteMetadata.siteUrl,
+  }
+  // Add mainEntityOfPage for better SEO
+  jsonLd['mainEntityOfPage'] = {
+    '@type': 'WebPage',
+    '@id': `${siteMetadata.siteUrl}/${post.slug}`,
+  }
+  // Add keywords if available
+  if (post.tags && post.tags.length > 0) {
+    jsonLd['keywords'] = post.tags.join(', ')
+  }
 
   const Layout = layouts[post.layout || defaultLayout]
 

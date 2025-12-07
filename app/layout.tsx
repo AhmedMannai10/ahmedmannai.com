@@ -25,13 +25,24 @@ export const metadata: Metadata = {
     template: `%s | ${siteMetadata.title}`,
   },
   description: siteMetadata.description,
+  keywords: siteMetadata.keywords || [],
+  authors: [{ name: siteMetadata.author, url: siteMetadata.siteUrl }],
+  creator: siteMetadata.author,
+  publisher: siteMetadata.author,
   openGraph: {
     title: siteMetadata.title,
     description: siteMetadata.description,
     url: './',
     siteName: siteMetadata.title,
-    images: [siteMetadata.socialBanner],
-    locale: 'en_US',
+    images: [
+      {
+        url: siteMetadata.socialBanner,
+        width: 1200,
+        height: 630,
+        alt: siteMetadata.title,
+      },
+    ],
+    locale: siteMetadata.locale || 'en_US',
     type: 'website',
   },
   alternates: {
@@ -52,9 +63,20 @@ export const metadata: Metadata = {
     },
   },
   twitter: {
-    title: siteMetadata.title,
     card: 'summary_large_image',
+    title: siteMetadata.title,
+    description: siteMetadata.description,
     images: [siteMetadata.socialBanner],
+    creator: siteMetadata.x ? `@${siteMetadata.x.split('/').pop()}` : undefined,
+  },
+  verification: {
+    // Add verification codes here when you have them
+    // google: 'your-google-verification-code',
+    // yandex: 'your-yandex-verification-code',
+    // yahoo: 'your-yahoo-verification-code',
+    // other: {
+    //   'facebook-domain-verification': 'your-facebook-verification-code',
+    // },
   },
 }
 
@@ -94,6 +116,60 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <meta name="theme-color" media="(prefers-color-scheme: light)" content="#fff" />
       <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000" />
       <link rel="alternate" type="application/rss+xml" href={`${basePath}/feed.xml`} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'Person',
+            name: siteMetadata.authorInfo?.name || siteMetadata.author,
+            jobTitle: siteMetadata.authorInfo?.jobTitle || 'Software Engineer',
+            worksFor: {
+              '@type': 'Organization',
+              name: siteMetadata.authorInfo?.company || 'QimInfo basel',
+            },
+            email: siteMetadata.authorInfo?.email || siteMetadata.email,
+            image: siteMetadata.authorInfo?.image || siteMetadata.siteLogo,
+            url: siteMetadata.siteUrl,
+            sameAs:
+              siteMetadata.authorInfo?.sameAs ||
+              [
+                siteMetadata.github,
+                siteMetadata.x,
+                siteMetadata.linkedin,
+                siteMetadata.youtube,
+              ].filter(Boolean),
+          }),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'WebSite',
+            name: siteMetadata.title,
+            description: siteMetadata.description,
+            url: siteMetadata.siteUrl,
+            author: {
+              '@type': 'Person',
+              name: siteMetadata.author,
+            },
+            publisher: {
+              '@type': 'Person',
+              name: siteMetadata.author,
+            },
+            potentialAction: {
+              '@type': 'SearchAction',
+              target: {
+                '@type': 'EntryPoint',
+                urlTemplate: `${siteMetadata.siteUrl}/search?q={search_term_string}`,
+              },
+              'query-input': 'required name=search_term_string',
+            },
+          }),
+        }}
+      />
       <body className="bg-white pl-[calc(100vw-100%)] text-black antialiased dark:bg-gray-950 dark:text-white">
         <Analytics />
         <ThemeProviders>

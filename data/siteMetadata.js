@@ -3,11 +3,12 @@ const siteMetadata = {
   title: 'Ahmed Mannai',
   author: 'Ahmed Mannai',
   headerTitle: 'Ahmed Mannai',
-  description: 'Software & Devops Engineer, Writer, Footballer',
+  description:
+    'Software & DevOps Engineer, Writer, and Footballer. Building clean, efficient solutions for mobile apps, backend systems, and digital tools.',
   language: 'en-us',
   theme: 'system', // system, dark or light
-  siteUrl: 'https://ahmedmannai.vercel.app',
-  //siteRepo: 'https://github.com/timlrx/tailwind-nextjs-starter-blog',
+  siteUrl: process.env.NEXT_PUBLIC_SITE_URL || 'https://ahmedmannai.com',
+  //siteRepo: 'https://github.com/ahmedmannai10/ahmedmannai.com',
   siteLogo: `${process.env.BASE_PATH || ''}/static/images/logo.png`,
   socialBanner: `${process.env.BASE_PATH || ''}/static/images/twitter-card.png`,
   //mastodon: 'https://mastodon.social/@mastodonuser',
@@ -21,6 +22,40 @@ const siteMetadata = {
   threads: 'https://www.threads.net/theahmedmannai',
   instagram: 'https://www.instagram.com/theahmedmannai',
   locale: 'en-US',
+  // SEO Keywords
+  keywords: [
+    'Ahmed Mannai',
+    'Software Engineer',
+    'DevOps Engineer',
+    'Web Development',
+    'Mobile Development',
+    'Backend Development',
+    'React',
+    'Next.js',
+    'JavaScript',
+    'TypeScript',
+    'Programming Blog',
+    'Tech Blog',
+    'Software Development',
+    'System Design',
+    'Cloud Computing',
+  ],
+  // Author information for structured data
+  authorInfo: {
+    name: 'Ahmed Mannai',
+    jobTitle: 'Software Engineer',
+    company: 'QimInfo basel',
+    email: 'ahmedmannai.com@gmail.com',
+    image: `${process.env.BASE_PATH || ''}/static/images/avatar.png`,
+    sameAs: [
+      'https://github.com/ahmedmannai10',
+      'https://x.com/Ahmad_Manai',
+      'https://www.linkedin.com/in/ahmedmannai',
+      'https://youtube.com/@ahmed-mannai',
+      'https://www.threads.net/theahmedmannai',
+      'https://www.instagram.com/theahmedmannai',
+    ],
+  },
   analytics: {
     // If you want to use an analytics provider you have to add it to the
     // content security policy in the `next.config.js` file.

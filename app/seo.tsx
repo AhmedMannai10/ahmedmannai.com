@@ -10,22 +10,45 @@ interface PageSEOProps {
 }
 
 export function genPageMetadata({ title, description, image, ...rest }: PageSEOProps): Metadata {
+  const fullTitle = `${title} | ${siteMetadata.title}`
+  const metaDescription = description || siteMetadata.description
+
   return {
     title,
-    description: description || siteMetadata.description,
+    description: metaDescription,
+    keywords: siteMetadata.keywords || [],
+    authors: [{ name: siteMetadata.author, url: siteMetadata.siteUrl }],
     openGraph: {
-      title: `${title} | ${siteMetadata.title}`,
-      description: description || siteMetadata.description,
+      title: fullTitle,
+      description: metaDescription,
       url: './',
       siteName: siteMetadata.title,
-      images: image ? [image] : [siteMetadata.socialBanner],
-      locale: 'en_US',
+      images: image
+        ? [
+            {
+              url: image,
+              width: 1200,
+              height: 630,
+              alt: title,
+            },
+          ]
+        : [
+            {
+              url: siteMetadata.socialBanner,
+              width: 1200,
+              height: 630,
+              alt: siteMetadata.title,
+            },
+          ],
+      locale: siteMetadata.locale || 'en_US',
       type: 'website',
     },
     twitter: {
-      title: `${title} | ${siteMetadata.title}`,
       card: 'summary_large_image',
+      title: fullTitle,
+      description: metaDescription,
       images: image ? [image] : [siteMetadata.socialBanner],
+      creator: siteMetadata.x ? `@${siteMetadata.x.split('/').pop()}` : undefined,
     },
     ...rest,
   }
