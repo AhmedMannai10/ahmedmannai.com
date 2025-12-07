@@ -81,9 +81,10 @@ const siteMetadata = {
     // },
   },
   newsletter: {
-    // supports mailchimp, buttondown, convertkit, klaviyo, revue, emailoctopus
+    // supports mailchimp, buttondown, convertkit, klaviyo, revue, emailoctopus, loops
     // Please add your .env file and modify it according to your selection
-    provider: 'convertkit',
+    // For Loops.so, add LOOPS_API_KEY to your .env file
+    provider: 'loops',
   },
   comments: {
     // If you want to use an analytics provider you have to add it to the
