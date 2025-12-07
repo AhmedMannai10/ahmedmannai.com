@@ -170,7 +170,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           }),
         }}
       />
-      <body className="bg-white pl-[calc(100vw-100%)] text-black antialiased dark:bg-gray-950 dark:text-white">
+      <body className="bg-cream-50 pl-[calc(100vw-100%)] text-darkGreen-950 antialiased dark:bg-darkGreen-950 dark:text-cream-100">
         <Analytics />
         <ThemeProviders>
           <SectionContainer>
