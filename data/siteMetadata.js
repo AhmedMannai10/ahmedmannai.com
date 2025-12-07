@@ -4,7 +4,7 @@ const siteMetadata = {
   author: 'Ahmed Mannai',
   headerTitle: 'Ahmed Mannai',
   description:
-    'Software & DevOps Engineer, Writer, and Footballer. Building clean, efficient solutions for mobile apps, backend systems, and digital tools.',
+    'Software & DevOps Engineer, Writer, and Footballer. Building clean, efficient software solutions and more.',
   language: 'en-us',
   theme: 'system', // system, dark or light
   siteUrl: process.env.NEXT_PUBLIC_SITE_URL || 'https://ahmedmannai.com',

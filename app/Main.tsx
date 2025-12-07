@@ -147,7 +147,7 @@ export default function Home({ posts }) {
               Languages & Frameworks
             </h3>
             <div className="flex flex-wrap gap-2">
-              {['JavaScript', 'TypeScript', 'React', 'Next.js', 'Node.js', 'Python'].map(
+              {['Flutter', 'Java', 'React', 'Next.js', 'Django', 'JavaScript', 'Python'].map(
                 (skill) => (
                   <span
                     key={skill}
@@ -164,22 +164,7 @@ export default function Home({ posts }) {
               DevOps & Tools
             </h3>
             <div className="flex flex-wrap gap-2">
-              {['Docker', 'Kubernetes', 'CI/CD', 'AWS', 'Linux', 'Git'].map((skill) => (
-                <span
-                  key={skill}
-                  className="rounded-full bg-primary-100 px-3 py-1 text-sm font-medium text-primary-800 dark:bg-primary-900 dark:text-primary-200"
-                >
-                  {skill}
-                </span>
-              ))}
-            </div>
-          </div>
-          <div>
-            <h3 className="mb-3 text-lg font-semibold text-darkGreen-800 dark:text-cream-200">
-              Other Skills
-            </h3>
-            <div className="flex flex-wrap gap-2">
-              {['Mobile Development', 'Backend Systems', 'System Design', 'Problem Solving'].map(
+              {['Docker', 'Kubernetes', 'AWS', 'Azure', 'Dynatrace', 'Prometheus', 'Grafana'].map(
                 (skill) => (
                   <span
                     key={skill}
@@ -189,6 +174,30 @@ export default function Home({ posts }) {
                   </span>
                 )
               )}
+            </div>
+          </div>
+          <div>
+            <h3 className="mb-3 text-lg font-semibold text-darkGreen-800 dark:text-cream-200">
+              Other Skills
+            </h3>
+            <div className="flex flex-wrap gap-2">
+              {[
+                'Performance Engineering',
+                'Jmeter',
+                'NeoLoad',
+                'Selenium',
+                'Appium',
+                'Load Testing',
+                'Load Runner',
+                'Supabase',
+              ].map((skill) => (
+                <span
+                  key={skill}
+                  className="rounded-full bg-primary-100 px-3 py-1 text-sm font-medium text-primary-800 dark:bg-primary-900 dark:text-primary-200"
+                >
+                  {skill}
+                </span>
+              ))}
             </div>
           </div>
         </div>
