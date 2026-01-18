@@ -7,98 +7,80 @@ import Image from '@/components/Image'
 import SocialIcon from '@/components/social-icons'
 import projectsData from '@/data/projectsData'
 
-const MAX_DISPLAY = 5
+const MAX_DISPLAY = 3
 
 export default function Home({ posts }) {
-  const featuredProjects = projectsData.slice(0, 2)
+  const featuredProjects = projectsData.slice(0, 4)
 
   return (
     <>
       {/* Hero Section */}
-      <section className="mb-20 space-y-8 pt-8 md:mb-32 md:pt-16">
-        <div className="flex flex-col items-start gap-12 md:flex-row md:items-center md:justify-between">
-          <div className="flex-1 space-y-6">
-            <h1 className="font-display text-5xl font-bold leading-tight tracking-tight text-black dark:text-white sm:text-6xl md:text-7xl lg:text-8xl">
-              Hello, I'm <span className="text-black dark:text-white">{siteMetadata.author}</span>
-            </h1>
-            <p className="max-w-2xl text-xl leading-relaxed text-gray-700 dark:text-gray-300 md:text-2xl">
-              {siteMetadata.description}
-            </p>
-            <p className="max-w-2xl text-lg leading-relaxed text-gray-600 dark:text-gray-400">
-              I love building and anything related to technology. I approach problems in a rational,
-              pragmatic way and seek the simplest, most functional solutions possible.
-            </p>
-            <div className="flex flex-wrap items-center gap-4 pt-4">
-              <Link
-                href="/about"
-                className="inline-flex items-center rounded-md border border-black bg-black px-6 py-3 text-base font-medium text-white transition-all hover:bg-gray-900 dark:border-white dark:bg-white dark:text-black dark:hover:bg-gray-100"
-              >
-                About Me
-              </Link>
-              <Link
-                href="/projects"
-                className="inline-flex items-center rounded-md border border-black px-6 py-3 text-base font-medium text-black transition-all hover:bg-gray-50 dark:border-white dark:text-white dark:hover:bg-gray-900"
-              >
-                View Projects
-              </Link>
-            </div>
-            <div className="flex items-center gap-4 pt-6">
-              <span className="text-sm font-medium text-gray-600 dark:text-gray-400">Connect:</span>
-              <div className="flex items-center gap-3">
-                <SocialIcon kind="github" href={siteMetadata.github} size={6} />
-                <SocialIcon kind="linkedin" href={siteMetadata.linkedin} size={6} />
-                <SocialIcon kind="x" href={siteMetadata.x} size={6} />
-                <SocialIcon kind="youtube" href={siteMetadata.youtube} size={6} />
-              </div>
-            </div>
-          </div>
-          <div className="relative hidden md:block">
-            <div className="relative h-64 w-64 overflow-hidden rounded-full border border-gray-200 dark:border-gray-800 lg:h-80 lg:w-80">
-              <Image
-                src={siteMetadata.authorInfo?.image || '/static/images/avatar.png'}
-                alt={siteMetadata.author}
-                width={320}
-                height={320}
-                className="h-full w-full object-cover"
-              />
-            </div>
+      <section className="mb-32 space-y-6 pt-12 md:mb-40 md:pt-20">
+        <div className="max-w-4xl">
+          <h1 className="font-display text-6xl font-bold leading-[1.1] tracking-tight text-black dark:text-white sm:text-7xl md:text-8xl lg:text-9xl">
+            {siteMetadata.author}
+          </h1>
+          <p className="mt-6 max-w-2xl text-xl leading-relaxed text-gray-600 dark:text-gray-400 md:text-2xl">
+            {siteMetadata.description}
+          </p>
+          <div className="mt-8 flex flex-wrap items-center gap-4">
+            <Link
+              href="/about"
+              className="inline-flex items-center rounded-md border border-black bg-black px-6 py-3 text-base font-medium text-white transition-all hover:bg-gray-900 dark:border-white dark:bg-white dark:text-black dark:hover:bg-gray-100"
+            >
+              About Me
+            </Link>
+            <Link
+              href="/projects"
+              className="inline-flex items-center text-base font-medium text-black underline underline-offset-4 hover:no-underline dark:text-white"
+            >
+              View Projects →
+            </Link>
           </div>
         </div>
       </section>
 
+      {/* Brief Intro Section */}
+      <section className="mb-32 max-w-3xl md:mb-40">
+        <p className="text-lg leading-relaxed text-gray-700 dark:text-gray-300">
+          I approach problems in a rational, pragmatic way and seek the simplest, most functional
+          solutions possible. I love building software that makes a difference.
+        </p>
+      </section>
+
       {/* Featured Projects Section */}
       {featuredProjects.length > 0 && (
-        <section className="mb-20 md:mb-32">
+        <section className="mb-32 md:mb-40">
           <div className="mb-12 flex items-center justify-between">
-            <h2 className="font-display text-3xl font-bold text-black dark:text-white md:text-4xl">
-              Featured Projects
+            <h2 className="font-display text-4xl font-bold text-black dark:text-white md:text-5xl">
+              Projects
             </h2>
             <Link
               href="/projects"
-              className="font-medium text-black underline underline-offset-4 hover:no-underline dark:text-white"
+              className="text-base font-medium text-gray-600 underline underline-offset-4 hover:text-black hover:no-underline dark:text-gray-400 dark:hover:text-white"
             >
-              View All →
+              View all →
             </Link>
           </div>
-          <div className="grid gap-8 md:grid-cols-2">
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {featuredProjects.map((project) => (
               <div
                 key={project.title}
-                className="group overflow-hidden rounded-lg border border-gray-200 bg-white transition-all hover:shadow-md dark:border-gray-800 dark:bg-black dark:hover:shadow-dark-md"
+                className="group overflow-hidden rounded-lg transition-all hover:shadow-subtle dark:hover:shadow-dark-subtle"
               >
                 {project.imgSrc && (
-                  <div className="relative h-48 overflow-hidden bg-gray-50 dark:bg-gray-900">
+                  <div className="relative mb-4 aspect-video overflow-hidden rounded-lg bg-gray-50 dark:bg-gray-900">
                     <Image
                       src={project.imgSrc}
                       alt={project.title}
                       width={600}
-                      height={300}
+                      height={400}
                       className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                     />
                   </div>
                 )}
-                <div className="p-8">
-                  <h3 className="mb-3 text-xl font-semibold text-black dark:text-white">
+                <div>
+                  <h3 className="mb-2 text-lg font-semibold text-black dark:text-white">
                     {project.slug ? (
                       <Link href={`/projects/${project.slug}`} className="hover:underline">
                         {project.title}
@@ -116,17 +98,9 @@ export default function Home({ posts }) {
                       project.title
                     )}
                   </h3>
-                  <p className="mb-6 text-gray-600 dark:text-gray-400">{project.description}</p>
-                  {(project.slug || project.href) && (
-                    <Link
-                      href={project.slug ? `/projects/${project.slug}` : project.href || '#'}
-                      target={project.slug ? undefined : '_blank'}
-                      rel={project.slug ? undefined : 'noopener noreferrer'}
-                      className="inline-flex items-center font-medium text-black underline underline-offset-4 hover:no-underline dark:text-white"
-                    >
-                      View Project →
-                    </Link>
-                  )}
+                  <p className="text-sm leading-relaxed text-gray-600 dark:text-gray-400">
+                    {project.description.split('.')[0]}.
+                  </p>
                 </div>
               </div>
             ))}
@@ -134,140 +108,63 @@ export default function Home({ posts }) {
         </section>
       )}
 
-      {/* Skills Section */}
-      <section className="mb-20 rounded-lg border border-gray-200 bg-gray-50 p-8 dark:border-gray-800 dark:bg-gray-900 md:mb-32 md:p-12">
-        <h2 className="mb-8 font-display text-3xl font-bold text-black dark:text-white md:text-4xl">
-          Technical Skills
-        </h2>
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-          <div>
-            <h3 className="mb-4 text-lg font-semibold text-black dark:text-white">
-              Languages & Frameworks
-            </h3>
-            <div className="flex flex-wrap gap-2">
-              {['Flutter', 'Java', 'React', 'Next.js', 'Django', 'JavaScript', 'Python'].map(
-                (skill) => (
-                  <span
-                    key={skill}
-                    className="rounded-md border border-gray-300 bg-white px-3 py-1 text-sm font-medium text-black dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-                  >
-                    {skill}
-                  </span>
-                )
-              )}
-            </div>
-          </div>
-          <div>
-            <h3 className="mb-4 text-lg font-semibold text-black dark:text-white">
-              DevOps & Tools
-            </h3>
-            <div className="flex flex-wrap gap-2">
-              {['Docker', 'Kubernetes', 'AWS', 'Azure', 'Dynatrace', 'Prometheus', 'Grafana'].map(
-                (skill) => (
-                  <span
-                    key={skill}
-                    className="rounded-md border border-gray-300 bg-white px-3 py-1 text-sm font-medium text-black dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-                  >
-                    {skill}
-                  </span>
-                )
-              )}
-            </div>
-          </div>
-          <div>
-            <h3 className="mb-4 text-lg font-semibold text-black dark:text-white">Other Skills</h3>
-            <div className="flex flex-wrap gap-2">
-              {[
-                'Performance Engineering',
-                'Jmeter',
-                'NeoLoad',
-                'Selenium',
-                'Appium',
-                'Load Testing',
-                'Load Runner',
-                'Supabase',
-              ].map((skill) => (
-                <span
-                  key={skill}
-                  className="rounded-md border border-gray-300 bg-white px-3 py-1 text-sm font-medium text-black dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-                >
-                  {skill}
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Blog Latest Section */}
-      <section className="divide-y divide-gray-200 dark:divide-gray-800">
-        <div className="space-y-3 pb-10 pt-8 md:space-y-4">
-          <h2 className="font-display text-3xl font-bold leading-tight tracking-tight text-black dark:text-white sm:text-4xl md:text-5xl">
+      <section className="mb-32 md:mb-40">
+        <div className="mb-12">
+          <h2 className="mb-3 font-display text-4xl font-bold text-black dark:text-white md:text-5xl">
             Latest Posts
           </h2>
-          <p className="text-lg leading-7 text-gray-600 dark:text-gray-400">
+          <p className="text-lg text-gray-600 dark:text-gray-400">
             Thoughts, tutorials, and insights on software development and technology
           </p>
         </div>
-        <ul className="divide-y divide-gray-200 dark:divide-gray-800">
+        <ul className="space-y-8">
           {!posts.length && 'No posts found.'}
           {posts.slice(0, MAX_DISPLAY).map((post) => {
             const { slug, date, title, summary, tags } = post
+            const summaryExcerpt = summary.split('.')[0] + '.'
             return (
-              <li key={slug} className="py-12">
-                <article>
-                  <div className="space-y-4 xl:grid xl:grid-cols-4 xl:items-baseline xl:space-y-0">
-                    <dl>
-                      <dt className="sr-only">Published on</dt>
-                      <dd className="text-sm font-medium leading-6 text-gray-500 dark:text-gray-400">
-                        <time dateTime={date}>{formatDate(date, siteMetadata.locale)}</time>
-                      </dd>
-                    </dl>
-                    <div className="space-y-6 xl:col-span-3">
-                      <div className="space-y-4">
-                        <div>
-                          <h2 className="text-2xl font-semibold leading-8 tracking-tight">
-                            <Link
-                              href={`/blog/${slug}`}
-                              className="text-black hover:underline dark:text-white"
-                            >
-                              {title}
-                            </Link>
-                          </h2>
-                          <div className="mt-3 flex flex-wrap gap-2">
-                            {tags.map((tag) => (
-                              <Tag key={tag} text={tag} />
-                            ))}
-                          </div>
+              <li key={slug}>
+                <article className="space-y-3">
+                  <div className="flex items-center gap-3 text-sm text-gray-500 dark:text-gray-400">
+                    <time dateTime={date}>{formatDate(date, siteMetadata.locale)}</time>
+                    {tags.length > 0 && (
+                      <>
+                        <span>•</span>
+                        <div className="flex flex-wrap gap-2">
+                          {tags.slice(0, 2).map((tag) => (
+                            <Tag key={tag} text={tag} />
+                          ))}
                         </div>
-                        <div className="prose max-w-none text-gray-600 dark:text-gray-400">
-                          {summary}
-                        </div>
-                      </div>
-                      <div className="text-base font-medium leading-6">
-                        <Link
-                          href={`/blog/${slug}`}
-                          className="text-black underline underline-offset-4 hover:no-underline dark:text-white"
-                          aria-label={`Read more: "${title}"`}
-                        >
-                          Read more →
-                        </Link>
-                      </div>
-                    </div>
+                      </>
+                    )}
                   </div>
+                  <h2 className="text-xl font-semibold leading-tight text-black dark:text-white">
+                    <Link href={`/blog/${slug}`} className="hover:underline">
+                      {title}
+                    </Link>
+                  </h2>
+                  <p className="text-gray-600 dark:text-gray-400">{summaryExcerpt}</p>
+                  <Link
+                    href={`/blog/${slug}`}
+                    className="inline-flex items-center text-sm font-medium text-black underline underline-offset-4 hover:no-underline dark:text-white"
+                    aria-label={`Read more: "${title}"`}
+                  >
+                    Read more →
+                  </Link>
                 </article>
               </li>
             )
           })}
         </ul>
         {posts.length > MAX_DISPLAY && (
-          <div className="flex justify-end pt-10 text-base font-medium leading-6">
+          <div className="mt-12">
             <Link
               href="/blog"
-              className="text-black underline underline-offset-4 hover:no-underline dark:text-white"
+              className="text-base font-medium text-gray-600 underline underline-offset-4 hover:text-black hover:no-underline dark:text-gray-400 dark:hover:text-white"
               aria-label="All posts"
             >
-              All Posts →
+              View all posts →
             </Link>
           </div>
         )}
@@ -275,9 +172,9 @@ export default function Home({ posts }) {
 
       {/* Newsletter Section */}
       {siteMetadata.newsletter?.provider && (
-        <section className="mt-20 rounded-lg border border-gray-200 bg-white p-8 dark:border-gray-800 dark:bg-black md:p-12">
-          <div className="mx-auto max-w-2xl text-center">
-            <h2 className="mb-4 font-display text-2xl font-bold text-black dark:text-white md:text-3xl">
+        <section className="mb-32 md:mb-40">
+          <div className="mx-auto max-w-xl text-center">
+            <h2 className="mb-3 font-display text-3xl font-bold text-black dark:text-white md:text-4xl">
               Stay Updated
             </h2>
             <p className="mb-8 text-gray-600 dark:text-gray-400">
