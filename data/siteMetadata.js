@@ -14,7 +14,7 @@ const siteMetadata = {
   //mastodon: 'https://mastodon.social/@mastodonuser',
   email: 'ahmedmannai.com@gmail.com',
   github: 'https://github.com/ahmedmannai10',
-  x: 'https://x.com/Ahmad_Manai',
+  x: 'https://x.com/Ahmed_Manaii',
   // twitter: 'https://twitter.com/Twitter',
   facebook: 'https://facebook.com',
   youtube: 'https://youtube.com/@ahmed-mannai',

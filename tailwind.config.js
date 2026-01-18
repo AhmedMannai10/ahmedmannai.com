@@ -24,6 +24,7 @@ module.exports = {
       fontFamily: {
         sans: ['var(--font-inter)', ...fontFamily.sans],
         display: ['var(--font-inter)', ...fontFamily.sans], // Inter Display for headings
+        lobster: ['var(--font-lobster)', ...fontFamily.serif],
       },
       colors: {
         // Minimal primary color for compatibility with pliny components

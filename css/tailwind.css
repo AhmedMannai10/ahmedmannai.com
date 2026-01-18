@@ -49,3 +49,156 @@ input:-webkit-autofill:focus {
   display: inline-block;
   vertical-align: middle;
 }
+
+/* Newsletter Form Styling */
+form input[type='email'],
+form input#email-input,
+input#email-input {
+  @apply w-full rounded-md border border-gray-300 bg-white px-4 py-2 font-sans text-sm text-black placeholder-gray-500 focus:border-black focus:outline-none focus:ring-1 focus:ring-black dark:border-gray-700 dark:bg-black dark:text-white dark:placeholder-gray-400 dark:focus:border-white dark:focus:ring-white;
+}
+
+/* NewsletterForm specific input - responsive width for desktop */
+form.flex input#email-input {
+  @apply w-full sm:min-w-[280px] sm:flex-1;
+}
+
+form button[type='submit'],
+button[type='submit'] {
+  @apply w-full rounded-md border border-black bg-black px-4 py-2 font-sans text-sm font-medium text-white transition-all hover:bg-gray-900 focus:outline-none focus:ring-1 focus:ring-black dark:border-white dark:bg-white dark:text-black dark:hover:bg-gray-100 dark:focus:ring-white;
+}
+
+/* NewsletterForm button in flex layout */
+form.flex button[type='submit'] {
+  @apply sm:w-auto sm:flex-shrink-0;
+}
+
+/* NewsletterForm title override */
+div > div.pb-1.text-lg.font-semibold {
+  @apply font-sans text-black dark:text-white;
+}
+
+/* NewsletterForm form container - better spacing */
+form.flex.flex-col.sm\:flex-row {
+  @apply gap-3;
+}
+
+/* NewsletterForm input container */
+form.flex > div:first-child {
+  @apply w-full sm:flex-1;
+}
+
+/* NewsletterForm button container */
+form.flex div.mt-2.sm\:mt-0,
+form.flex > div:last-child {
+  @apply w-full sm:w-auto sm:flex-shrink-0;
+}
+
+/* KBar Search Interface Styling */
+/* Override KBar Positioner backdrop */
+div[class*='bg-gray-300'][class*='backdrop-blur'],
+div[class*='bg-black'][class*='backdrop-blur'] {
+  @apply bg-black/50 backdrop-blur-sm !important;
+}
+
+/* KBar Main Container */
+div[class*='rounded-2xl'][class*='border-gray-100'],
+div[class*='rounded-2xl'][class*='border-gray-800'] {
+  @apply border-gray-200 bg-white dark:border-gray-800 dark:bg-black !important;
+}
+
+/* KBar Search Input */
+input[class*='bg-transparent'][class*='text-gray-600'],
+input[class*='bg-transparent'][class*='text-gray-200'] {
+  @apply text-black placeholder-gray-500 dark:text-white dark:placeholder-gray-400 !important;
+}
+
+/* KBar Search Icon */
+div[class*='flex'][class*='items-center'][class*='space-x-4'] svg {
+  @apply text-gray-600 dark:text-gray-400 !important;
+}
+
+/* KBar ESC Button */
+kbd[class*='rounded'][class*='border'][class*='text-gray-400'] {
+  @apply border-gray-300 bg-white text-gray-600 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400 !important;
+}
+
+/* KBar Section Header */
+div[class*='uppercase'][class*='text-primary-600'] {
+  @apply text-gray-500 dark:text-gray-400 !important;
+}
+
+/* KBar List Items - Normal State */
+div[class*='flex'][class*='cursor-pointer'][class*='text-gray-700'],
+div[class*='flex'][class*='cursor-pointer'][class*='text-gray-100'] {
+  @apply text-black dark:text-white !important;
+}
+
+/* KBar Active/Selected Item */
+div[class*='bg-primary-600'][class*='text-gray-100'] {
+  @apply bg-black text-white dark:bg-white dark:text-black !important;
+}
+
+/* KBar Active Item - Ensure all direct children have proper text color */
+div[class*='bg-primary-600'] > div,
+div[class*='bg-black'][class*='text-white'] > div,
+div[class*='bg-white'][class*='text-black'] > div {
+  @apply text-white dark:text-black !important;
+}
+
+/* KBar Active Item - Nested divs */
+div[class*='bg-primary-600'] div,
+div[class*='bg-black'][class*='text-white'] div,
+div[class*='bg-white'][class*='text-black'] div {
+  @apply text-white dark:text-black !important;
+}
+
+/* KBar Active Item Title (the item.name div - no class) */
+div[class*='bg-primary-600'] > div > div > div:not([class]),
+div[class*='bg-black'][class*='text-white'] > div > div > div:not([class]),
+div[class*='bg-white'][class*='text-black'] > div > div > div:not([class]) {
+  @apply text-white dark:text-black !important;
+}
+
+/* KBar Item Subtitle - Normal (not active) */
+div[class*='text-gray-400'][class*='text-xs']:not([class*='bg-primary']):not(
+    [class*='bg-black']
+  ):not([class*='bg-white']) {
+  @apply text-gray-500 dark:text-gray-400 !important;
+}
+
+/* KBar Item Subtitle - Active */
+div[class*='bg-primary-600'] div[class*='text-gray-200'],
+div[class*='bg-primary-600'] div[class*='text-gray-400'],
+div[class*='bg-black'][class*='text-white'] div[class*='text-gray-200'],
+div[class*='bg-black'][class*='text-white'] div[class*='text-gray-400'],
+div[class*='bg-white'][class*='text-black'] div[class*='text-gray-200'],
+div[class*='bg-white'][class*='text-black'] div[class*='text-gray-400'] {
+  @apply text-gray-300 dark:text-gray-600 !important;
+}
+
+/* KBar Active Item Shortcut Keys */
+div[class*='bg-primary-600'] kbd,
+div[class*='bg-black'][class*='text-white'] kbd,
+div[class*='bg-white'][class*='text-black'] kbd {
+  @apply border-gray-300 text-white dark:border-gray-600 dark:text-black !important;
+}
+
+/* KBar Shortcut Keys */
+kbd[class*='border-gray-400'],
+kbd[class*='border-gray-200'] {
+  @apply border-gray-300 bg-white text-gray-600 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400 !important;
+}
+
+/* KBar Loading/No Results */
+div[class*='text-center'][class*='text-gray-400'],
+div[class*='text-center'][class*='text-gray-600'] {
+  @apply border-gray-200 text-gray-500 dark:border-gray-800 dark:text-gray-400 !important;
+}
+
+/* Ensure Inter font throughout */
+[data-kb-positioner],
+[data-kb-animator],
+[data-kb-search],
+[data-kb-results] {
+  font-family: var(--font-inter), sans-serif;
+}

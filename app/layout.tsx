@@ -3,7 +3,7 @@ import 'pliny/search/algolia.css'
 import 'remark-github-blockquote-alert/alert.css'
 import { Analytics } from '@vercel/analytics/react'
 
-import { Inter } from 'next/font/google'
+import { Inter, Lobster } from 'next/font/google'
 import { SearchProvider, SearchConfig } from 'pliny/search'
 import Header from '@/components/Header'
 import SectionContainer from '@/components/SectionContainer'
@@ -17,6 +17,13 @@ const inter = Inter({
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-inter',
+})
+
+const lobster = Lobster({
+  subsets: ['latin'],
+  weight: '400',
+  display: 'swap',
+  variable: '--font-lobster',
 })
 
 export const metadata: Metadata = {
@@ -87,7 +94,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang={siteMetadata.language}
-      className={`${inter.variable} scroll-smooth`}
+      className={`${inter.variable} ${lobster.variable} scroll-smooth`}
       suppressHydrationWarning
     >
       <link
