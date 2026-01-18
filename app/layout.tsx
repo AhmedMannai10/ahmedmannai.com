@@ -3,7 +3,7 @@ import 'pliny/search/algolia.css'
 import 'remark-github-blockquote-alert/alert.css'
 import { Analytics } from '@vercel/analytics/react'
 
-import { Space_Grotesk } from 'next/font/google'
+import { Inter } from 'next/font/google'
 import { SearchProvider, SearchConfig } from 'pliny/search'
 import Header from '@/components/Header'
 import SectionContainer from '@/components/SectionContainer'
@@ -13,10 +13,10 @@ import { ThemeProviders } from './theme-providers'
 import { Metadata } from 'next'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 
-const space_grotesk = Space_Grotesk({
+const inter = Inter({
   subsets: ['latin'],
   display: 'swap',
-  variable: '--font-space-grotesk',
+  variable: '--font-inter',
 })
 
 export const metadata: Metadata = {
@@ -87,7 +87,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang={siteMetadata.language}
-      className={`${space_grotesk.variable} scroll-smooth`}
+      className={`${inter.variable} scroll-smooth`}
       suppressHydrationWarning
     >
       <link
@@ -171,7 +171,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           }),
         }}
       />
-      <body className="bg-cream-50 pl-[calc(100vw-100%)] text-darkGreen-950 antialiased dark:bg-darkGreen-950 dark:text-cream-100">
+      <body className="bg-white pl-[calc(100vw-100%)] text-black antialiased dark:bg-black dark:text-white">
         <Analytics />
         <SpeedInsights />
         <ThemeProviders>

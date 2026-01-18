@@ -9,16 +9,34 @@ import { Metadata } from 'next'
 
 export async function generateMetadata({ params }: { params: { tag: string } }): Promise<Metadata> {
   const tag = decodeURI(params.tag)
-  return genPageMetadata({
-    title: tag,
-    description: `${siteMetadata.title} ${tag} tagged content`,
-    alternates: {
-      canonical: './',
-      types: {
-        'application/rss+xml': `${siteMetadata.siteUrl}/tags/${tag}/feed.xml`,
+  const tagUrl = `${siteMetadata.siteUrl}/tags/${tag}`
+  const tagTitle = tag.charAt(0).toUpperCase() + tag.slice(1).replace(/-/g, ' ')
+  const description = `Explore ${tagTitle} related articles and content by ${siteMetadata.author}. Discover insights, tutorials, and thoughts on ${tagTitle} topics.`
+
+  return {
+    ...genPageMetadata({
+      title: `${tagTitle} - ${siteMetadata.title}`,
+      description: description,
+      alternates: {
+        canonical: tagUrl,
+        types: {
+          'application/rss+xml': `${siteMetadata.siteUrl}/tags/${tag}/feed.xml`,
+        },
+      },
+    }),
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        'max-video-preview': -1,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
       },
     },
-  })
+    keywords: [tag, tagTitle, ...(siteMetadata.keywords || [])],
+  }
 }
 
 export const generateStaticParams = async () => {

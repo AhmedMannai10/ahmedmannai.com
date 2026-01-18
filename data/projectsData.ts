@@ -1,11 +1,14 @@
+import { slug } from 'github-slugger'
+
 interface Project {
   title: string
   description: string
   href?: string
   imgSrc?: string
+  slug?: string
 }
 
-const projectsData: Project[] = [
+const projectsDataRaw: Omit<Project, 'slug'>[] = [
   {
     title: 'SportzMe - Find Sport. Play Now.',
     description: `A mobile app connecting players worldwide through sports. Create games, discover nearby matches, and connect with players — all in one app. Features include game creation, location-based match discovery, player chat, and community feedback system.`,
@@ -35,5 +38,11 @@ ChosChat is a simple Android app that allows users to enage in chat room convers
     href: 'https://github.com/AhmedMannai10/GhosChat-Android-App',
   },
 ]
+
+// Generate slugs for all projects
+const projectsData: Project[] = projectsDataRaw.map((project) => ({
+  ...project,
+  slug: slug(project.title),
+}))
 
 export default projectsData

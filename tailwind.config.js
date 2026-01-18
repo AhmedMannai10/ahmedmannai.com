@@ -22,119 +22,138 @@ module.exports = {
         14: '3.5rem',
       },
       fontFamily: {
-        sans: ['var(--font-space-grotesk)', ...fontFamily.sans],
+        sans: ['var(--font-inter)', ...fontFamily.sans],
+        display: ['var(--font-inter)', ...fontFamily.sans], // Inter Display for headings
       },
       colors: {
-        // Primary color - Orange (for buttons, links, accents)
+        // Minimal primary color for compatibility with pliny components
         primary: {
-          50: '#fff4ed',
-          100: '#ffe4d4',
-          200: '#ffc9a8',
-          300: '#ffa471',
-          400: '#ff7f50',
-          500: '#ff6b35',
-          600: '#ff5722',
-          700: '#e64a19',
-          800: '#c43e15',
-          900: '#a03312',
-          950: '#5a1a09',
+          50: '#FAFAFA',
+          100: '#F5F5F5',
+          200: '#E5E5E5',
+          300: '#D4D4D4',
+          400: '#A3A3A3',
+          500: '#737373',
+          600: '#000000', // Black for light mode
+          700: '#171717',
+          800: '#0A0A0A',
+          900: '#000000',
         },
-        // Dark Green (main background)
-        darkGreen: {
-          50: '#f0f7f4',
-          100: '#d9ede6',
-          200: '#b7dbd0',
-          300: '#88c1b0',
-          400: '#5aa08a',
-          500: '#3d8570',
-          600: '#2d6b5a',
-          700: '#25564a',
-          800: '#21463d',
-          900: '#1d3a33',
-          950: '#0f211c',
+        // Linear-inspired neutral palette
+        // Light mode backgrounds
+        bg: {
+          base: '#FFFFFF',
+          subtle: '#FAFAFA',
+          muted: '#F5F5F5',
         },
-        // Cream/Beige (light backgrounds and text)
-        cream: {
-          50: '#fefdfb',
-          100: '#faf8f3',
-          200: '#f5f1e8',
-          300: '#ede5d4',
-          400: '#e2d5bc',
-          500: '#d4c2a0',
-          600: '#c4ab82',
-          700: '#b3946a',
-          800: '#947c5a',
-          900: '#7a684d',
-          950: '#413528',
+        // Dark mode backgrounds
+        dark: {
+          base: '#000000',
+          subtle: '#0A0A0A',
+          muted: '#141414',
         },
-        // Brown/Tan (panels and accents)
-        brown: {
-          50: '#faf8f5',
-          100: '#f3efe8',
-          200: '#e6ddd0',
-          300: '#d4c4b0',
-          400: '#bda68b',
-          500: '#a0826d',
-          600: '#8b6f5a',
-          700: '#735a4a',
-          800: '#5f4b3f',
-          900: '#4f4037',
-          950: '#2a211c',
+        // Text colors
+        text: {
+          primary: '#000000',
+          secondary: '#1A1A1A',
+          tertiary: '#4A4A4A',
+          inverse: '#FFFFFF',
+          'inverse-secondary': '#E5E5E5',
+          'inverse-tertiary': '#B3B3B3',
         },
-        // Yellow (decorative elements, stars)
-        accentYellow: {
-          50: '#fffbeb',
-          100: '#fef3c7',
-          200: '#fde68a',
-          300: '#fcd34d',
-          400: '#fbbf24',
-          500: '#f59e0b',
-          600: '#d97706',
-          700: '#b45309',
-          800: '#92400e',
-          900: '#78350f',
-          950: '#451a03',
+        // Border colors
+        border: {
+          light: '#E5E5E5',
+          DEFAULT: '#D1D1D1',
+          dark: '#1A1A1A',
+          'dark-subtle': '#2A2A2A',
         },
-        // Keep gray for compatibility
+        // Minimal accent (for links and interactive elements)
+        accent: {
+          DEFAULT: '#000000',
+          hover: '#1A1A1A',
+          dark: '#FFFFFF',
+          'dark-hover': '#E5E5E5',
+        },
+        // Keep gray for compatibility and use as neutral
         gray: colors.gray,
       },
       typography: ({ theme }) => ({
         DEFAULT: {
           css: {
+            color: theme('colors.text.primary'),
             a: {
-              color: theme('colors.primary.500'),
+              color: theme('colors.accent.DEFAULT'),
+              textDecoration: 'underline',
+              textDecorationThickness: '1px',
+              textUnderlineOffset: '2px',
               '&:hover': {
-                color: `${theme('colors.primary.600')}`,
+                color: theme('colors.accent.hover'),
+                textDecorationThickness: '2px',
               },
-              code: { color: theme('colors.primary.400') },
+              code: {
+                color: theme('colors.accent.DEFAULT'),
+              },
             },
             'h1,h2': {
               fontWeight: '700',
               letterSpacing: theme('letterSpacing.tight'),
+              color: theme('colors.text.primary'),
             },
             h3: {
               fontWeight: '600',
+              color: theme('colors.text.primary'),
             },
             code: {
-              color: theme('colors.primary.600'),
+              color: theme('colors.text.primary'),
+              backgroundColor: theme('colors.bg.subtle'),
+              padding: '0.125rem 0.25rem',
+              borderRadius: '0.25rem',
+            },
+            pre: {
+              backgroundColor: theme('colors.bg.subtle'),
+              border: `1px solid ${theme('colors.border.light')}`,
             },
           },
         },
         invert: {
           css: {
+            color: theme('colors.text.inverse'),
             a: {
-              color: theme('colors.primary.500'),
+              color: theme('colors.accent.dark'),
+              textDecoration: 'underline',
+              textDecorationThickness: '1px',
+              textUnderlineOffset: '2px',
               '&:hover': {
-                color: `${theme('colors.primary.400')}`,
+                color: theme('colors.accent.dark-hover'),
+                textDecorationThickness: '2px',
               },
-              code: { color: theme('colors.primary.400') },
+              code: {
+                color: theme('colors.accent.dark'),
+              },
             },
             'h1,h2,h3,h4,h5,h6': {
-              color: theme('colors.cream.100'),
+              color: theme('colors.text.inverse'),
+            },
+            code: {
+              color: theme('colors.text.inverse'),
+              backgroundColor: theme('colors.dark.muted'),
+            },
+            pre: {
+              backgroundColor: theme('colors.dark.muted'),
+              border: `1px solid ${theme('colors.border.dark')}`,
             },
           },
         },
       }),
+      boxShadow: {
+        subtle: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+        DEFAULT: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1)',
+        md: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1)',
+        'dark-subtle': '0 1px 2px 0 rgba(255, 255, 255, 0.05)',
+        'dark-md':
+          '0 4px 6px -1px rgba(255, 255, 255, 0.05), 0 2px 4px -2px rgba(255, 255, 255, 0.05)',
+      },
     },
   },
   plugins: [require('@tailwindcss/forms'), require('@tailwindcss/typography')],

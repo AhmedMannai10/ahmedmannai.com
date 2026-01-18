@@ -17,14 +17,16 @@ export default function Footer() {
           <SocialIcon kind="instagram" href={siteMetadata.instagram} size={6} />
           <SocialIcon kind="threads" href={siteMetadata.threads} size={6} />
         </div>
-        <div className="mb-2 flex space-x-2 text-sm text-darkGreen-600 dark:text-cream-400">
+        <div className="mb-2 flex space-x-2 text-sm text-gray-600 dark:text-gray-400">
           <div>{siteMetadata.author}</div>
           <div>{` • `}</div>
           <div>{`© ${new Date().getFullYear()}`}</div>
           <div>{` • `}</div>
-          <Link href="/">{siteMetadata.title}</Link>
+          <Link href="/" className="hover:underline">
+            {siteMetadata.title}
+          </Link>
         </div>
-        <div className="mb-8 text-sm text-darkGreen-600 dark:text-cream-400">
+        <div className="mb-8 text-sm text-gray-600 dark:text-gray-400">
           {/*
           <Link href="https://github.com/timlrx/tailwind-nextjs-starter-blog">
             Tailwind Nextjs Theme

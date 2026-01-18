@@ -50,7 +50,7 @@ export async function generateMetadata({
     }
   })
 
-  const postUrl = `${siteMetadata.siteUrl}/${post.slug}`
+  const postUrl = `${siteMetadata.siteUrl}/blog/${post.slug}`
   const canonicalUrl = post.canonicalUrl || postUrl
 
   return {
@@ -59,6 +59,17 @@ export async function generateMetadata({
     keywords: post.tags || siteMetadata.keywords || [],
     authors:
       authors.length > 0 ? authors.map((name) => ({ name })) : [{ name: siteMetadata.author }],
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        'max-video-preview': -1,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+      },
+    },
     openGraph: {
       title: post.title,
       description: post.summary,
@@ -67,7 +78,7 @@ export async function generateMetadata({
       type: 'article',
       publishedTime: publishedAt,
       modifiedTime: modifiedAt,
-      url: './',
+      url: postUrl,
       images: ogImages,
       authors: authors.length > 0 ? authors : [siteMetadata.author],
       tags: post.tags || [],
@@ -129,6 +140,18 @@ export default async function Page({ params }: { params: { slug: string[] } }) {
   // Add keywords if available
   if (post.tags && post.tags.length > 0) {
     jsonLd['keywords'] = post.tags.join(', ')
+    // Add articleSection based on primary tag
+    jsonLd['articleSection'] = post.tags[0]
+  }
+  // Add wordCount if available from readingTime
+  if (post.readingTime?.words) {
+    jsonLd['wordCount'] = post.readingTime.words
+  }
+  // Ensure publisher is properly structured as Organization
+  jsonLd['publisher'] = {
+    '@type': 'Organization',
+    name: siteMetadata.author,
+    url: siteMetadata.siteUrl,
   }
 
   const Layout = layouts[post.layout || defaultLayout]

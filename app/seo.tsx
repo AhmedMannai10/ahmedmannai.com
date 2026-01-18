@@ -18,6 +18,17 @@ export function genPageMetadata({ title, description, image, ...rest }: PageSEOP
     description: metaDescription,
     keywords: siteMetadata.keywords || [],
     authors: [{ name: siteMetadata.author, url: siteMetadata.siteUrl }],
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        'max-video-preview': -1,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+      },
+    },
     openGraph: {
       title: fullTitle,
       description: metaDescription,
