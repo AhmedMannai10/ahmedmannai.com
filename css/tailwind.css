@@ -202,3 +202,21 @@ div[class*='text-center'][class*='text-gray-600'] {
 [data-kb-results] {
   font-family: var(--font-inter), sans-serif;
 }
+
+/* ============================================
+   GRADIENT TEXT UTILITY
+   ============================================ */
+.gradient-text {
+  background-image: linear-gradient(135deg, #7c3aed 0%, #a855f7 50%, #ec4899 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Base state for animated elements — starts invisible, animation fills to visible */
+.animate-fade-in-up,
+.animate-fade-in {
+  opacity: 0;
+  animation-fill-mode: forwards;
+}
