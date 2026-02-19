@@ -220,3 +220,22 @@ div[class*='text-center'][class*='text-gray-600'] {
   opacity: 0;
   animation-fill-mode: forwards;
 }
+
+/* Ghost project number — large watermark behind project row content */
+.project-number-bg {
+  position: absolute;
+  top: -0.5rem;
+  right: 0;
+  font-size: 8rem;
+  font-weight: 700;
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(0, 0, 0, 0.04);
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
+}
+
+.dark .project-number-bg {
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.04);
+}

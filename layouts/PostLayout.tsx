@@ -95,7 +95,50 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
             </dl>
             <div className="divide-y divide-gray-200 dark:divide-gray-800 xl:col-span-3 xl:row-span-2 xl:pb-0">
               <div className="prose max-w-none pb-8 pt-10 dark:prose-invert">{children}</div>
-              <div className="pb-6 pt-6 text-sm text-gray-600 dark:text-gray-400">
+
+              {/* ── Post-read author card ──────────────────────── */}
+              <div className="border-t border-gray-200 py-8 dark:border-gray-800">
+                {authorDetails.map((author) => (
+                  <div
+                    key={author.name}
+                    className="flex items-start gap-4 rounded-xl border border-gray-200 bg-gray-50 p-5 dark:border-gray-800 dark:bg-gray-950"
+                  >
+                    {author.avatar && (
+                      <Image
+                        src={author.avatar}
+                        width={48}
+                        height={48}
+                        alt={author.name}
+                        className="h-12 w-12 flex-shrink-0 rounded-full object-cover"
+                      />
+                    )}
+                    <div className="min-w-0 flex-1">
+                      <p className="font-semibold text-black dark:text-white">{author.name}</p>
+                      <p className="mt-0.5 text-sm text-gray-500 dark:text-gray-400">
+                        Software & DevOps Engineer · Builder · Writer
+                      </p>
+                      <div className="mt-3 flex flex-wrap gap-4">
+                        {author.twitter && (
+                          <Link
+                            href={author.twitter}
+                            className="text-sm font-medium text-black underline underline-offset-4 hover:no-underline dark:text-white"
+                          >
+                            Follow on X →
+                          </Link>
+                        )}
+                        <Link
+                          href="/blog"
+                          className="text-sm font-medium text-gray-500 underline underline-offset-4 hover:text-black hover:no-underline dark:text-gray-400 dark:hover:text-white"
+                        >
+                          More posts →
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="pb-6 pt-2 text-sm text-gray-500 dark:text-gray-500">
                 <Link href={discussUrl(path)} rel="nofollow" className="hover:underline">
                   Discuss on Twitter
                 </Link>

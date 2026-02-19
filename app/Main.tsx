@@ -1,6 +1,5 @@
 import Link from '@/components/Link'
 import siteMetadata from '@/data/siteMetadata'
-import { formatDate } from 'pliny/utils/formatDate'
 import Image from '@/components/Image'
 import projectsData from '@/data/projectsData'
 
@@ -15,11 +14,15 @@ export default function Home({ posts }) {
     <>
       {/* ─── Hero ───────────────────────────────────────────── */}
       <section className="relative mb-16 overflow-hidden pt-8 md:mb-24 md:pt-14">
-        {/* Decorative gradient orbs */}
-        <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
-          <div className="absolute -left-20 -top-10 h-80 w-80 rounded-full bg-violet-500 opacity-[0.08] blur-3xl dark:opacity-[0.06]" />
-          <div className="absolute -bottom-10 right-0 h-72 w-72 rounded-full bg-pink-500 opacity-[0.08] blur-3xl dark:opacity-[0.05]" />
-        </div>
+        {/* Single precise radial gradient */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 -z-10"
+          style={{
+            background:
+              'radial-gradient(ellipse 80% 50% at 0% 0%, rgba(124,58,237,0.07) 0%, transparent 70%)',
+          }}
+        />
 
         <div className="relative max-w-3xl">
           {/* Greeting row */}
@@ -30,38 +33,36 @@ export default function Home({ posts }) {
             <Image
               src="/static/images/avatar.png"
               alt="Ahmed Mannai"
-              width={52}
-              height={52}
-              className="h-13 w-13 rounded-full object-cover ring-2 ring-gray-200 dark:ring-gray-800"
+              width={48}
+              height={48}
+              className="rounded-full object-cover ring-2 ring-gray-200 dark:ring-gray-800"
             />
-            <div className="flex items-center gap-2">
-              <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                Hey, I'm Ahmed
-              </span>
-              <span
-                className="inline-flex h-2 w-2 rounded-full bg-green-500"
-                title="Available for opportunities"
-              />
-            </div>
+            <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
+              Hey, I'm Ahmed
+            </span>
           </div>
 
-          {/* Name */}
+          {/* Name — editorial scale, split across two intentional lines */}
           <h1
-            className="animate-fade-in-up font-display text-5xl font-bold leading-tight tracking-tight text-black dark:text-white sm:text-6xl md:text-7xl"
+            className="animate-fade-in-up font-display font-bold leading-[0.88] tracking-[-0.04em] text-black dark:text-white"
             style={{ animationDelay: '100ms' }}
           >
-            {siteMetadata.author}
+            <span className="block text-7xl sm:text-8xl md:text-9xl">Ahmed</span>
+            <span className="block text-7xl sm:text-8xl md:text-9xl">
+              Mannai
+              <span className="text-gray-300 dark:text-gray-700">.</span>
+            </span>
           </h1>
 
-          {/* Bio */}
+          {/* Bio — editorial left-border treatment */}
           <p
-            className="mt-5 max-w-xl animate-fade-in-up text-lg leading-relaxed text-gray-600 dark:text-gray-400 md:text-xl"
+            className="mt-8 max-w-sm animate-fade-in-up border-l-2 border-gray-200 pl-4 text-base leading-relaxed text-gray-500 dark:border-gray-800 dark:text-gray-400"
             style={{ animationDelay: '220ms' }}
           >
-            Software & DevOps engineer who builds clean products and writes about the craft.
+            I build things, ship products, and document the journey. This is my lab.
           </p>
 
-          {/* Identity pills */}
+          {/* Identity pills — dashed border signals "in progress / active" */}
           <div
             className="mt-5 flex animate-fade-in-up flex-wrap gap-2"
             style={{ animationDelay: '300ms' }}
@@ -69,23 +70,26 @@ export default function Home({ posts }) {
             {IDENTITY_PILLS.map((pill) => (
               <span
                 key={pill}
-                className="rounded-full border border-gray-200 px-3 py-1 text-xs font-medium text-gray-600 dark:border-gray-800 dark:text-gray-400"
+                className="rounded-full border border-dashed border-gray-300 px-3 py-1 text-xs font-medium text-gray-500 dark:border-gray-700 dark:text-gray-400"
               >
                 {pill}
               </span>
             ))}
           </div>
 
-          {/* CTAs */}
+          {/* CTAs — primary arrow slides right on hover */}
           <div
             className="mt-8 flex animate-fade-in-up flex-wrap items-center gap-4"
             style={{ animationDelay: '380ms' }}
           >
             <Link
               href="/projects"
-              className="inline-flex items-center rounded-md border border-black bg-black px-6 py-3 text-base font-medium text-white transition-all hover:bg-gray-900 dark:border-white dark:bg-white dark:text-black dark:hover:bg-gray-100"
+              className="group inline-flex items-center gap-2 rounded-md border border-black bg-black px-6 py-3 text-base font-medium text-white transition-all hover:bg-gray-900 dark:border-white dark:bg-white dark:text-black dark:hover:bg-gray-100"
             >
-              View Projects →
+              View Projects
+              <span className="inline-block transition-transform duration-200 group-hover:translate-x-1">
+                →
+              </span>
             </Link>
             <Link
               href="/blog"
@@ -118,59 +122,123 @@ export default function Home({ posts }) {
             </Link>
           </div>
 
-          <div className="grid gap-6 md:grid-cols-2">
-            {featuredProjects.map((project, index) => (
-              <div
-                key={project.title}
-                className="group relative overflow-hidden rounded-xl border border-gray-200 bg-white transition-all duration-300 hover:-translate-y-0.5 hover:border-gray-300 hover:shadow-lg dark:border-gray-800 dark:bg-gray-950 dark:hover:border-gray-700 dark:hover:shadow-[0_10px_30px_rgba(255,255,255,0.04)]"
-              >
-                {/* Featured badge */}
-                {index === 0 && (
-                  <div className="absolute left-3 top-3 z-10 rounded-full bg-black px-2.5 py-1 text-xs font-semibold uppercase tracking-wide text-white dark:bg-white dark:text-black">
-                    Featured
+          {/* Asymmetric grid: first card spans full width, second occupies left half only */}
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+            {/* First project — full-width horizontal editorial card */}
+            {featuredProjects[0] && (
+              <div className="group overflow-hidden rounded-xl border border-gray-200 bg-white transition-all duration-300 hover:border-gray-300 hover:shadow-lg dark:border-gray-800 dark:bg-gray-950 dark:hover:border-gray-700 dark:hover:shadow-[0_10px_30px_rgba(255,255,255,0.04)] md:col-span-2">
+                <div className="flex flex-col md:flex-row">
+                  {featuredProjects[0].imgSrc && (
+                    <div className="relative h-56 overflow-hidden bg-gray-50 dark:bg-gray-900 md:h-72 md:w-[55%]">
+                      <Image
+                        src={featuredProjects[0].imgSrc}
+                        alt={featuredProjects[0].title}
+                        width={800}
+                        height={450}
+                        className="h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100 md:bg-gradient-to-r" />
+                    </div>
+                  )}
+                  <div className="flex flex-col justify-center p-8 md:w-[45%]">
+                    <p className="mb-3 font-mono text-xs uppercase tracking-widest text-gray-300 dark:text-gray-700">
+                      01
+                    </p>
+                    <h3 className="mb-3 text-xl font-bold leading-snug text-black dark:text-white">
+                      {featuredProjects[0].slug ? (
+                        <Link
+                          href={`/projects/${featuredProjects[0].slug}`}
+                          className="hover:underline"
+                        >
+                          {featuredProjects[0].title}
+                        </Link>
+                      ) : featuredProjects[0].href ? (
+                        <Link
+                          href={featuredProjects[0].href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="hover:underline"
+                        >
+                          {featuredProjects[0].title}
+                        </Link>
+                      ) : (
+                        featuredProjects[0].title
+                      )}
+                    </h3>
+                    <p className="mb-6 text-sm leading-relaxed text-gray-600 dark:text-gray-400">
+                      {featuredProjects[0].description}
+                    </p>
+                    {(featuredProjects[0].slug || featuredProjects[0].href) && (
+                      <Link
+                        href={
+                          featuredProjects[0].slug
+                            ? `/projects/${featuredProjects[0].slug}`
+                            : featuredProjects[0].href || '#'
+                        }
+                        target={featuredProjects[0].slug ? undefined : '_blank'}
+                        rel={featuredProjects[0].slug ? undefined : 'noopener noreferrer'}
+                        className="inline-flex items-center gap-1 self-start text-sm font-medium text-black underline underline-offset-4 hover:no-underline dark:text-white"
+                      >
+                        View Project →
+                      </Link>
+                    )}
                   </div>
-                )}
+                </div>
+              </div>
+            )}
 
-                {project.imgSrc && (
-                  <div className="relative h-48 overflow-hidden bg-gray-50 dark:bg-gray-900">
+            {/* Second project — standard card, left half only; right cell = intentional white space */}
+            {featuredProjects[1] && (
+              <div className="group overflow-hidden rounded-xl border border-gray-200 bg-white transition-all duration-300 hover:-translate-y-0.5 hover:border-gray-300 hover:shadow-lg dark:border-gray-800 dark:bg-gray-950 dark:hover:border-gray-700 dark:hover:shadow-[0_10px_30px_rgba(255,255,255,0.04)]">
+                {featuredProjects[1].imgSrc && (
+                  <div className="relative h-44 overflow-hidden bg-gray-50 dark:bg-gray-900">
                     <Image
-                      src={project.imgSrc}
-                      alt={project.title}
+                      src={featuredProjects[1].imgSrc}
+                      alt={featuredProjects[1].title}
                       width={600}
                       height={300}
-                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      className="h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                   </div>
                 )}
-
                 <div className="p-6">
-                  <h3 className="mb-2 text-lg font-semibold text-black dark:text-white">
-                    {project.slug ? (
-                      <Link href={`/projects/${project.slug}`} className="hover:underline">
-                        {project.title}
-                      </Link>
-                    ) : project.href ? (
+                  <p className="mb-2 font-mono text-xs uppercase tracking-widest text-gray-300 dark:text-gray-700">
+                    02
+                  </p>
+                  <h3 className="mb-2 text-base font-semibold text-black dark:text-white">
+                    {featuredProjects[1].slug ? (
                       <Link
-                        href={project.href}
+                        href={`/projects/${featuredProjects[1].slug}`}
+                        className="hover:underline"
+                      >
+                        {featuredProjects[1].title}
+                      </Link>
+                    ) : featuredProjects[1].href ? (
+                      <Link
+                        href={featuredProjects[1].href}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="hover:underline"
                       >
-                        {project.title}
+                        {featuredProjects[1].title}
                       </Link>
                     ) : (
-                      project.title
+                      featuredProjects[1].title
                     )}
                   </h3>
-                  <p className="mb-4 text-sm leading-relaxed text-gray-600 dark:text-gray-400">
-                    {project.description}
+                  <p className="mb-4 line-clamp-2 text-sm leading-relaxed text-gray-600 dark:text-gray-400">
+                    {featuredProjects[1].description}
                   </p>
-                  {(project.slug || project.href) && (
+                  {(featuredProjects[1].slug || featuredProjects[1].href) && (
                     <Link
-                      href={project.slug ? `/projects/${project.slug}` : project.href || '#'}
-                      target={project.slug ? undefined : '_blank'}
-                      rel={project.slug ? undefined : 'noopener noreferrer'}
+                      href={
+                        featuredProjects[1].slug
+                          ? `/projects/${featuredProjects[1].slug}`
+                          : featuredProjects[1].href || '#'
+                      }
+                      target={featuredProjects[1].slug ? undefined : '_blank'}
+                      rel={featuredProjects[1].slug ? undefined : 'noopener noreferrer'}
                       className="inline-flex items-center gap-1 text-sm font-medium text-black underline underline-offset-4 hover:no-underline dark:text-white"
                     >
                       View Project →
@@ -178,15 +246,14 @@ export default function Home({ posts }) {
                   )}
                 </div>
               </div>
-            ))}
+            )}
           </div>
         </section>
       )}
 
       {/* ─── Latest Posts ───────────────────────────────────── */}
       <section className="mb-16">
-        {/* Section heading */}
-        <div className="mb-8 flex items-end justify-between">
+        <div className="mb-6 flex items-end justify-between">
           <div>
             <p className="mb-1 text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-600">
               02 — Writing
@@ -206,44 +273,75 @@ export default function Home({ posts }) {
           )}
         </div>
 
-        {/* Card grid */}
         {!posts.length && (
           <p className="text-sm text-gray-500 dark:text-gray-400">No posts found.</p>
         )}
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+
+        {/* Editorial list */}
+        <div className="divide-y divide-gray-100 dark:divide-gray-900">
           {posts.slice(0, MAX_DISPLAY).map((post) => {
-            const { slug, date, title, summary, tags } = post
+            const { slug, date, title, summary } = post
             return (
               <Link
                 key={slug}
                 href={`/blog/${slug}`}
-                className="group flex flex-col rounded-xl border border-gray-200 bg-white p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-gray-300 hover:shadow-md dark:border-gray-800 dark:bg-gray-950 dark:hover:border-gray-700 dark:hover:shadow-[0_8px_24px_rgba(255,255,255,0.03)]"
+                className="group -mx-4 flex items-start gap-6 rounded-lg px-4 py-4 transition-colors hover:bg-gray-50 dark:hover:bg-gray-950/50"
               >
                 <time
                   dateTime={date}
-                  className="mb-3 text-xs font-medium text-gray-400 dark:text-gray-600"
+                  className="w-20 flex-shrink-0 pt-0.5 font-mono text-xs uppercase tracking-widest text-gray-400 dark:text-gray-600"
                 >
-                  {formatDate(date, siteMetadata.locale)}
+                  {new Date(date).toLocaleDateString('en-US', {
+                    month: 'short',
+                    year: 'numeric',
+                  })}
                 </time>
-                <h3 className="mb-2 text-base font-semibold leading-snug text-black transition-colors group-hover:text-gray-700 dark:text-white dark:group-hover:text-gray-200">
-                  {title}
-                </h3>
-                <p className="mb-4 line-clamp-2 flex-1 text-sm leading-relaxed text-gray-500 dark:text-gray-400">
-                  {summary}
-                </p>
-                <div className="flex flex-wrap gap-1.5">
-                  {tags.slice(0, 2).map((tag) => (
-                    <span
-                      key={tag}
-                      className="rounded-md border border-gray-200 px-2 py-0.5 text-xs font-medium uppercase text-gray-500 dark:border-gray-700 dark:text-gray-400"
-                    >
-                      {tag.split(' ').join('-')}
-                    </span>
-                  ))}
+                <div className="min-w-0 flex-1">
+                  <p className="text-sm font-semibold text-black dark:text-white">{title}</p>
+                  <p className="mt-0.5 line-clamp-1 text-sm text-gray-500 dark:text-gray-400">
+                    {summary}
+                  </p>
                 </div>
+                <span className="flex-shrink-0 pt-0.5 text-sm text-gray-400 opacity-0 transition-opacity duration-150 group-hover:opacity-100 dark:text-gray-600">
+                  →
+                </span>
               </Link>
             )
           })}
+        </div>
+      </section>
+
+      {/* ─── Follow the journey ──────────────────────────── */}
+      <section className="mb-16">
+        <div className="border-l-4 border-black py-2 pl-6 dark:border-white">
+          <p className="mb-1 text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-600">
+            Building in public
+          </p>
+          <h2 className="font-display text-xl font-bold text-black dark:text-white sm:text-2xl">
+            Follow along as I build.
+          </h2>
+          <p className="mt-2 max-w-md text-sm text-gray-500 dark:text-gray-400">
+            I share devlogs, project updates, and notes from the lab. No spam — just what I'm
+            building.
+          </p>
+          <div className="mt-4 flex flex-wrap gap-3">
+            <Link
+              href={siteMetadata.x}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-black transition-all hover:border-gray-400 hover:bg-gray-50 dark:border-gray-700 dark:text-white dark:hover:border-gray-600 dark:hover:bg-gray-900"
+            >
+              Follow on X
+            </Link>
+            <Link
+              href={siteMetadata.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-black transition-all hover:border-gray-400 hover:bg-gray-50 dark:border-gray-700 dark:text-white dark:hover:border-gray-600 dark:hover:bg-gray-900"
+            >
+              GitHub
+            </Link>
+          </div>
         </div>
       </section>
     </>

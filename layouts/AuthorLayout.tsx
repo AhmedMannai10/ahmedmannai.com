@@ -2,6 +2,8 @@ import { ReactNode } from 'react'
 import type { Authors } from 'contentlayer/generated'
 import SocialIcon from '@/components/social-icons'
 import Image from '@/components/Image'
+import Link from '@/components/Link'
+import siteMetadata from '@/data/siteMetadata'
 
 interface Props {
   children: ReactNode
@@ -93,6 +95,40 @@ export default function AuthorLayout({ children, content }: Props) {
                   {skill}
                 </span>
               ))}
+            </div>
+          </div>
+
+          {/* Follow along CTA */}
+          <div className="mt-10 border-t border-gray-200 pt-10 dark:border-gray-800">
+            <h4 className="mb-1 text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-600">
+              Follow the journey
+            </h4>
+            <p className="mt-2 text-base text-gray-600 dark:text-gray-400">
+              I build in public and share what I learn. Follow along on X or browse the devlogs.
+            </p>
+            <div className="mt-5 flex flex-wrap gap-3">
+              <Link
+                href={siteMetadata.x}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center rounded-md border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-black transition-all hover:border-gray-400 hover:bg-gray-50 dark:border-gray-800 dark:bg-black dark:text-white dark:hover:border-gray-600"
+              >
+                Follow on X
+              </Link>
+              <Link
+                href={siteMetadata.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center rounded-md border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-black transition-all hover:border-gray-400 hover:bg-gray-50 dark:border-gray-800 dark:bg-black dark:text-white dark:hover:border-gray-600"
+              >
+                GitHub
+              </Link>
+              <Link
+                href="/blog"
+                className="inline-flex items-center rounded-md border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-black transition-all hover:border-gray-400 hover:bg-gray-50 dark:border-gray-800 dark:bg-black dark:text-white dark:hover:border-gray-600"
+              >
+                Read the devlogs
+              </Link>
             </div>
           </div>
         </div>
