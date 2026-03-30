@@ -4,7 +4,7 @@ const siteMetadata = {
   author: 'Ahmed Mannai',
   headerTitle: 'Ahmed Mannai',
   description:
-    'Software & DevOps Engineer, Writer, and Footballer. Building clean, efficient software solutions and more.',
+    'Ahmed Mannai is a Software & DevOps Engineer building web apps, mobile products, and open source tools. Read devlogs, project breakdowns, and technical writing.',
   language: 'en-us',
   theme: 'system', // system, dark or light
   siteUrl: process.env.NEXT_PUBLIC_SITE_URL || 'https://ahmedmannai.com',
@@ -49,7 +49,7 @@ const siteMetadata = {
     image: `${process.env.BASE_PATH || ''}/static/images/avatar.png`,
     sameAs: [
       'https://github.com/ahmedmannai10',
-      'https://x.com/Ahmad_Manai',
+      'https://x.com/Ahmed_Manaii',
       'https://www.linkedin.com/in/ahmedmannai',
       'https://youtube.com/@ahmed-mannai',
       'https://www.threads.net/theahmedmannai',

@@ -2,6 +2,7 @@ import 'css/tailwind.css'
 import 'pliny/search/algolia.css'
 import 'remark-github-blockquote-alert/alert.css'
 import { Analytics } from '@vercel/analytics/react'
+import Script from 'next/script'
 
 import { Inter, Lobster } from 'next/font/google'
 import { SearchProvider, SearchConfig } from 'pliny/search'
@@ -133,6 +134,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             '@type': 'Person',
             name: siteMetadata.authorInfo?.name || siteMetadata.author,
             jobTitle: siteMetadata.authorInfo?.jobTitle || 'Software Engineer',
+            description: siteMetadata.description,
             worksFor: {
               '@type': 'Organization',
               name: siteMetadata.authorInfo?.company || 'QimInfo basel',
@@ -140,6 +142,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             email: siteMetadata.authorInfo?.email || siteMetadata.email,
             image: siteMetadata.authorInfo?.image || siteMetadata.siteLogo,
             url: siteMetadata.siteUrl,
+            knowsAbout: [
+              'Software Engineering',
+              'DevOps',
+              'Web Development',
+              'Mobile Development',
+              'TypeScript',
+              'React',
+              'Next.js',
+            ],
             sameAs:
               siteMetadata.authorInfo?.sameAs ||
               [
@@ -160,6 +171,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             name: siteMetadata.title,
             description: siteMetadata.description,
             url: siteMetadata.siteUrl,
+            inLanguage: 'en-US',
             author: {
               '@type': 'Person',
               name: siteMetadata.author,
@@ -180,6 +192,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         }}
       />
       <body className="bg-white pl-[calc(100vw-100%)] text-black antialiased dark:bg-black dark:text-white">
+        <Script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4839732717123016"
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
+        />
         <Analytics />
         <SpeedInsights />
         <ThemeProviders>

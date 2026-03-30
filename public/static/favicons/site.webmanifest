@@ -1,9 +1,11 @@
 {
-  "name": "",
-  "short_name": "",
+  "name": "Ahmed Mannai",
+  "short_name": "A.Mannai",
+  "start_url": "/",
+  "lang": "en-US",
   "icons": [
     {
-      "src": "/android-chrome-96x96.png",
+      "src": "/static/favicons/android-chrome-96x96.png",
       "sizes": "96x96",
       "type": "image/png"
     }
