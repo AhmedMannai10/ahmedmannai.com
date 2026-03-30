@@ -34,23 +34,9 @@ export function genPageMetadata({ title, description, image, ...rest }: PageSEOP
       description: metaDescription,
       url: './',
       siteName: siteMetadata.title,
-      images: image
-        ? [
-            {
-              url: image,
-              width: 1200,
-              height: 630,
-              alt: title,
-            },
-          ]
-        : [
-            {
-              url: siteMetadata.socialBanner,
-              width: 1200,
-              height: 630,
-              alt: siteMetadata.title,
-            },
-          ],
+      ...(image && {
+        images: [{ url: image, width: 1200, height: 630, alt: title }],
+      }),
       locale: siteMetadata.locale || 'en_US',
       type: 'website',
     },
@@ -58,7 +44,7 @@ export function genPageMetadata({ title, description, image, ...rest }: PageSEOP
       card: 'summary_large_image',
       title: fullTitle,
       description: metaDescription,
-      images: image ? [image] : [siteMetadata.socialBanner],
+      ...(image && { images: [image] }),
       creator: siteMetadata.x ? `@${siteMetadata.x.split('/').pop()}` : undefined,
     },
     ...rest,
