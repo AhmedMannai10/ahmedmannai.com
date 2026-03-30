@@ -8,10 +8,6 @@ export async function GET(req: NextRequest) {
   const title = searchParams.get('title') ?? 'Ahmed Mannai'
   const date = searchParams.get('date') ?? ''
 
-  const interBold = await fetch(
-    'https://fonts.gstatic.com/s/inter/v13/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuFuYAZ9hiJ-Ek-_EeA.woff2'
-  ).then((res) => res.arrayBuffer())
-
   const titleSize = title.length > 60 ? '48px' : title.length > 40 ? '58px' : '68px'
 
   return new ImageResponse(
@@ -26,7 +22,6 @@ export async function GET(req: NextRequest) {
         backgroundColor: '#080808',
         position: 'relative',
         overflow: 'hidden',
-        fontFamily: 'Inter, sans-serif',
       }}
     >
       {/* Atmospheric glow — top right */}
@@ -110,17 +105,6 @@ export async function GET(req: NextRequest) {
         </div>
       </div>
     </div>,
-    {
-      width: 1200,
-      height: 630,
-      fonts: [
-        {
-          name: 'Inter',
-          data: interBold,
-          style: 'normal',
-          weight: 700,
-        },
-      ],
-    }
+    { width: 1200, height: 630 }
   )
 }
