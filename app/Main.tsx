@@ -19,92 +19,143 @@ export default function Home({ posts }) {
   return (
     <>
       {/* ─── Hero ───────────────────────────────────────────── */}
-      <section className="relative mb-16 overflow-hidden pt-8 md:mb-24 md:pt-14">
-        {/* Radial gradient background accent */}
+      <section className="relative flex min-h-[calc(100vh-4rem)] flex-col">
+        {/* Full-viewport atmospheric background — breaks out of the container */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 -z-10"
+          className="pointer-events-none absolute -z-10"
           style={{
-            background:
-              'radial-gradient(ellipse 80% 50% at 0% 0%, rgba(124,58,237,0.07) 0%, transparent 70%)',
+            top: 0,
+            bottom: 0,
+            left: 'calc(50% - 50vw)',
+            width: '100vw',
           }}
-        />
-
-        <div className="relative max-w-3xl">
-          {/* Greeting row */}
+        >
           <div
-            className="mb-6 flex animate-fade-in items-center gap-3"
-            style={{ animationDelay: '0ms' }}
-          >
-            <Image
-              src="/static/images/avatar.png"
-              alt="Ahmed Mannai — Software & DevOps Engineer"
-              width={48}
-              height={48}
-              className="rounded-full object-cover ring-2 ring-gray-200 dark:ring-gray-800"
-            />
-            <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
-              Hey, I'm Ahmed
-            </span>
+            className="absolute left-1/2 top-0 h-[70vh] w-[80vw] -translate-x-1/2 rounded-full opacity-60 blur-[140px]"
+            style={{
+              background:
+                'radial-gradient(ellipse, rgba(139,92,246,0.18) 0%, rgba(59,130,246,0.08) 50%, transparent 70%)',
+            }}
+          />
+          <div
+            className="absolute bottom-0 left-[10%] h-[45vh] w-[45vw] rounded-full opacity-40 blur-[110px]"
+            style={{ background: 'rgba(99,102,241,0.14)' }}
+          />
+          <div
+            className="absolute bottom-0 right-[10%] h-[45vh] w-[45vw] rounded-full opacity-40 blur-[110px]"
+            style={{ background: 'rgba(168,85,247,0.12)' }}
+          />
+        </div>
+
+        {/* Main content — vertically centered */}
+        <div className="flex flex-1 flex-col items-center justify-center px-4 pb-8 pt-16 text-center sm:px-6 lg:px-8">
+          {/* Avatar */}
+          <div className="mb-8 animate-fade-in" style={{ animationDelay: '0ms' }}>
+            <div className="relative inline-block">
+              <Image
+                src="/static/images/avatar.png"
+                alt="Ahmed Mannai"
+                width={80}
+                height={80}
+                className="rounded-full object-cover"
+              />
+              {/* Online indicator */}
+              <span className="absolute bottom-0.5 right-0.5 block h-3.5 w-3.5 rounded-full border-2 border-white bg-emerald-400 dark:border-black" />
+            </div>
           </div>
 
-          {/* Name — editorial scale */}
-          <h1
-            className="animate-fade-in-up font-display font-bold leading-[0.88] tracking-[-0.04em] text-black dark:text-white"
-            style={{ animationDelay: '100ms' }}
+          {/* Eyebrow label */}
+          <p
+            className="mb-5 animate-fade-in text-xs font-semibold uppercase tracking-[0.3em] text-gray-400 dark:text-gray-500"
+            style={{ animationDelay: '60ms' }}
           >
-            <span className="block text-7xl sm:text-8xl md:text-9xl">Ahmed</span>
-            <span className="block text-7xl sm:text-8xl md:text-9xl">
-              Mannai
-              <span className="text-gray-300 dark:text-gray-700">.</span>
+            Software & DevOps Engineer
+          </p>
+
+          {/* Headline — massive, Apple-weight */}
+          <h1
+            className="mx-auto max-w-4xl animate-fade-in-up font-display font-bold leading-[1.05] tracking-[-0.03em] text-black dark:text-white"
+            style={{
+              animationDelay: '120ms',
+              fontSize: 'clamp(2.75rem, 8vw, 6rem)',
+            }}
+          >
+            Building what
+            <br />
+            <span
+              style={{
+                backgroundImage: 'linear-gradient(135deg, #000 0%, #6366f1 50%, #8b5cf6 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+              }}
+              className="dark:hidden"
+            >
+              matters.
+            </span>
+            <span
+              style={{
+                backgroundImage: 'linear-gradient(135deg, #fff 0%, #a5b4fc 50%, #c4b5fd 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+              }}
+              className="hidden dark:inline"
+            >
+              matters.
             </span>
           </h1>
 
-          {/* Bio — keyword-rich tagline */}
+          {/* Tagline */}
           <p
-            className="mt-8 max-w-sm animate-fade-in-up border-l-2 border-gray-200 pl-4 text-base leading-relaxed text-gray-500 dark:border-gray-800 dark:text-gray-400"
+            className="mx-auto mt-7 max-w-lg animate-fade-in-up text-lg leading-relaxed text-gray-500 dark:text-gray-400 sm:text-xl"
             style={{ animationDelay: '220ms' }}
           >
-            Software & DevOps Engineer building web apps, mobile products, and open source tools. I
-            document the journey here.
+            Web apps. Mobile products. DevOps infrastructure.
+            <br className="hidden sm:block" />
+            Crafted with precision, shipped with purpose.
           </p>
-
-          {/* Stats / Highlights bar */}
-          <div
-            className="mt-6 grid animate-fade-in-up grid-cols-2 gap-3 sm:grid-cols-4"
-            style={{ animationDelay: '300ms' }}
-          >
-            {STATS.map((stat) => (
-              <div
-                key={stat.label}
-                className="rounded-lg border border-gray-100 bg-gray-50 px-3 py-2.5 dark:border-gray-800 dark:bg-gray-950"
-              >
-                <p className="text-sm font-bold text-black dark:text-white">{stat.label}</p>
-                <p className="text-xs text-gray-500 dark:text-gray-400">{stat.sublabel}</p>
-              </div>
-            ))}
-          </div>
 
           {/* CTAs */}
           <div
-            className="mt-8 flex animate-fade-in-up flex-wrap items-center gap-4"
-            style={{ animationDelay: '380ms' }}
+            className="mt-10 flex animate-fade-in-up flex-wrap justify-center gap-4"
+            style={{ animationDelay: '320ms' }}
           >
             <Link
               href="/projects"
-              className="group inline-flex items-center gap-2 rounded-md border border-black bg-black px-6 py-3 text-base font-medium text-white transition-all hover:bg-gray-900 dark:border-white dark:bg-white dark:text-black dark:hover:bg-gray-100"
+              className="group inline-flex items-center gap-2 rounded-full border border-black bg-black px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-black/20 transition-all duration-200 hover:scale-[1.02] hover:bg-gray-900 dark:border-white dark:bg-white dark:text-black dark:shadow-white/10 dark:hover:bg-gray-100"
             >
               View Projects
-              <span className="inline-block transition-transform duration-200 group-hover:translate-x-1">
+              <span className="inline-block transition-transform duration-200 group-hover:translate-x-0.5">
                 →
               </span>
             </Link>
             <Link
               href="/blog"
-              className="inline-flex items-center rounded-md border border-gray-300 px-6 py-3 text-base font-medium text-black transition-all hover:border-black hover:bg-gray-50 dark:border-gray-700 dark:text-white dark:hover:border-white dark:hover:bg-gray-900"
+              className="inline-flex items-center rounded-full border border-gray-300 bg-white/60 px-7 py-3.5 text-sm font-semibold text-black backdrop-blur-sm transition-all duration-200 hover:scale-[1.02] hover:border-gray-400 hover:bg-white dark:border-gray-700 dark:bg-black/40 dark:text-white dark:hover:border-gray-500 dark:hover:bg-black/60"
             >
               Read Blog
             </Link>
+          </div>
+        </div>
+
+        {/* Stats strip — pinned to bottom, full width */}
+        <div
+          className="animate-fade-in border-t border-gray-100 dark:border-gray-900"
+          style={{ animationDelay: '480ms' }}
+        >
+          <div className="grid grid-cols-2 divide-x divide-y divide-gray-100 dark:divide-gray-900 sm:grid-cols-4 sm:divide-y-0">
+            {STATS.map((stat) => (
+              <div key={stat.label} className="flex flex-col items-center py-5">
+                <span className="text-xl font-bold tracking-tight text-black dark:text-white">
+                  {stat.label}
+                </span>
+                <span className="mt-0.5 text-xs text-gray-400 dark:text-gray-500">
+                  {stat.sublabel}
+                </span>
+              </div>
+            ))}
           </div>
         </div>
       </section>

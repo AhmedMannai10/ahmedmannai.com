@@ -54,7 +54,7 @@ input:-webkit-autofill:focus {
 form input[type='email'],
 form input#email-input,
 input#email-input {
-  @apply w-full rounded-md border border-gray-300 bg-white px-4 py-2 font-sans text-sm text-black placeholder-gray-500 focus:border-black focus:outline-none focus:ring-1 focus:ring-black dark:border-gray-700 dark:bg-black dark:text-white dark:placeholder-gray-400 dark:focus:border-white dark:focus:ring-white;
+  @apply w-full rounded-full border border-gray-300 bg-white px-5 py-2.5 font-sans text-sm text-black placeholder-gray-400 focus:border-black focus:outline-none focus:ring-1 focus:ring-black dark:border-gray-700 dark:bg-black dark:text-white dark:placeholder-gray-500 dark:focus:border-white dark:focus:ring-white;
 }
 
 /* NewsletterForm specific input - responsive width for desktop */
@@ -64,7 +64,7 @@ form.flex input#email-input {
 
 form button[type='submit'],
 button[type='submit'] {
-  @apply w-full rounded-md border border-black bg-black px-4 py-2 font-sans text-sm font-medium text-white transition-all hover:bg-gray-900 focus:outline-none focus:ring-1 focus:ring-black dark:border-white dark:bg-white dark:text-black dark:hover:bg-gray-100 dark:focus:ring-white;
+  @apply w-full rounded-full border border-black bg-black px-6 py-2.5 font-sans text-sm font-semibold text-white shadow-lg shadow-black/20 transition-all hover:scale-[1.02] hover:bg-gray-900 focus:outline-none focus:ring-1 focus:ring-black dark:border-white dark:bg-white dark:text-black dark:shadow-white/10 dark:hover:bg-gray-100 dark:focus:ring-white;
 }
 
 /* NewsletterForm button in flex layout */
