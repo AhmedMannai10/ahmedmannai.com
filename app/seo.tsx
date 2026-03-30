@@ -12,6 +12,7 @@ interface PageSEOProps {
 export function genPageMetadata({ title, description, image, ...rest }: PageSEOProps): Metadata {
   const fullTitle = `${title} | ${siteMetadata.title}`
   const metaDescription = description || siteMetadata.description
+  const ogImage = image || `${siteMetadata.siteUrl}/api/og?title=${encodeURIComponent(title)}`
 
   return {
     title,
@@ -34,9 +35,7 @@ export function genPageMetadata({ title, description, image, ...rest }: PageSEOP
       description: metaDescription,
       url: './',
       siteName: siteMetadata.title,
-      ...(image && {
-        images: [{ url: image, width: 1200, height: 630, alt: title }],
-      }),
+      images: [{ url: ogImage, width: 1200, height: 630, alt: title }],
       locale: siteMetadata.locale || 'en_US',
       type: 'website',
     },
@@ -44,7 +43,7 @@ export function genPageMetadata({ title, description, image, ...rest }: PageSEOP
       card: 'summary_large_image',
       title: fullTitle,
       description: metaDescription,
-      ...(image && { images: [image] }),
+      images: [ogImage],
       creator: siteMetadata.x ? `@${siteMetadata.x.split('/').pop()}` : undefined,
     },
     ...rest,

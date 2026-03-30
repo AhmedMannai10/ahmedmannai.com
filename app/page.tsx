@@ -24,6 +24,7 @@ export const metadata: Metadata = {
     description: siteMetadata.description,
     url: siteMetadata.siteUrl,
     siteName: siteMetadata.title,
+    images: [{ url: `${siteMetadata.siteUrl}/opengraph-image`, width: 1200, height: 630 }],
     locale: siteMetadata.locale || 'en_US',
     type: 'website',
   },
@@ -31,6 +32,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: siteMetadata.title,
     description: siteMetadata.description,
+    images: [`${siteMetadata.siteUrl}/opengraph-image`],
     creator: siteMetadata.x ? `@${siteMetadata.x.split('/').pop()}` : undefined,
   },
   alternates: {
