@@ -93,109 +93,85 @@ form.flex > div:last-child {
   @apply w-full sm:w-auto sm:flex-shrink-0;
 }
 
-/* KBar Search Interface Styling */
-/* Override KBar Positioner backdrop */
+/* ============================================
+   KBAR — Apple Spotlight style
+   ============================================ */
+
+/* Backdrop — strong blur like iOS */
 div[class*='bg-gray-300'][class*='backdrop-blur'],
 div[class*='bg-black'][class*='backdrop-blur'] {
-  @apply bg-black/50 backdrop-blur-sm !important;
+  @apply bg-black/40 backdrop-blur-md !important;
 }
 
-/* KBar Main Container */
+/* Main container — frosted glass card, positioned in top third */
 div[class*='rounded-2xl'][class*='border-gray-100'],
 div[class*='rounded-2xl'][class*='border-gray-800'] {
-  @apply border-gray-200 bg-white dark:border-gray-800 dark:bg-black !important;
+  @apply mt-[15vh] border border-gray-200/60 bg-white/95 shadow-2xl backdrop-blur-2xl dark:border-gray-800/60 dark:bg-black/95 !important;
 }
 
-/* KBar Search Input */
+/* Search input */
 input[class*='bg-transparent'][class*='text-gray-600'],
 input[class*='bg-transparent'][class*='text-gray-200'] {
-  @apply text-black placeholder-gray-500 dark:text-white dark:placeholder-gray-400 !important;
+  @apply text-lg text-black placeholder-gray-400 dark:text-white dark:placeholder-gray-500 !important;
 }
 
-/* KBar Search Icon */
+/* Search icon */
 div[class*='flex'][class*='items-center'][class*='space-x-4'] svg {
-  @apply text-gray-600 dark:text-gray-400 !important;
+  @apply text-gray-400 dark:text-gray-500 !important;
 }
 
-/* KBar ESC Button */
+/* ESC badge */
 kbd[class*='rounded'][class*='border'][class*='text-gray-400'] {
-  @apply border-gray-300 bg-white text-gray-600 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400 !important;
+  @apply rounded-md border-gray-200 bg-gray-100 text-xs text-gray-500 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-400 !important;
 }
 
-/* KBar Section Header */
+/* Section label */
 div[class*='uppercase'][class*='text-primary-600'] {
-  @apply text-gray-500 dark:text-gray-400 !important;
+  @apply px-4 py-2 text-xs font-semibold tracking-widest text-gray-400 dark:text-gray-500 !important;
 }
 
-/* KBar List Items - Normal State */
+/* List items — normal */
 div[class*='flex'][class*='cursor-pointer'][class*='text-gray-700'],
 div[class*='flex'][class*='cursor-pointer'][class*='text-gray-100'] {
+  @apply mx-2 rounded-xl text-black dark:text-white !important;
+}
+
+/* Active/highlighted item */
+div[class*='bg-primary-600'][class*='text-gray-100'] {
+  @apply mx-2 rounded-xl bg-gray-100 text-black dark:bg-gray-900 dark:text-white !important;
+}
+
+/* Active item children */
+div[class*='bg-primary-600'] > div,
+div[class*='bg-gray-100'][class*='text-black'] > div {
   @apply text-black dark:text-white !important;
 }
 
-/* KBar Active/Selected Item */
-div[class*='bg-primary-600'][class*='text-gray-100'] {
-  @apply bg-black text-white dark:bg-white dark:text-black !important;
-}
-
-/* KBar Active Item - Ensure all direct children have proper text color */
-div[class*='bg-primary-600'] > div,
-div[class*='bg-black'][class*='text-white'] > div,
-div[class*='bg-white'][class*='text-black'] > div {
-  @apply text-white dark:text-black !important;
-}
-
-/* KBar Active Item - Nested divs */
 div[class*='bg-primary-600'] div,
-div[class*='bg-black'][class*='text-white'] div,
-div[class*='bg-white'][class*='text-black'] div {
-  @apply text-white dark:text-black !important;
+div[class*='bg-gray-100'][class*='text-black'] div {
+  @apply text-black dark:text-white !important;
 }
 
-/* KBar Active Item Title (the item.name div - no class) */
-div[class*='bg-primary-600'] > div > div > div:not([class]),
-div[class*='bg-black'][class*='text-white'] > div > div > div:not([class]),
-div[class*='bg-white'][class*='text-black'] > div > div > div:not([class]) {
-  @apply text-white dark:text-black !important;
-}
-
-/* KBar Item Subtitle - Normal (not active) */
+/* Item subtitle — normal */
 div[class*='text-gray-400'][class*='text-xs']:not([class*='bg-primary']):not(
-    [class*='bg-black']
-  ):not([class*='bg-white']) {
-  @apply text-gray-500 dark:text-gray-400 !important;
+    [class*='bg-gray-100']
+  ):not([class*='bg-gray-900']) {
+  @apply text-gray-400 dark:text-gray-500 !important;
 }
 
-/* KBar Item Subtitle - Active */
-div[class*='bg-primary-600'] div[class*='text-gray-200'],
-div[class*='bg-primary-600'] div[class*='text-gray-400'],
-div[class*='bg-black'][class*='text-white'] div[class*='text-gray-200'],
-div[class*='bg-black'][class*='text-white'] div[class*='text-gray-400'],
-div[class*='bg-white'][class*='text-black'] div[class*='text-gray-200'],
-div[class*='bg-white'][class*='text-black'] div[class*='text-gray-400'] {
-  @apply text-gray-300 dark:text-gray-600 !important;
-}
-
-/* KBar Active Item Shortcut Keys */
-div[class*='bg-primary-600'] kbd,
-div[class*='bg-black'][class*='text-white'] kbd,
-div[class*='bg-white'][class*='text-black'] kbd {
-  @apply border-gray-300 text-white dark:border-gray-600 dark:text-black !important;
-}
-
-/* KBar Shortcut Keys */
+/* Shortcut keys */
 kbd[class*='border-gray-400'],
 kbd[class*='border-gray-200'] {
-  @apply border-gray-300 bg-white text-gray-600 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400 !important;
+  @apply rounded-md border-gray-200 bg-gray-100 text-xs text-gray-500 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-400 !important;
 }
 
-/* KBar Loading/No Results */
+/* No results / loading */
 div[class*='text-center'][class*='text-gray-400'],
 div[class*='text-center'][class*='text-gray-600'] {
-  @apply border-gray-200 text-gray-500 dark:border-gray-800 dark:text-gray-400 !important;
+  @apply text-gray-400 dark:text-gray-500 !important;
 }
 
-/* Ensure Inter font throughout */
+/* Inter font throughout */
 [data-kb-positioner],
 [data-kb-animator],
 [data-kb-search],
