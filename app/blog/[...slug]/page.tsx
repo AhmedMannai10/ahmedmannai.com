@@ -40,18 +40,27 @@ export async function generateMetadata({
   const publishedAt = new Date(post.date).toISOString()
   const modifiedAt = new Date(post.lastmod || post.date).toISOString()
   const authors = authorDetails.map((author) => author.name)
-  let imageList = [siteMetadata.socialBanner]
-  if (post.images) {
-    imageList = typeof post.images === 'string' ? [post.images] : post.images
-  }
-  const ogImages = imageList.map((img) => {
-    return {
-      url: img.includes('http') ? img : siteMetadata.siteUrl + img,
-    }
-  })
 
   const postUrl = `${siteMetadata.siteUrl}/blog/${post.slug}`
   const canonicalUrl = post.canonicalUrl || postUrl
+
+  // Dynamic OG image via API route; fall back to post images if explicitly set
+  const dateFormatted = new Date(post.date).toLocaleDateString('en-US', {
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
+  })
+  const dynamicOgUrl = `${siteMetadata.siteUrl}/api/og?title=${encodeURIComponent(post.title)}&date=${encodeURIComponent(dateFormatted)}`
+  const ogImageUrl =
+    post.images && post.images.length > 0
+      ? typeof post.images === 'string'
+        ? post.images.includes('http')
+          ? post.images
+          : siteMetadata.siteUrl + post.images
+        : post.images[0].includes('http')
+          ? post.images[0]
+          : siteMetadata.siteUrl + post.images[0]
+      : dynamicOgUrl
 
   return {
     title: post.title,
@@ -79,7 +88,7 @@ export async function generateMetadata({
       publishedTime: publishedAt,
       modifiedTime: modifiedAt,
       url: postUrl,
-      images: ogImages,
+      images: [{ url: ogImageUrl, width: 1200, height: 630, alt: post.title }],
       authors: authors.length > 0 ? authors : [siteMetadata.author],
       tags: post.tags || [],
     },
@@ -87,7 +96,7 @@ export async function generateMetadata({
       card: 'summary_large_image',
       title: post.title,
       description: post.summary,
-      images: imageList,
+      images: [ogImageUrl],
       creator: siteMetadata.x ? `@${siteMetadata.x.split('/').pop()}` : undefined,
     },
     alternates: {

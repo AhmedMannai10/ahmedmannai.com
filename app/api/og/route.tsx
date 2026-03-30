@@ -1,45 +1,24 @@
 import { ImageResponse } from 'next/og'
-import { allBlogs } from 'contentlayer/generated'
+import { NextRequest } from 'next/server'
 
-export const size = { width: 1200, height: 630 }
-export const contentType = 'image/png'
+export const runtime = 'edge'
 
-export async function generateImageMetadata({ params }: { params: { slug: string[] } }) {
-  const slug = decodeURI(params.slug.join('/'))
-  const post = allBlogs.find((p) => p.slug === slug)
-  return [
-    {
-      id: 'og',
-      alt: post?.title ?? 'Ahmed Mannai',
-    },
-  ]
-}
-
-export default async function Image({ params }: { params: { slug: string[] } }) {
-  const slug = decodeURI(params.slug.join('/'))
-  const post = allBlogs.find((p) => p.slug === slug)
-
-  const title = post?.title ?? 'Blog Post'
-  const date = post?.date
-    ? new Date(post.date).toLocaleDateString('en-US', {
-        month: 'long',
-        day: 'numeric',
-        year: 'numeric',
-      })
-    : ''
+export async function GET(req: NextRequest) {
+  const { searchParams } = req.nextUrl
+  const title = searchParams.get('title') ?? 'Ahmed Mannai'
+  const date = searchParams.get('date') ?? ''
 
   const interBold = await fetch(
     'https://fonts.gstatic.com/s/inter/v13/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuFuYAZ9hiJ-Ek-_EeA.woff2'
   ).then((res) => res.arrayBuffer())
 
-  // Scale font size down for long titles
   const titleSize = title.length > 60 ? '48px' : title.length > 40 ? '58px' : '68px'
 
   return new ImageResponse(
     <div
       style={{
-        width: '100%',
-        height: '100%',
+        width: '1200px',
+        height: '630px',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
@@ -132,7 +111,8 @@ export default async function Image({ params }: { params: { slug: string[] } }) 
       </div>
     </div>,
     {
-      ...size,
+      width: 1200,
+      height: 630,
       fonts: [
         {
           name: 'Inter',
