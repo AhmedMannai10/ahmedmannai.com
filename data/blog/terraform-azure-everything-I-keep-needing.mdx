@@ -1,0 +1,733 @@
+---
+title: 'Terraform + Azure — Everything I Keep Needing'
+date: '2026-04-01'
+tags: ['terraform', 'azure', 'devops', 'infrastructure', 'tutorial']
+summary: "A living reference for provisioning Azure infrastructure with Terraform. From first init to production-grade state management, modules, CI/CD, and the mistakes I've made so you don't have to."
+---
+
+Hey.
+
+This is the post I wish existed when I started using Terraform with Azure. Not a marketing page for HashiCorp. Not a 40-minute video. Just the stuff that actually matters, in the order you actually need it.
+
+I'll update this as I build. Bookmark it.
+
+---
+
+## What Terraform is (and isn't)
+
+Terraform is a tool that lets you describe infrastructure as code — you write what you want, it figures out how to get there.
+
+You write this:
+
+```hcl
+resource "azurerm_resource_group" "main" {
+  name     = "rg-myapp-prod"
+  location = "eastus"
+}
+```
+
+Run `terraform apply`. Azure creates that resource group. Done.
+
+The key word is **declarative**. You don't write steps ("create this, then create that"). You write the end state. Terraform computes the diff between what exists and what you want, then executes only what's needed.
+
+That diff is called a **plan**. Always read it before applying.
+
+---
+
+## The toolchain
+
+Before anything else, get this installed:
+
+```bash
+# macOS
+brew tap hashicorp/tap && brew install hashicorp/tap/terraform
+
+# Windows
+choco install terraform
+
+# Verify
+terraform version
+```
+
+Tools I actually use alongside it:
+
+- **Azure CLI** — `az login` is how Terraform authenticates locally
+- **tfenv** — switch Terraform versions without pain
+- **TFLint** — catches Azure-specific mistakes before they hit the cloud
+- **Checkov** — static security scanner, runs in CI
+- **terraform-docs** — auto-generates README for your modules
+
+---
+
+## The workflow. Every time.
+
+```bash
+terraform init                 # download providers, init backend
+terraform validate             # check syntax
+terraform plan -out=tfplan     # see what will change
+terraform apply tfplan         # apply exactly what you reviewed
+```
+
+Never `terraform apply` without a saved plan in a real environment. The plan you reviewed and the plan that runs should be the same file.
+
+---
+
+## Project structure
+
+Don't put everything in one file. You'll regret it by week two.
+
+```
+.
+├── providers.tf       # terraform {} block + provider config
+├── main.tf            # resources
+├── variables.tf       # variable declarations
+├── outputs.tf         # outputs
+├── locals.tf          # computed local values
+├── terraform.tfvars   # real values — DO NOT commit this
+└── modules/
+    ├── networking/
+    ├── storage/
+    └── aks/
+```
+
+---
+
+## Connecting to Azure
+
+### Local development — just use the CLI
+
+```bash
+az login
+az account set --subscription "<your-sub-id>"
+```
+
+Then in `providers.tf`:
+
+```hcl
+terraform {
+  required_version = ">= 1.6.0"
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "~> 3.100"
+    }
+  }
+}
+
+provider "azurerm" {
+  features {}
+}
+```
+
+That's it. Terraform picks up your `az login` session automatically.
+
+### CI/CD — Service Principal
+
+Create one:
+
+```bash
+az ad sp create-for-rbac \
+  --name "sp-terraform" \
+  --role Contributor \
+  --scopes /subscriptions/<your-sub-id>
+```
+
+That gives you a JSON blob. Set those values as environment variables in your pipeline:
+
+```bash
+ARM_CLIENT_ID="..."
+ARM_CLIENT_SECRET="..."
+ARM_SUBSCRIPTION_ID="..."
+ARM_TENANT_ID="..."
+```
+
+Terraform picks them up automatically. No changes to your `.tf` files.
+
+> **Never put secrets in .tf files.** Not even in a private repo. Use env vars, Azure Key Vault, or OIDC federated credentials.
+
+---
+
+## Variables, locals, outputs
+
+### Variables — parameterise everything
+
+```hcl
+variable "environment" {
+  description = "Deployment environment"
+  type        = string
+  default     = "dev"
+
+  validation {
+    condition     = contains(["dev", "staging", "prod"], var.environment)
+    error_message = "Must be dev, staging, or prod."
+  }
+}
+
+variable "tags" {
+  type    = map(string)
+  default = {}
+}
+```
+
+### Locals — compute once, use everywhere
+
+```hcl
+locals {
+  prefix      = "${var.project}-${var.environment}"
+  common_tags = merge(var.tags, { managed_by = "terraform" })
+}
+```
+
+Use `local.prefix` in every resource name. Consistent naming, zero repetition.
+
+### Outputs — expose what you need downstream
+
+```hcl
+output "vnet_id" {
+  description = "VNet resource ID"
+  value       = azurerm_virtual_network.main.id
+}
+
+output "connection_string" {
+  value     = azurerm_storage_account.main.primary_connection_string
+  sensitive = true   # masked in CLI output, still usable in pipelines
+}
+```
+
+---
+
+## The resources I use constantly
+
+### Resource group
+
+```hcl
+resource "azurerm_resource_group" "main" {
+  name     = "${local.prefix}-rg"
+  location = var.location
+  tags     = local.common_tags
+}
+```
+
+### Virtual network + subnet
+
+```hcl
+resource "azurerm_virtual_network" "vnet" {
+  name                = "${local.prefix}-vnet"
+  address_space       = ["10.0.0.0/16"]
+  location            = azurerm_resource_group.main.location
+  resource_group_name = azurerm_resource_group.main.name
+  tags                = local.common_tags
+}
+
+resource "azurerm_subnet" "app" {
+  name                 = "snet-app"
+  resource_group_name  = azurerm_resource_group.main.name
+  virtual_network_name = azurerm_virtual_network.vnet.name
+  address_prefixes     = ["10.0.1.0/24"]
+  service_endpoints    = ["Microsoft.Storage", "Microsoft.KeyVault"]
+}
+```
+
+### Storage account
+
+```hcl
+resource "azurerm_storage_account" "main" {
+  name                      = "${replace(local.prefix, "-", "")}sa"
+  resource_group_name       = azurerm_resource_group.main.name
+  location                  = azurerm_resource_group.main.location
+  account_tier              = "Standard"
+  account_replication_type  = var.environment == "prod" ? "GRS" : "LRS"
+  min_tls_version           = "TLS1_2"
+  enable_https_traffic_only = true
+
+  blob_properties {
+    versioning_enabled = true
+  }
+
+  network_rules {
+    default_action             = "Deny"
+    virtual_network_subnet_ids = [azurerm_subnet.app.id]
+  }
+
+  tags = local.common_tags
+}
+```
+
+### Key Vault
+
+```hcl
+data "azurerm_client_config" "current" {}
+
+resource "azurerm_key_vault" "kv" {
+  name                       = "${local.prefix}-kv"
+  location                   = azurerm_resource_group.main.location
+  resource_group_name        = azurerm_resource_group.main.name
+  tenant_id                  = data.azurerm_client_config.current.tenant_id
+  sku_name                   = "standard"
+  purge_protection_enabled   = var.environment == "prod"
+  soft_delete_retention_days = 90
+
+  access_policy {
+    tenant_id = data.azurerm_client_config.current.tenant_id
+    object_id = data.azurerm_client_config.current.object_id
+    secret_permissions = ["Get", "List", "Set", "Delete", "Purge", "Recover"]
+  }
+
+  tags = local.common_tags
+}
+```
+
+### AKS cluster
+
+```hcl
+resource "azurerm_kubernetes_cluster" "aks" {
+  name                = "${local.prefix}-aks"
+  location            = azurerm_resource_group.main.location
+  resource_group_name = azurerm_resource_group.main.name
+  dns_prefix          = local.prefix
+  kubernetes_version  = var.k8s_version
+
+  default_node_pool {
+    name                = "system"
+    vm_size             = "Standard_D4s_v3"
+    vnet_subnet_id      = azurerm_subnet.app.id
+    enable_auto_scaling = true
+    min_count           = var.environment == "prod" ? 3 : 1
+    max_count           = 5
+  }
+
+  identity {
+    type = "SystemAssigned"
+  }
+
+  network_profile {
+    network_plugin    = "azure"
+    load_balancer_sku = "standard"
+  }
+
+  tags = local.common_tags
+}
+```
+
+---
+
+## HCL patterns worth memorising
+
+### count — conditional resource creation
+
+```hcl
+resource "azurerm_resource_group" "optional" {
+  count    = var.create_rg ? 1 : 0
+  name     = "${local.prefix}-rg"
+  location = var.location
+}
+```
+
+### for_each — prefer this over count for collections
+
+```hcl
+variable "subnets" {
+  type = map(object({
+    cidr = string
+  }))
+}
+
+resource "azurerm_subnet" "all" {
+  for_each             = var.subnets
+  name                 = each.key
+  address_prefixes     = [each.value.cidr]
+  resource_group_name  = azurerm_resource_group.main.name
+  virtual_network_name = azurerm_virtual_network.vnet.name
+}
+```
+
+Why prefer `for_each` over `count`? With `count`, deleting item [1] from a list shifts all indices. With `for_each`, keys are stable. No unexpected destroys.
+
+### dynamic blocks — conditional nested config
+
+```hcl
+resource "azurerm_network_security_group" "nsg" {
+  name                = "${local.prefix}-nsg"
+  location            = azurerm_resource_group.main.location
+  resource_group_name = azurerm_resource_group.main.name
+
+  dynamic "security_rule" {
+    for_each = var.nsg_rules
+    content {
+      name                       = security_rule.value.name
+      priority                   = security_rule.value.priority
+      direction                  = security_rule.value.direction
+      access                     = security_rule.value.access
+      protocol                   = security_rule.value.protocol
+      source_port_range          = "*"
+      destination_port_range     = security_rule.value.port
+      source_address_prefix      = "*"
+      destination_address_prefix = "*"
+    }
+  }
+}
+```
+
+### lifecycle — control destroy/replace behaviour
+
+```hcl
+lifecycle {
+  create_before_destroy = true  # zero-downtime replacement
+  prevent_destroy       = true  # block accidental terraform destroy
+  ignore_changes        = [
+    tags["last_modified"],      # allow external drift on these
+  ]
+}
+```
+
+Add `prevent_destroy = true` to any production database or storage account. It's saved me more than once.
+
+---
+
+## State — the most important thing to get right
+
+State is Terraform's memory. It maps your config to real Azure resource IDs.
+
+If state gets corrupted or lost, you're manually importing resources for hours. Get this right from day one.
+
+### Remote state on Azure Blob Storage
+
+First, bootstrap the storage manually (run once):
+
+```bash
+RESOURCE_GROUP="rg-terraform-state"
+STORAGE_ACCOUNT="sttfstate$(date +%s | tail -c 6)"
+CONTAINER="tfstate"
+
+az group create --name $RESOURCE_GROUP --location eastus
+
+az storage account create \
+  --name $STORAGE_ACCOUNT \
+  --resource-group $RESOURCE_GROUP \
+  --sku Standard_LRS \
+  --encryption-services blob
+
+az storage container create \
+  --name $CONTAINER \
+  --account-name $STORAGE_ACCOUNT
+```
+
+Then configure the backend in `providers.tf`:
+
+```hcl
+terraform {
+  backend "azurerm" {
+    resource_group_name  = "rg-terraform-state"
+    storage_account_name = "sttfstate123456"
+    container_name       = "tfstate"
+    key                  = "prod/myapp/terraform.tfstate"
+  }
+}
+```
+
+The `key` is the path inside the container. Use a consistent pattern:
+
+```
+<env>/<project>/<component>/terraform.tfstate
+
+prod/platform/networking/terraform.tfstate
+prod/platform/aks/terraform.tfstate
+staging/myapp/terraform.tfstate
+```
+
+This way, every team and every component has its own state file. No collisions.
+
+### State commands I use regularly
+
+```bash
+terraform state list                    # see all tracked resources
+terraform state show <resource_addr>    # inspect one resource's state
+terraform state mv <old> <new>          # rename without destroying
+terraform state rm <resource_addr>      # untrack (keeps real Azure resource)
+terraform import <resource_addr> <id>   # pull existing resource into state
+terraform force-unlock <lock-id>        # unstick a frozen lock
+```
+
+---
+
+## Modules
+
+A module is just a folder with `.tf` files. You call it like a function.
+
+### Structure I use
+
+```
+modules/
+  networking/
+    main.tf
+    variables.tf
+    outputs.tf
+    README.md
+  storage/
+  aks/
+environments/
+  dev/
+    main.tf
+    terraform.tfvars
+  prod/
+    main.tf
+    terraform.tfvars
+```
+
+### Calling a module
+
+```hcl
+module "networking" {
+  source = "../../modules/networking"
+
+  prefix        = local.prefix
+  location      = var.location
+  rg_name       = azurerm_resource_group.main.name
+  address_space = ["10.0.0.0/16"]
+  subnets       = var.subnets
+  tags          = local.common_tags
+}
+
+# Use its output elsewhere
+resource "azurerm_kubernetes_cluster" "aks" {
+  default_node_pool {
+    vnet_subnet_id = module.networking.subnet_ids["app"]
+  }
+}
+```
+
+Module rules I follow:
+
+- One logical concern per module — `networking`, not `everything`
+- Accept `tags` as a variable, apply to every resource inside
+- Never hardcode subscription IDs or secrets inside a module
+- Pin version when consuming from the Terraform Registry: `version = "~> 5.0"`
+- Validate all input variables — fail fast with a readable error
+
+---
+
+## Secrets — the non-negotiable rules
+
+**Rule 1:** No secret ever touches a `.tf` file.
+
+**Rule 2:** `.tfvars` files with real values go in `.gitignore`.
+
+**Rule 3:** Read secrets from Key Vault at apply time:
+
+```hcl
+data "azurerm_key_vault_secret" "db_password" {
+  name         = "db-admin-password"
+  key_vault_id = azurerm_key_vault.kv.id
+}
+
+resource "azurerm_mssql_server" "sql" {
+  administrator_login_password = data.azurerm_key_vault_secret.db_password.value
+}
+```
+
+### .gitignore
+
+```
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+*.tfvars.json
+tfplan
+crash.log
+override.tf
+```
+
+---
+
+## CI/CD
+
+### GitHub Actions
+
+```yaml
+name: Terraform
+on:
+  push: { branches: [main] }
+  pull_request: { branches: [main] }
+
+env:
+  ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+  ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+  ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+  ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+        with: { terraform_version: 1.7.x }
+
+      - run: terraform init
+      - run: terraform validate
+      - run: pip install checkov && checkov -d . --compact
+      - run: terraform plan -out=tfplan
+
+      - name: Apply (main branch only)
+        if: github.ref == 'refs/heads/main'
+        run: terraform apply tfplan
+```
+
+### Azure DevOps
+
+```yaml
+trigger:
+  branches: { include: [main] }
+
+stages:
+  - stage: Plan
+    jobs:
+      - job: Plan
+        pool: { vmImage: ubuntu-latest }
+        steps:
+          - task: TerraformInstaller@1
+            inputs: { terraformVersion: 1.7.x }
+          - task: TerraformTaskV4@4
+            inputs:
+              provider: azurerm
+              command: init
+              backendServiceArm: 'terraform-sp'
+              backendAzureRmResourceGroupName: 'rg-terraform-state'
+              backendAzureRmStorageAccountName: 'sttfstate123456'
+              backendAzureRmContainerName: 'tfstate'
+              backendAzureRmKey: 'prod/terraform.tfstate'
+          - task: TerraformTaskV4@4
+            inputs: { provider: azurerm, command: plan, commandOptions: '-out=tfplan' }
+
+  - stage: Apply
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+    jobs:
+      - deployment: Apply
+        environment: Production
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - task: TerraformTaskV4@4
+                  inputs: { provider: azurerm, command: apply, commandOptions: 'tfplan' }
+```
+
+---
+
+## Advanced patterns
+
+### depends_on — explicit dependencies
+
+Terraform infers dependencies automatically through resource references. Use `depends_on` only when the dependency exists but can't be expressed through a reference — most commonly RBAC assignments that a resource needs at boot:
+
+```hcl
+resource "azurerm_kubernetes_cluster" "aks" {
+  depends_on = [azurerm_role_assignment.aks_subnet_access]
+}
+```
+
+### Remote state as a data source
+
+When one Terraform project needs outputs from another:
+
+```hcl
+data "terraform_remote_state" "networking" {
+  backend = "azurerm"
+  config = {
+    resource_group_name  = "rg-terraform-state"
+    storage_account_name = "sttfstate123456"
+    container_name       = "tfstate"
+    key                  = "prod/networking/terraform.tfstate"
+  }
+}
+
+vnet_id = data.terraform_remote_state.networking.outputs.vnet_id
+```
+
+### Import existing resources (Terraform 1.5+)
+
+```hcl
+import {
+  to = azurerm_resource_group.main
+  id = "/subscriptions/<sub-id>/resourceGroups/my-existing-rg"
+}
+```
+
+Run `terraform plan` — it generates the config for you. This is how you adopt resources that were created manually.
+
+### moved blocks — safe refactoring
+
+Renamed a resource? Moving it into a module? Don't let Terraform destroy and recreate it:
+
+```hcl
+moved {
+  from = azurerm_storage_account.old_name
+  to   = module.storage.azurerm_storage_account.main
+}
+```
+
+---
+
+## Mistakes that have cost me time
+
+**Using `count` for collections instead of `for_each`.**
+Delete index 0 from a `count` list and Terraform wants to destroy everything that shifted. Use `for_each` with a map. Keys are stable.
+
+**No remote state from the start.**
+Works fine locally. First time someone else runs it, their state overwrites yours. Set up the Azure backend before you write a single resource.
+
+**Applying without a saved plan.**
+The plan and apply were 30 seconds apart. A new resource popped into existence between them. I applied something different from what I reviewed. Use `-out=tfplan` always.
+
+**Forgetting `prevent_destroy` on databases.**
+`terraform destroy` doesn't ask twice. Add `lifecycle { prevent_destroy = true }` to anything that holds data in prod.
+
+**Hardcoding the location.**
+`location = "eastus"` shows up in 40 files. Then the project needs to run somewhere else. Use a variable.
+
+**Giant `main.tf`.**
+500-line files where everything depends on everything. Plans take forever, PRs are impossible to review. Split into modules early.
+
+---
+
+## Quick reference
+
+```bash
+# Daily
+terraform init
+terraform validate
+terraform fmt -recursive
+terraform plan -out=tfplan
+terraform apply tfplan
+
+# State
+terraform state list
+terraform state show <resource>
+terraform state mv <old> <new>
+terraform state rm <resource>
+terraform import <resource> <azure-resource-id>
+terraform force-unlock <lock-id>
+
+# Useful flags
+terraform plan -target=module.aks         # plan only one module
+terraform apply -var="environment=prod"   # override a variable
+terraform output -json                    # all outputs as JSON
+terraform console                         # interactive REPL for expressions
+terraform graph | dot -Tsvg > graph.svg   # visualise dependencies
+```
+
+---
+
+## Resources I actually go back to
+
+- [azurerm provider docs](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs) — search before you guess
+- [Azure Verified Modules](https://azure.github.io/Azure-Verified-Modules) — Microsoft's official opinionated modules
+- [terraform-best-practices.com](https://www.terraform-best-practices.com) — the structure advice is solid
+- [TFLint azurerm ruleset](https://github.com/terraform-linters/tflint-ruleset-azurerm) — catches Azure-specific issues statically
+
+---
+
+This is a living document. I'll update it as I hit new patterns or make new mistakes.
+
+If something here saved you a few hours, or if I got something wrong — find me on [X](https://x.com/Ahmed_Manaii).
