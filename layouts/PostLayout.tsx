@@ -9,7 +9,6 @@ import Image from '@/components/Image'
 import Tag from '@/components/Tag'
 import siteMetadata from '@/data/siteMetadata'
 import ScrollTopAndComment from '@/components/ScrollTopAndComment'
-import AdSenseAd from '@/components/AdSenseAd'
 
 const editUrl = (path) => `${siteMetadata.siteRepo}/blob/main/data/${path}`
 const discussUrl = (path) =>
@@ -38,12 +37,12 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
     <SectionContainer>
       <ScrollTopAndComment />
       <article>
-        <div className="xl:divide-y xl:divide-gray-100 xl:dark:divide-gray-900">
+        <div className="xl:divide-y xl:divide-stone/15">
           {/* Article header */}
           <header className="pb-8 pt-10 xl:pb-8">
             <div className="space-y-4 text-center">
               {/* Date eyebrow */}
-              <p className="text-xs font-semibold uppercase tracking-[0.25em] text-gray-400 dark:text-gray-500">
+              <p className="text-xs font-semibold uppercase tracking-[0.25em] text-stone">
                 <time dateTime={date}>
                   {new Date(date).toLocaleDateString(siteMetadata.locale, postDateTemplate)}
                 </time>
@@ -53,9 +52,9 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
             </div>
           </header>
 
-          <div className="grid-rows-[auto_1fr] divide-y divide-gray-100 pb-8 dark:divide-gray-900 xl:grid xl:grid-cols-4 xl:gap-x-8 xl:divide-y-0">
+          <div className="grid-rows-[auto_1fr] divide-y divide-stone/15 pb-8 xl:grid xl:grid-cols-4 xl:gap-x-8 xl:divide-y-0">
             {/* Sidebar — author */}
-            <dl className="pb-10 pt-6 xl:border-b xl:border-gray-100 xl:pt-11 xl:dark:border-gray-900">
+            <dl className="pb-10 pt-6 xl:border-b xl:border-stone/15 xl:pt-11">
               <dt className="sr-only">Authors</dt>
               <dd>
                 <ul className="flex flex-wrap justify-center gap-4 sm:space-x-12 xl:block xl:space-x-0 xl:space-y-8">
@@ -67,18 +66,18 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
                           width={40}
                           height={40}
                           alt="avatar"
-                          className="h-10 w-10 rounded-full ring-2 ring-gray-100 dark:ring-gray-800"
+                          className="h-10 w-10 rounded-full ring-2 ring-stone/15"
                         />
                       )}
                       <dl className="whitespace-nowrap text-sm font-medium leading-5">
                         <dt className="sr-only">Name</dt>
-                        <dd className="text-black dark:text-white">{author.name}</dd>
+                        <dd className="text-ink dark:text-bone">{author.name}</dd>
                         <dt className="sr-only">Twitter</dt>
                         <dd>
                           {author.twitter && (
                             <Link
                               href={author.twitter}
-                              className="text-xs text-gray-500 underline underline-offset-4 hover:text-black hover:no-underline dark:text-gray-400 dark:hover:text-white"
+                              className="focus-ring rounded text-xs text-stone underline underline-offset-4 hover:text-ink hover:no-underline dark:hover:text-bone"
                             >
                               {author.twitter
                                 .replace('https://twitter.com/', '@')
@@ -94,7 +93,7 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
             </dl>
 
             {/* Main content */}
-            <div className="divide-y divide-gray-100 dark:divide-gray-900 xl:col-span-3 xl:row-span-2 xl:pb-0">
+            <div className="divide-y divide-stone/15 xl:col-span-3 xl:row-span-2 xl:pb-0">
               <div className="prose max-w-none pb-8 pt-10 dark:prose-invert">{children}</div>
 
               {/* Post-read author card */}
@@ -102,7 +101,7 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
                 {authorDetails.map((author) => (
                   <div
                     key={author.name}
-                    className="flex items-start gap-4 rounded-2xl border border-gray-200 bg-gray-50/50 p-6 backdrop-blur-sm dark:border-gray-800 dark:bg-gray-950/50"
+                    className="flex items-start gap-4 rounded-2xl border border-stone/15 bg-stone/5 p-6"
                   >
                     {author.avatar && (
                       <Image
@@ -110,26 +109,26 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
                         width={48}
                         height={48}
                         alt={author.name}
-                        className="h-12 w-12 flex-shrink-0 rounded-full ring-2 ring-gray-100 dark:ring-gray-800"
+                        className="h-12 w-12 flex-shrink-0 rounded-full ring-2 ring-stone/15"
                       />
                     )}
                     <div className="min-w-0 flex-1">
-                      <p className="font-semibold text-black dark:text-white">{author.name}</p>
-                      <p className="mt-0.5 text-sm text-gray-500 dark:text-gray-400">
+                      <p className="font-semibold text-ink dark:text-bone">{author.name}</p>
+                      <p className="mt-0.5 text-sm text-stone">
                         Software & DevOps Engineer · Builder · Writer
                       </p>
                       <div className="mt-4 flex flex-wrap gap-3">
                         {author.twitter && (
                           <Link
                             href={author.twitter}
-                            className="inline-flex items-center rounded-full border border-black bg-black px-4 py-1.5 text-xs font-semibold text-white transition-all hover:scale-[1.02] hover:bg-gray-900 dark:border-white dark:bg-white dark:text-black dark:hover:bg-gray-100"
+                            className="focus-ring inline-flex items-center rounded-full bg-ink px-4 py-1.5 text-xs font-semibold text-paper transition-all hover:scale-[1.02] hover:opacity-90 dark:bg-bone dark:text-graphite"
                           >
                             Follow on X →
                           </Link>
                         )}
                         <Link
                           href="/blog"
-                          className="inline-flex items-center rounded-full border border-gray-300 px-4 py-1.5 text-xs font-semibold text-gray-600 transition-all hover:scale-[1.02] hover:border-gray-400 hover:text-black dark:border-gray-700 dark:text-gray-400 dark:hover:border-gray-500 dark:hover:text-white"
+                          className="focus-ring inline-flex items-center rounded-full border border-stone/20 px-4 py-1.5 text-xs font-semibold text-stone transition-all hover:scale-[1.02] hover:border-stone/40 hover:text-ink dark:hover:text-bone"
                         >
                           More posts →
                         </Link>
@@ -139,28 +138,25 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
                 ))}
               </div>
 
-              <div className="pb-6 pt-4 text-sm text-gray-400 dark:text-gray-600">
+              <div className="pb-6 pt-4 text-sm text-stone">
                 <Link
                   href={discussUrl(path)}
                   rel="nofollow"
-                  className="hover:text-black hover:underline dark:hover:text-white"
+                  className="focus-ring rounded hover:text-ink hover:underline dark:hover:text-bone"
                 >
                   Discuss on Twitter
                 </Link>
                 {` · `}
                 <Link
                   href={editUrl(filePath)}
-                  className="hover:text-black hover:underline dark:hover:text-white"
+                  className="focus-ring rounded hover:text-ink hover:underline dark:hover:text-bone"
                 >
                   View on GitHub
                 </Link>
               </div>
 
               {siteMetadata.comments && (
-                <div
-                  className="pb-6 pt-6 text-center text-gray-600 dark:text-gray-400"
-                  id="comment"
-                >
+                <div className="pb-6 pt-6 text-center text-stone" id="comment">
                   <Comments slug={slug} />
                 </div>
               )}
@@ -168,10 +164,10 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
 
             {/* Sidebar footer — tags + prev/next */}
             <footer>
-              <div className="divide-gray-100 text-sm font-medium leading-5 dark:divide-gray-900 xl:col-start-1 xl:row-start-2 xl:divide-y">
+              <div className="divide-stone/15 text-sm font-medium leading-5 xl:col-start-1 xl:row-start-2 xl:divide-y">
                 {tags && (
                   <div className="py-4 xl:py-8">
-                    <h2 className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-gray-400 dark:text-gray-500">
+                    <h2 className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-stone">
                       Tags
                     </h2>
                     <div className="flex flex-wrap gap-2">
@@ -185,12 +181,12 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
                   <div className="flex justify-between gap-4 py-4 xl:block xl:space-y-6 xl:py-8">
                     {prev && prev.path && (
                       <div className="flex-1">
-                        <h2 className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-gray-400 dark:text-gray-500">
+                        <h2 className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-stone">
                           Previous
                         </h2>
                         <Link
                           href={`/${prev.path}`}
-                          className="block rounded-xl border border-gray-200 bg-gray-50 p-3 text-sm font-medium text-black transition-all hover:-translate-y-0.5 hover:border-gray-300 hover:shadow-md dark:border-gray-800 dark:bg-gray-950 dark:text-white dark:hover:border-gray-700"
+                          className="focus-ring block rounded-xl border border-stone/15 bg-paper p-3 text-sm font-medium text-ink transition-all hover:-translate-y-0.5 hover:border-stone/30 hover:shadow-md dark:border-stone/20 dark:bg-graphite dark:text-bone"
                         >
                           ← {prev.title}
                         </Link>
@@ -198,12 +194,12 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
                     )}
                     {next && next.path && (
                       <div className="flex-1">
-                        <h2 className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-gray-400 dark:text-gray-500">
+                        <h2 className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-stone">
                           Next
                         </h2>
                         <Link
                           href={`/${next.path}`}
-                          className="block rounded-xl border border-gray-200 bg-gray-50 p-3 text-sm font-medium text-black transition-all hover:-translate-y-0.5 hover:border-gray-300 hover:shadow-md dark:border-gray-800 dark:bg-gray-950 dark:text-white dark:hover:border-gray-700"
+                          className="focus-ring block rounded-xl border border-stone/15 bg-paper p-3 text-sm font-medium text-ink transition-all hover:-translate-y-0.5 hover:border-stone/30 hover:shadow-md dark:border-stone/20 dark:bg-graphite dark:text-bone"
                         >
                           {next.title} →
                         </Link>
@@ -215,14 +211,11 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
               <div className="pt-4 xl:pt-8">
                 <Link
                   href={`/${basePath}`}
-                  className="inline-flex items-center rounded-full border border-gray-200 px-4 py-1.5 text-sm font-medium text-gray-600 transition-all hover:border-gray-400 hover:text-black dark:border-gray-800 dark:text-gray-400 dark:hover:border-gray-600 dark:hover:text-white"
+                  className="focus-ring inline-flex items-center rounded-full border border-stone/15 px-4 py-1.5 text-sm font-medium text-stone transition-all hover:border-stone/40 hover:text-ink dark:hover:text-bone"
                   aria-label="Back to the blog"
                 >
                   ← Back to blog
                 </Link>
-                <div className="mt-6">
-                  <AdSenseAd />
-                </div>
               </div>
             </footer>
           </div>

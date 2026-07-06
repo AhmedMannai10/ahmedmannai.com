@@ -19,7 +19,7 @@ export default async function Image() {
         overflow: 'hidden',
       }}
     >
-      {/* Atmospheric glow — top left */}
+      {/* Signal glow — top left */}
       <div
         style={{
           position: 'absolute',
@@ -29,7 +29,7 @@ export default async function Image() {
           height: '550px',
           borderRadius: '50%',
           background:
-            'radial-gradient(ellipse, rgba(139,92,246,0.45) 0%, rgba(99,102,241,0.2) 45%, transparent 70%)',
+            'radial-gradient(ellipse, rgba(14,107,87,0.45) 0%, rgba(20,184,150,0.2) 45%, transparent 70%)',
           filter: 'blur(90px)',
         }}
       />
@@ -42,7 +42,7 @@ export default async function Image() {
           width: '500px',
           height: '400px',
           borderRadius: '50%',
-          background: 'radial-gradient(ellipse, rgba(168,85,247,0.25) 0%, transparent 70%)',
+          background: 'radial-gradient(ellipse, rgba(20,184,150,0.22) 0%, transparent 70%)',
           filter: 'blur(80px)',
         }}
       />

@@ -56,7 +56,7 @@ const ThemeSwitch = () => {
   return (
     <div className="mr-5 flex items-center">
       <Menu as="div" className="relative inline-block text-left">
-        <div className="flex items-center justify-center hover:text-gray-600 dark:hover:text-gray-400">
+        <div className="focus-ring flex items-center justify-center rounded hover:text-stone">
           <Menu.Button>
             {mounted ? resolvedTheme === 'dark' ? <Moon /> : <Sun /> : <Blank />}
           </Menu.Button>
@@ -70,7 +70,7 @@ const ThemeSwitch = () => {
           leaveFrom="transform opacity-100 scale-100"
           leaveTo="transform opacity-0 scale-95"
         >
-          <Menu.Items className="absolute right-0 z-50 mt-2 w-32 origin-top-right divide-y divide-gray-200 rounded-md border border-gray-200 bg-white shadow-md ring-1 ring-black ring-opacity-5 focus:outline-none dark:divide-gray-800 dark:border-gray-800 dark:bg-black dark:shadow-dark-md">
+          <Menu.Items className="absolute right-0 z-50 mt-2 w-32 origin-top-right divide-y divide-stone/15 rounded-md border border-stone/15 bg-paper shadow-md ring-1 ring-stone/10 focus:outline-none dark:bg-graphite dark:shadow-dark-md">
             <RadioGroup value={theme} onChange={setTheme}>
               <div className="p-1">
                 <RadioGroup.Option value="light">
@@ -78,10 +78,8 @@ const ThemeSwitch = () => {
                     {({ active }) => (
                       <button
                         className={`${
-                          active
-                            ? 'bg-gray-100 text-black dark:bg-gray-800 dark:text-white'
-                            : 'text-gray-700 dark:text-gray-300'
-                        } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                          active ? 'bg-stone/10 text-ink dark:text-bone' : 'text-stone'
+                        } focus-ring group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                       >
                         <div className="mr-2">
                           <Sun />
@@ -96,10 +94,8 @@ const ThemeSwitch = () => {
                     {({ active }) => (
                       <button
                         className={`${
-                          active
-                            ? 'bg-gray-100 text-black dark:bg-gray-800 dark:text-white'
-                            : 'text-gray-700 dark:text-gray-300'
-                        } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                          active ? 'bg-stone/10 text-ink dark:text-bone' : 'text-stone'
+                        } focus-ring group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                       >
                         <div className="mr-2">
                           <Moon />
@@ -114,10 +110,8 @@ const ThemeSwitch = () => {
                     {({ active }) => (
                       <button
                         className={`${
-                          active
-                            ? 'bg-gray-100 text-black dark:bg-gray-800 dark:text-white'
-                            : 'text-gray-700 dark:text-gray-300'
-                        } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                          active ? 'bg-stone/10 text-ink dark:text-bone' : 'text-stone'
+                        } focus-ring group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                       >
                         <div className="mr-2">
                           <Monitor />

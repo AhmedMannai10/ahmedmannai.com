@@ -8,10 +8,10 @@ import Logo from './Logo'
 
 const Header = () => {
   return (
-    <header className="sticky top-0 z-50 border-b border-gray-200/60 bg-white/80 backdrop-blur-xl dark:border-gray-800/60 dark:bg-black/80">
+    <header className="sticky top-0 z-50 border-b border-stone/15 bg-paper/80 backdrop-blur-xl dark:border-stone/20 dark:bg-graphite/80">
       <div className="flex items-center justify-between py-4">
         <div>
-          <Link href="/" aria-label={siteMetadata.headerTitle}>
+          <Link href="/" aria-label={siteMetadata.headerTitle} className="focus-ring rounded">
             <div className="flex items-center">
               <Logo />
             </div>
@@ -25,12 +25,18 @@ const Header = () => {
                 <Link
                   key={link.title}
                   href={link.href}
-                  className="rounded-full px-4 py-1.5 text-sm font-medium text-gray-600 transition-all hover:bg-gray-100 hover:text-black dark:text-gray-400 dark:hover:bg-gray-900 dark:hover:text-white"
+                  className="focus-ring rounded-full px-4 py-1.5 text-sm font-medium text-stone transition-all hover:bg-stone/10 hover:text-ink dark:hover:text-bone"
                 >
                   {link.title}
                 </Link>
               ))}
           </nav>
+          <Link
+            href="/book"
+            className="focus-ring whitespace-nowrap rounded-full bg-signal px-4 py-1.5 text-sm font-semibold text-paper transition-all hover:scale-[1.02] hover:bg-signal/90 dark:bg-signal-dark dark:text-graphite dark:hover:bg-signal-dark/90"
+          >
+            Book a Call
+          </Link>
           <div className="flex items-center gap-3">
             <SearchButton />
             <ThemeSwitch />

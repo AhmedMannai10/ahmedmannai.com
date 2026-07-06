@@ -2,7 +2,9 @@
 
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useState } from 'react'
+import posthog from '../lib/posthog-browser'
 import Link from './Link'
+import AmbientGlow from './AmbientGlow'
 import headerNavLinks from '@/data/headerNavLinks'
 
 const MobileNav = () => {
@@ -10,12 +12,19 @@ const MobileNav = () => {
 
   const onToggleNav = () => {
     setNavShow((status) => {
+      const nextStatus = !status
+
       if (status) {
         document.body.style.overflow = 'auto'
       } else {
         document.body.style.overflow = 'hidden'
       }
-      return !status
+
+      posthog.capture('mobile_nav_toggled', {
+        nav_state: nextStatus ? 'opened' : 'closed',
+      })
+
+      return nextStatus
     })
   }
 
@@ -25,7 +34,7 @@ const MobileNav = () => {
       <button
         aria-label="Toggle Menu"
         onClick={onToggleNav}
-        className="flex h-9 w-9 items-center justify-center rounded-full border border-gray-200 text-black transition-all hover:border-gray-300 hover:bg-gray-50 dark:border-gray-800 dark:text-white dark:hover:border-gray-700 dark:hover:bg-gray-900 sm:hidden"
+        className="focus-ring flex h-9 w-9 items-center justify-center rounded-full border border-stone/15 text-ink transition-all hover:border-stone/30 hover:bg-stone/5 dark:border-stone/20 dark:text-bone dark:hover:border-stone/40 dark:hover:bg-stone/10 sm:hidden"
       >
         <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
           <path
@@ -62,36 +71,34 @@ const MobileNav = () => {
               leaveFrom="translate-y-0"
               leaveTo="translate-y-full"
             >
-              <Dialog.Panel className="relative overflow-hidden rounded-t-[2rem] bg-white/95 shadow-2xl backdrop-blur-2xl dark:bg-black/95">
-                {/* Subtle atmospheric orb */}
-                <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
-                  <div
-                    className="absolute -top-16 left-1/2 h-64 w-80 -translate-x-1/2 rounded-full opacity-25 blur-[80px]"
-                    style={{
-                      background:
-                        'radial-gradient(ellipse, rgba(139,92,246,0.4) 0%, rgba(99,102,241,0.2) 50%, transparent 70%)',
-                    }}
-                  />
-                </div>
+              <Dialog.Panel className="relative overflow-hidden rounded-t-[2rem] bg-paper/95 shadow-2xl backdrop-blur-2xl dark:bg-graphite/95">
+                <AmbientGlow className="-top-16 left-1/2 h-64 w-80 -translate-x-1/2" />
 
                 {/* Handle pill */}
                 <div className="flex justify-center pt-3">
-                  <div className="h-1 w-10 rounded-full bg-gray-300 dark:bg-gray-700" />
+                  <div className="h-1 w-10 rounded-full bg-stone/30" />
                 </div>
 
                 {/* Nav links */}
                 <nav className="px-4 pb-2 pt-4">
+                  <Link
+                    href="/book"
+                    onClick={onToggleNav}
+                    className="focus-ring mb-2 flex items-center justify-center rounded-2xl bg-signal px-4 py-4 text-lg font-semibold text-paper transition-colors dark:bg-signal-dark dark:text-graphite"
+                  >
+                    Book a Call
+                  </Link>
                   {headerNavLinks.map((link) => (
                     <Link
                       key={link.title}
                       href={link.href}
                       onClick={onToggleNav}
-                      className="group flex items-center justify-between rounded-2xl px-4 py-4 transition-colors hover:bg-gray-100/80 dark:hover:bg-gray-900/80"
+                      className="focus-ring group flex items-center justify-between rounded-2xl px-4 py-4 transition-colors hover:bg-stone/10"
                     >
-                      <span className="text-2xl font-semibold tracking-tight text-black dark:text-white">
+                      <span className="text-2xl font-semibold tracking-tight text-ink dark:text-bone">
                         {link.title}
                       </span>
-                      <span className="flex h-8 w-8 items-center justify-center rounded-full border border-gray-200 text-sm text-gray-400 transition-colors group-hover:border-gray-300 group-hover:text-black dark:border-gray-800 dark:group-hover:border-gray-700 dark:group-hover:text-white">
+                      <span className="flex h-8 w-8 items-center justify-center rounded-full border border-stone/15 text-sm text-stone transition-colors group-hover:border-stone/30 group-hover:text-ink dark:border-stone/20 dark:group-hover:border-stone/40 dark:group-hover:text-bone">
                         →
                       </span>
                     </Link>
@@ -103,7 +110,7 @@ const MobileNav = () => {
                   <button
                     onClick={onToggleNav}
                     aria-label="Close menu"
-                    className="flex h-12 w-12 items-center justify-center rounded-full border border-gray-200 bg-gray-100/80 text-black transition-all hover:scale-[1.04] hover:bg-gray-200 active:scale-95 dark:border-gray-800 dark:bg-gray-900/80 dark:text-white dark:hover:bg-gray-800"
+                    className="focus-ring flex h-12 w-12 items-center justify-center rounded-full border border-stone/15 bg-stone/10 text-ink transition-all hover:scale-[1.04] hover:bg-stone/20 active:scale-95 dark:border-stone/20 dark:text-bone"
                   >
                     <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor">
                       <path

@@ -1,161 +1,115 @@
+'use client'
+
 import Link from '@/components/Link'
+import posthog from '../lib/posthog-browser'
 import siteMetadata from '@/data/siteMetadata'
 import Image from '@/components/Image'
+import Sparkline from '@/components/Sparkline'
+import AmbientGlow from '@/components/AmbientGlow'
 import projectsData from '@/data/projectsData'
 import NewsletterForm from 'pliny/ui/NewsletterForm'
 
 const MAX_DISPLAY = 3
 
 const STATS = [
-  { label: '4+ Years', sublabel: 'Experience' },
-  { label: '10+', sublabel: 'Projects Shipped' },
-  { label: 'Open Source', sublabel: 'Contributor' },
-  { label: 'Football', sublabel: 'Enthusiast' },
+  { label: '58%', sublabel: 'Capacity Gain, 1 Load Test' },
+  { label: '53%', sublabel: 'Crash-Rate Reduction' },
+  { label: '$1k MRR', sublabel: 'Plan In Progress' },
+  { label: '2', sublabel: 'Products Shipped' },
 ]
+
+const CAPACITY_TREND = [30, 28, 34, 26, 40, 55, 70, 88, 95]
 
 export default function Home({ posts }) {
   const featuredProjects = projectsData.slice(0, 3)
+  const featuredPosts = posts.filter((post) => post.featured)
+  const displayPosts = featuredPosts.length > 0 ? featuredPosts : posts.slice(0, MAX_DISPLAY)
 
   return (
     <>
       {/* ─── Hero ───────────────────────────────────────────── */}
-      <section className="relative flex min-h-[calc(100vh-4rem)] flex-col">
-        {/* Full-viewport atmospheric background — breaks out of the container */}
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute -z-10"
-          style={{
-            top: 0,
-            bottom: 0,
-            left: 'calc(50% - 50vw)',
-            width: '100vw',
-          }}
-        >
-          <div
-            className="absolute left-1/2 top-0 h-[70vh] w-[80vw] -translate-x-1/2 rounded-full opacity-60 blur-[140px]"
-            style={{
-              background:
-                'radial-gradient(ellipse, rgba(139,92,246,0.18) 0%, rgba(59,130,246,0.08) 50%, transparent 70%)',
-            }}
-          />
-          <div
-            className="absolute bottom-0 left-[10%] h-[45vh] w-[45vw] rounded-full opacity-40 blur-[110px]"
-            style={{ background: 'rgba(99,102,241,0.14)' }}
-          />
-          <div
-            className="absolute bottom-0 right-[10%] h-[45vh] w-[45vw] rounded-full opacity-40 blur-[110px]"
-            style={{ background: 'rgba(168,85,247,0.12)' }}
-          />
-        </div>
+      <section className="relative overflow-hidden pb-16 pt-16 md:pb-24 md:pt-24">
+        <AmbientGlow className="-right-24 -top-16 h-[32rem] w-[32rem]" />
 
-        {/* Main content — vertically centered */}
-        <div className="flex flex-1 flex-col items-center justify-center px-4 pb-8 pt-16 text-center sm:px-6 lg:px-8">
-          {/* Avatar */}
-          <div className="mb-8 animate-fade-in" style={{ animationDelay: '0ms' }}>
-            <div className="relative inline-block">
-              <Image
-                src="/static/images/avatar.png"
-                alt="Ahmed Mannai"
-                width={80}
-                height={80}
-                className="rounded-full object-cover"
-              />
-              {/* Online indicator */}
-              <span className="absolute bottom-0.5 right-0.5 block h-3.5 w-3.5 rounded-full border-2 border-white bg-emerald-400 dark:border-black" />
+        <div className="grid grid-cols-1 items-center gap-12 md:grid-cols-2 md:gap-10">
+          {/* Left — copy */}
+          <div className="animate-fade-in-up">
+            <p className="mb-5 font-mono text-xs uppercase tracking-[0.2em] text-stone">
+              <span className="text-signal dark:text-signal-dark">{'>'}</span> Software &amp;
+              Performance Engineer
+            </p>
+
+            <h1
+              className="font-display font-semibold leading-[1.08] tracking-tight text-ink dark:text-bone"
+              style={{ fontSize: 'clamp(2.5rem, 5.5vw, 3.75rem)' }}
+            >
+              Builds what founders ship.
+              <br />
+              Fixes what quietly breaks.
+            </h1>
+
+            <p className="mt-6 max-w-md text-base leading-relaxed text-stone sm:text-lg">
+              0→1 product builds for founders, and performance engineering for systems already under
+              load.
+            </p>
+
+            <div className="mt-9 flex flex-wrap gap-4">
+              <Link
+                href="/book"
+                onClick={() =>
+                  posthog.capture('cta_clicked', {
+                    cta_name: 'hero_book_call',
+                    destination: '/book',
+                    section: 'hero',
+                  })
+                }
+                className="focus-ring group inline-flex items-center gap-2 rounded-full bg-signal px-7 py-3.5 text-sm font-semibold text-paper shadow-lg shadow-signal/20 transition-all duration-200 hover:scale-[1.02] hover:bg-signal/90 dark:bg-signal-dark dark:text-graphite dark:shadow-signal-dark/10"
+              >
+                Book a Call
+                <span className="inline-block transition-transform duration-200 group-hover:translate-x-0.5">
+                  →
+                </span>
+              </Link>
+              <Link
+                href="/projects"
+                onClick={() =>
+                  posthog.capture('cta_clicked', {
+                    cta_name: 'hero_view_projects',
+                    destination: '/projects',
+                    section: 'hero',
+                  })
+                }
+                className="focus-ring inline-flex items-center rounded-full border border-stone/20 bg-paper px-7 py-3.5 text-sm font-semibold text-ink transition-all duration-200 hover:scale-[1.02] hover:border-stone/40 dark:border-stone/20 dark:bg-graphite dark:text-bone dark:hover:border-stone/40"
+              >
+                View Projects
+              </Link>
             </div>
           </div>
 
-          {/* Eyebrow label */}
-          <p
-            className="mb-5 animate-fade-in text-xs font-semibold uppercase tracking-[0.3em] text-gray-400 dark:text-gray-500"
-            style={{ animationDelay: '60ms' }}
-          >
-            Software & DevOps Engineer
-          </p>
-
-          {/* Headline — massive, Apple-weight */}
-          <h1
-            className="mx-auto max-w-4xl animate-fade-in-up font-display font-bold leading-[1.05] tracking-[-0.03em] text-black dark:text-white"
-            style={{
-              animationDelay: '120ms',
-              fontSize: 'clamp(2.75rem, 8vw, 6rem)',
-            }}
-          >
-            Building what
-            <br />
-            <span
-              style={{
-                backgroundImage: 'linear-gradient(135deg, #000 0%, #6366f1 50%, #8b5cf6 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-              }}
-              className="dark:hidden"
-            >
-              matters.
-            </span>
-            <span
-              style={{
-                backgroundImage: 'linear-gradient(135deg, #fff 0%, #a5b4fc 50%, #c4b5fd 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-              }}
-              className="hidden dark:inline"
-            >
-              matters.
-            </span>
-          </h1>
-
-          {/* Tagline */}
-          <p
-            className="mx-auto mt-7 max-w-lg animate-fade-in-up text-lg leading-relaxed text-gray-500 dark:text-gray-400 sm:text-xl"
-            style={{ animationDelay: '220ms' }}
-          >
-            Web apps. Mobile products. DevOps infrastructure.
-            <br className="hidden sm:block" />
-            Crafted with precision, shipped with purpose.
-          </p>
-
-          {/* CTAs */}
+          {/* Right — readout panel (signature element) */}
           <div
-            className="mt-10 flex animate-fade-in-up flex-wrap justify-center gap-4"
-            style={{ animationDelay: '320ms' }}
+            className="animate-fade-in-up rounded-2xl border border-stone/15 bg-paper/70 p-6 backdrop-blur-sm dark:border-stone/20 dark:bg-graphite/50"
+            style={{ animationDelay: '160ms' }}
           >
-            <Link
-              href="/projects"
-              className="group inline-flex items-center gap-2 rounded-full border border-black bg-black px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-black/20 transition-all duration-200 hover:scale-[1.02] hover:bg-gray-900 dark:border-white dark:bg-white dark:text-black dark:shadow-white/10 dark:hover:bg-gray-100"
-            >
-              View Projects
-              <span className="inline-block transition-transform duration-200 group-hover:translate-x-0.5">
-                →
-              </span>
-            </Link>
-            <Link
-              href="/blog"
-              className="inline-flex items-center rounded-full border border-gray-300 bg-white/60 px-7 py-3.5 text-sm font-semibold text-black backdrop-blur-sm transition-all duration-200 hover:scale-[1.02] hover:border-gray-400 hover:bg-white dark:border-gray-700 dark:bg-black/40 dark:text-white dark:hover:border-gray-500 dark:hover:bg-black/60"
-            >
-              Read Blog
-            </Link>
-          </div>
-        </div>
+            <p className="mb-4 font-mono text-[11px] uppercase tracking-[0.2em] text-stone">
+              {'// live readout'}
+            </p>
+            <Sparkline points={CAPACITY_TREND} height={72} />
+            <div className="mt-1 flex items-center justify-between font-mono text-xs text-stone">
+              <span>1,200 users</span>
+              <span className="font-semibold text-signal dark:text-signal-dark">1,900 users</span>
+            </div>
 
-        {/* Stats strip — pinned to bottom, full width */}
-        <div
-          className="animate-fade-in border-t border-gray-100 dark:border-gray-900"
-          style={{ animationDelay: '480ms' }}
-        >
-          <div className="grid grid-cols-2 divide-x divide-y divide-gray-100 dark:divide-gray-900 sm:grid-cols-4 sm:divide-y-0">
-            {STATS.map((stat) => (
-              <div key={stat.label} className="flex flex-col items-center py-5">
-                <span className="text-xl font-bold tracking-tight text-black dark:text-white">
-                  {stat.label}
-                </span>
-                <span className="mt-0.5 text-xs text-gray-400 dark:text-gray-500">
-                  {stat.sublabel}
-                </span>
-              </div>
-            ))}
+            <div className="mt-6 grid grid-cols-2 gap-px overflow-hidden rounded-lg border border-stone/15 bg-stone/15 dark:border-stone/20 dark:bg-stone/20">
+              {STATS.map((stat) => (
+                <div key={stat.label} className="bg-paper/90 p-4 dark:bg-graphite/60">
+                  <div className="font-mono text-lg font-semibold text-ink dark:text-bone">
+                    {stat.label}
+                  </div>
+                  <div className="mt-0.5 text-[11px] leading-snug text-stone">{stat.sublabel}</div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -165,16 +119,23 @@ export default function Home({ posts }) {
         <section className="mb-20 md:mb-28">
           <div className="mb-8 flex items-end justify-between">
             <div>
-              <p className="mb-1 text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-600">
-                01 — Selected Work
+              <p className="mb-1 font-mono text-xs text-stone">
+                <span className="text-signal dark:text-signal-dark">$</span> projects
               </p>
-              <h2 className="font-display text-2xl font-bold text-black dark:text-white md:text-3xl">
+              <h2 className="font-display text-2xl font-semibold text-ink dark:text-bone md:text-3xl">
                 Projects
               </h2>
             </div>
             <Link
               href="/projects"
-              className="text-sm font-medium text-gray-500 underline underline-offset-4 transition-colors hover:text-black hover:no-underline dark:text-gray-400 dark:hover:text-white"
+              onClick={() =>
+                posthog.capture('cta_clicked', {
+                  cta_name: 'projects_view_all',
+                  destination: '/projects',
+                  section: 'projects',
+                })
+              }
+              className="focus-ring rounded text-sm font-medium text-stone underline underline-offset-4 transition-colors hover:text-ink hover:no-underline dark:hover:text-bone"
             >
               View All →
             </Link>
@@ -185,10 +146,10 @@ export default function Home({ posts }) {
             {featuredProjects.map((project, idx) => (
               <div
                 key={project.title}
-                className="group flex flex-col overflow-hidden rounded-xl border border-gray-200 bg-white transition-all duration-300 hover:-translate-y-0.5 hover:border-gray-300 hover:shadow-lg dark:border-gray-800 dark:bg-gray-950 dark:hover:border-gray-700 dark:hover:shadow-[0_10px_30px_rgba(255,255,255,0.04)]"
+                className="group flex flex-col overflow-hidden rounded-xl border border-stone/15 bg-paper transition-all duration-300 hover:-translate-y-0.5 hover:border-stone/30 hover:shadow-lg dark:border-stone/20 dark:bg-graphite dark:hover:border-stone/40 dark:hover:shadow-[0_10px_30px_rgba(255,255,255,0.04)]"
               >
                 {project.imgSrc && (
-                  <div className="relative h-44 overflow-hidden bg-gray-50 dark:bg-gray-900">
+                  <div className="relative h-44 overflow-hidden bg-stone/10">
                     <Image
                       src={project.imgSrc}
                       alt={project.title}
@@ -200,12 +161,15 @@ export default function Home({ posts }) {
                   </div>
                 )}
                 <div className="flex flex-1 flex-col p-5">
-                  <p className="mb-2 font-mono text-xs uppercase tracking-widest text-gray-300 dark:text-gray-700">
+                  <p className="mb-2 font-mono text-xs uppercase tracking-widest text-stone/40">
                     {String(idx + 1).padStart(2, '0')}
                   </p>
-                  <h3 className="mb-2 text-base font-semibold leading-snug text-black dark:text-white">
+                  <h3 className="mb-2 text-base font-semibold leading-snug text-ink dark:text-bone">
                     {project.slug ? (
-                      <Link href={`/projects/${project.slug}`} className="hover:underline">
+                      <Link
+                        href={`/projects/${project.slug}`}
+                        className="focus-ring rounded hover:underline"
+                      >
                         {project.title}
                       </Link>
                     ) : project.href ? (
@@ -213,7 +177,7 @@ export default function Home({ posts }) {
                         href={project.href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="hover:underline"
+                        className="focus-ring rounded hover:underline"
                       >
                         {project.title}
                       </Link>
@@ -221,7 +185,7 @@ export default function Home({ posts }) {
                       project.title
                     )}
                   </h3>
-                  <p className="mb-4 line-clamp-2 flex-1 text-sm leading-relaxed text-gray-600 dark:text-gray-400">
+                  <p className="mb-4 line-clamp-2 flex-1 text-sm leading-relaxed text-stone">
                     {project.description}
                   </p>
                   {(project.slug || project.href) && (
@@ -229,7 +193,15 @@ export default function Home({ posts }) {
                       href={project.slug ? `/projects/${project.slug}` : project.href || '#'}
                       target={project.slug ? undefined : '_blank'}
                       rel={project.slug ? undefined : 'noopener noreferrer'}
-                      className="inline-flex items-center gap-1 self-start text-sm font-medium text-black underline underline-offset-4 hover:no-underline dark:text-white"
+                      onClick={() =>
+                        posthog.capture('cta_clicked', {
+                          cta_name: 'project_card_view',
+                          destination: project.slug ? `/projects/${project.slug}` : project.href,
+                          project_title: project.title,
+                          section: 'projects',
+                        })
+                      }
+                      className="focus-ring inline-flex items-center gap-1 self-start rounded text-sm font-medium text-ink underline underline-offset-4 hover:no-underline dark:text-bone"
                     >
                       View Project →
                     </Link>
@@ -241,21 +213,28 @@ export default function Home({ posts }) {
         </section>
       )}
 
-      {/* ─── Latest Posts ───────────────────────────────────── */}
+      {/* ─── Featured Writing ───────────────────────────────── */}
       <section className="mb-20 md:mb-28">
         <div className="mb-8 flex items-end justify-between">
           <div>
-            <p className="mb-1 text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-600">
-              02 — Writing
+            <p className="mb-1 font-mono text-xs text-stone">
+              <span className="text-signal dark:text-signal-dark">$</span> writing
             </p>
-            <h2 className="font-display text-2xl font-bold text-black dark:text-white md:text-3xl">
-              Latest Posts
+            <h2 className="font-display text-2xl font-semibold text-ink dark:text-bone md:text-3xl">
+              Featured Writing
             </h2>
           </div>
           {posts.length > MAX_DISPLAY && (
             <Link
               href="/blog"
-              className="text-sm font-medium text-gray-500 underline underline-offset-4 transition-colors hover:text-black hover:no-underline dark:text-gray-400 dark:hover:text-white"
+              onClick={() =>
+                posthog.capture('cta_clicked', {
+                  cta_name: 'writing_all_posts',
+                  destination: '/blog',
+                  section: 'writing',
+                })
+              }
+              className="focus-ring rounded text-sm font-medium text-stone underline underline-offset-4 transition-colors hover:text-ink hover:no-underline dark:hover:text-bone"
               aria-label="All posts"
             >
               All Posts →
@@ -263,36 +242,38 @@ export default function Home({ posts }) {
           )}
         </div>
 
-        {!posts.length && (
-          <p className="text-sm text-gray-500 dark:text-gray-400">No posts found.</p>
-        )}
+        {!displayPosts.length && <p className="text-sm text-stone">No posts found.</p>}
 
-        {/* Card grid */}
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3">
-          {posts.slice(0, MAX_DISPLAY).map((post) => {
+          {displayPosts.slice(0, MAX_DISPLAY).map((post) => {
             const { slug, date, title, summary } = post
             return (
               <Link
                 key={slug}
                 href={`/blog/${slug}`}
-                className="group flex flex-col rounded-xl border border-gray-200 bg-white p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-gray-300 hover:shadow-lg dark:border-gray-800 dark:bg-gray-950 dark:hover:border-gray-700 dark:hover:shadow-[0_10px_30px_rgba(255,255,255,0.04)]"
+                onClick={() =>
+                  posthog.capture('featured_post_clicked', {
+                    post_slug: slug,
+                    post_title: title,
+                    section: 'featured_writing',
+                  })
+                }
+                className="focus-ring group flex flex-col rounded-xl border border-stone/15 bg-paper p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-stone/30 hover:shadow-lg dark:border-stone/20 dark:bg-graphite dark:hover:border-stone/40 dark:hover:shadow-[0_10px_30px_rgba(255,255,255,0.04)]"
               >
                 <time
                   dateTime={date}
-                  className="mb-3 font-mono text-xs uppercase tracking-widest text-gray-400 dark:text-gray-600"
+                  className="mb-3 font-mono text-xs uppercase tracking-widest text-stone"
                 >
                   {new Date(date).toLocaleDateString('en-US', {
                     month: 'short',
                     year: 'numeric',
                   })}
                 </time>
-                <p className="mb-2 flex-1 text-sm font-semibold leading-snug text-black dark:text-white">
+                <p className="mb-2 flex-1 text-sm font-semibold leading-snug text-ink dark:text-bone">
                   {title}
                 </p>
-                <p className="mb-4 line-clamp-2 text-xs leading-relaxed text-gray-500 dark:text-gray-400">
-                  {summary}
-                </p>
-                <span className="inline-flex items-center gap-1 self-start text-xs font-medium text-gray-400 transition-colors group-hover:text-black dark:group-hover:text-white">
+                <p className="mb-4 line-clamp-2 text-xs leading-relaxed text-stone">{summary}</p>
+                <span className="inline-flex items-center gap-1 self-start text-xs font-medium text-stone transition-colors group-hover:text-ink dark:group-hover:text-bone">
                   Read
                   <span className="inline-block transition-transform duration-150 group-hover:translate-x-0.5">
                     →
@@ -306,14 +287,14 @@ export default function Home({ posts }) {
 
       {/* ─── Newsletter + Follow ─────────────────────────────── */}
       <section className="mb-16">
-        <div className="rounded-xl border border-gray-200 bg-gray-50 p-8 dark:border-gray-800 dark:bg-gray-950">
-          <div className="mb-1 text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-600">
+        <div className="rounded-xl border border-stone/15 bg-paper p-8 dark:border-stone/20 dark:bg-graphite">
+          <div className="mb-1 font-mono text-xs uppercase tracking-widest text-stone">
             Building in public
           </div>
-          <h2 className="mb-2 font-display text-xl font-bold text-black dark:text-white sm:text-2xl">
+          <h2 className="mb-2 font-display text-xl font-semibold text-ink dark:text-bone sm:text-2xl">
             Follow along as I build.
           </h2>
-          <p className="mb-6 max-w-md text-sm text-gray-500 dark:text-gray-400">
+          <p className="mb-6 max-w-md text-sm text-stone">
             Devlogs, project updates, and notes from the lab. No spam — just what I'm shipping.
           </p>
 
@@ -328,7 +309,14 @@ export default function Home({ posts }) {
               href={siteMetadata.x}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-black transition-all hover:border-gray-400 hover:bg-white dark:border-gray-700 dark:text-white dark:hover:border-gray-600 dark:hover:bg-gray-900"
+              onClick={() =>
+                posthog.capture('social_link_clicked', {
+                  social_network: 'x',
+                  destination: siteMetadata.x,
+                  section: 'follow',
+                })
+              }
+              className="focus-ring inline-flex items-center rounded-md border border-stone/20 px-4 py-2 text-sm font-medium text-ink transition-all hover:border-stone/40 hover:bg-stone/5 dark:text-bone dark:hover:bg-stone/10"
             >
               Follow on X
             </Link>
@@ -336,9 +324,31 @@ export default function Home({ posts }) {
               href={siteMetadata.github}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-black transition-all hover:border-gray-400 hover:bg-white dark:border-gray-700 dark:text-white dark:hover:border-gray-600 dark:hover:bg-gray-900"
+              onClick={() =>
+                posthog.capture('social_link_clicked', {
+                  social_network: 'github',
+                  destination: siteMetadata.github,
+                  section: 'follow',
+                })
+              }
+              className="focus-ring inline-flex items-center rounded-md border border-stone/20 px-4 py-2 text-sm font-medium text-ink transition-all hover:border-stone/40 hover:bg-stone/5 dark:text-bone dark:hover:bg-stone/10"
             >
               GitHub
+            </Link>
+            <Link
+              href={siteMetadata.youtube || '#'}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() =>
+                posthog.capture('social_link_clicked', {
+                  social_network: 'youtube',
+                  destination: siteMetadata.youtube,
+                  section: 'follow',
+                })
+              }
+              className="focus-ring inline-flex items-center rounded-md border border-stone/20 px-4 py-2 text-sm font-medium text-ink transition-all hover:border-stone/40 hover:bg-stone/5 dark:text-bone dark:hover:bg-stone/10"
+            >
+              Watch on YouTube
             </Link>
           </div>
         </div>

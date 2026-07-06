@@ -8,6 +8,7 @@ import { CoreContent } from 'pliny/utils/contentlayer'
 import type { Blog } from 'contentlayer/generated'
 import Link from '@/components/Link'
 import Tag from '@/components/Tag'
+import AmbientGlow from '@/components/AmbientGlow'
 import siteMetadata from '@/data/siteMetadata'
 import tagData from 'app/tag-data.json'
 
@@ -33,7 +34,7 @@ function Pagination({ totalPages, currentPage }: PaginationProps) {
       <nav className="flex items-center justify-between">
         {!prevPage ? (
           <button
-            className="cursor-auto rounded-full border border-gray-200 px-5 py-2 text-sm font-medium text-gray-300 dark:border-gray-800 dark:text-gray-700"
+            className="cursor-auto rounded-full border border-stone/15 px-5 py-2 text-sm font-medium text-stone/40"
             disabled
           >
             ← Previous
@@ -42,17 +43,17 @@ function Pagination({ totalPages, currentPage }: PaginationProps) {
           <Link
             href={currentPage - 1 === 1 ? `/${basePath}/` : `/${basePath}/page/${currentPage - 1}`}
             rel="prev"
-            className="rounded-full border border-gray-300 px-5 py-2 text-sm font-medium text-black transition-all hover:border-gray-400 hover:bg-gray-50 dark:border-gray-700 dark:text-white dark:hover:border-gray-600 dark:hover:bg-gray-900"
+            className="focus-ring rounded-full border border-stone/20 px-5 py-2 text-sm font-medium text-ink transition-all hover:border-stone/40 hover:bg-stone/5 dark:text-bone"
           >
             ← Previous
           </Link>
         )}
-        <span className="text-sm text-gray-400 dark:text-gray-500">
+        <span className="text-sm text-stone">
           {currentPage} / {totalPages}
         </span>
         {!nextPage ? (
           <button
-            className="cursor-auto rounded-full border border-gray-200 px-5 py-2 text-sm font-medium text-gray-300 dark:border-gray-800 dark:text-gray-700"
+            className="cursor-auto rounded-full border border-stone/15 px-5 py-2 text-sm font-medium text-stone/40"
             disabled
           >
             Next →
@@ -61,7 +62,7 @@ function Pagination({ totalPages, currentPage }: PaginationProps) {
           <Link
             href={`/${basePath}/page/${currentPage + 1}`}
             rel="next"
-            className="rounded-full border border-gray-300 px-5 py-2 text-sm font-medium text-black transition-all hover:border-gray-400 hover:bg-gray-50 dark:border-gray-700 dark:text-white dark:hover:border-gray-600 dark:hover:bg-gray-900"
+            className="focus-ring rounded-full border border-stone/20 px-5 py-2 text-sm font-medium text-ink transition-all hover:border-stone/40 hover:bg-stone/5 dark:text-bone"
           >
             Next →
           </Link>
@@ -86,24 +87,15 @@ export default function ListLayoutWithTags({
 
   return (
     <div className="relative overflow-hidden">
-      {/* Atmospheric orb */}
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
-        <div
-          className="absolute -top-20 left-1/2 h-[350px] w-[500px] -translate-x-1/2 rounded-full opacity-40 blur-[120px]"
-          style={{
-            background:
-              'radial-gradient(ellipse, rgba(139,92,246,0.1) 0%, rgba(99,102,241,0.05) 50%, transparent 70%)',
-          }}
-        />
-      </div>
+      <AmbientGlow className="-top-20 left-1/2 h-[350px] w-[500px] -translate-x-1/2" />
 
       {/* Page header */}
       <div className="pb-8 pt-16 sm:hidden">
-        <p className="mb-3 text-xs font-semibold uppercase tracking-[0.25em] text-gray-400 dark:text-gray-500">
-          Writing
+        <p className="mb-3 font-mono text-xs text-stone">
+          <span className="text-signal dark:text-signal-dark">$</span> writing
         </p>
         <h1
-          className="font-display font-bold tracking-tight text-black dark:text-white"
+          className="font-display font-semibold tracking-tight text-ink dark:text-bone"
           style={{ fontSize: 'clamp(2rem, 6vw, 3.5rem)' }}
         >
           {title}
@@ -112,15 +104,15 @@ export default function ListLayoutWithTags({
 
       <div className="flex sm:space-x-10">
         {/* Tag sidebar */}
-        <div className="hidden h-full max-h-screen min-w-[240px] max-w-[240px] flex-wrap overflow-auto rounded-2xl border border-gray-200 bg-white/60 pt-5 backdrop-blur-sm dark:border-gray-800 dark:bg-black/40 sm:flex">
+        <div className="hidden h-full max-h-screen min-w-[240px] max-w-[240px] flex-wrap overflow-auto rounded-2xl border border-stone/15 bg-paper pt-5 dark:border-stone/20 dark:bg-graphite sm:flex">
           <div className="px-5 py-4">
             {/* Page header (desktop, inside sidebar) */}
-            <div className="mb-5 border-b border-gray-100 pb-5 dark:border-gray-900">
-              <p className="mb-1 text-xs font-semibold uppercase tracking-[0.2em] text-gray-400 dark:text-gray-500">
-                Writing
+            <div className="mb-5 border-b border-stone/15 pb-5">
+              <p className="mb-1 font-mono text-xs text-stone">
+                <span className="text-signal dark:text-signal-dark">$</span> writing
               </p>
               <h1
-                className="font-display font-bold tracking-tight text-black dark:text-white"
+                className="font-display font-semibold tracking-tight text-ink dark:text-bone"
                 style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)' }}
               >
                 {title}
@@ -129,11 +121,11 @@ export default function ListLayoutWithTags({
 
             {/* All posts link */}
             {pathname.startsWith('/blog') ? (
-              <p className="mb-3 text-sm font-bold text-black dark:text-white">All Posts</p>
+              <p className="mb-3 text-sm font-bold text-ink dark:text-bone">All Posts</p>
             ) : (
               <Link
                 href="/blog"
-                className="mb-3 block text-sm font-bold text-gray-500 hover:text-black hover:underline dark:text-gray-400 dark:hover:text-white"
+                className="focus-ring mb-3 block rounded text-sm font-bold text-stone hover:text-ink hover:underline dark:hover:text-bone"
               >
                 All Posts
               </Link>
@@ -146,14 +138,14 @@ export default function ListLayoutWithTags({
                 return (
                   <li key={t}>
                     {isActive ? (
-                      <span className="flex items-center justify-between rounded-full bg-black px-3 py-1.5 text-xs font-medium text-white dark:bg-white dark:text-black">
+                      <span className="flex items-center justify-between rounded-full bg-signal px-3 py-1.5 text-xs font-medium text-paper dark:bg-signal-dark dark:text-graphite">
                         <span className="uppercase">{t}</span>
                         <span className="ml-2 opacity-60">{tagCounts[t]}</span>
                       </span>
                     ) : (
                       <Link
                         href={`/tags/${slug(t)}`}
-                        className="flex items-center justify-between rounded-full px-3 py-1.5 text-xs font-medium uppercase text-gray-500 transition-all hover:bg-gray-100 hover:text-black dark:text-gray-400 dark:hover:bg-gray-900 dark:hover:text-white"
+                        className="focus-ring flex items-center justify-between rounded-full px-3 py-1.5 text-xs font-medium uppercase text-stone transition-all hover:bg-stone/10 hover:text-ink dark:hover:text-bone"
                         aria-label={`View posts tagged ${t}`}
                       >
                         <span>{t}</span>
@@ -174,10 +166,10 @@ export default function ListLayoutWithTags({
               const { path, date, title, summary, tags } = post
               return (
                 <li key={path}>
-                  <article className="group rounded-2xl border border-gray-200 bg-white/60 p-6 backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-gray-300 hover:shadow-lg dark:border-gray-800 dark:bg-black/40 dark:hover:border-gray-700 dark:hover:shadow-[0_10px_30px_rgba(255,255,255,0.04)]">
+                  <article className="group rounded-2xl border border-stone/15 bg-paper p-6 transition-all duration-300 hover:-translate-y-0.5 hover:border-stone/30 hover:shadow-lg dark:border-stone/20 dark:bg-graphite dark:hover:border-stone/40 dark:hover:shadow-[0_10px_30px_rgba(255,255,255,0.04)]">
                     <time
                       dateTime={date}
-                      className="mb-3 block font-mono text-xs uppercase tracking-[0.2em] text-gray-400 dark:text-gray-500"
+                      className="mb-3 block font-mono text-xs uppercase tracking-[0.2em] text-stone"
                       suppressHydrationWarning
                     >
                       {formatDate(date, siteMetadata.locale)}
@@ -185,7 +177,7 @@ export default function ListLayoutWithTags({
                     <h2 className="mb-2 text-xl font-bold tracking-tight">
                       <Link
                         href={`/${path}`}
-                        className="text-black hover:underline dark:text-white"
+                        className="focus-ring rounded text-ink hover:underline dark:text-bone"
                       >
                         {title}
                       </Link>
@@ -195,13 +187,11 @@ export default function ListLayoutWithTags({
                         <Tag key={tag} text={tag} />
                       ))}
                     </div>
-                    <p className="text-sm leading-relaxed text-gray-500 dark:text-gray-400">
-                      {summary}
-                    </p>
+                    <p className="text-sm leading-relaxed text-stone">{summary}</p>
                     <div className="mt-4">
                       <Link
                         href={`/${path}`}
-                        className="inline-flex items-center gap-1 text-xs font-semibold text-gray-400 transition-colors group-hover:text-black dark:group-hover:text-white"
+                        className="focus-ring inline-flex items-center gap-1 rounded text-xs font-semibold text-stone transition-colors group-hover:text-ink dark:group-hover:text-bone"
                       >
                         Read more
                         <span className="inline-block transition-transform duration-150 group-hover:translate-x-0.5">

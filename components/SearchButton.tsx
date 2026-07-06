@@ -1,24 +1,32 @@
+'use client'
+
 import { AlgoliaButton } from 'pliny/search/AlgoliaButton'
 import { KBarButton } from 'pliny/search/KBarButton'
+import posthog from '../lib/posthog-browser'
 import siteMetadata from '@/data/siteMetadata'
 
 const SearchButton = () => {
-  if (
-    siteMetadata.search &&
-    (siteMetadata.search.provider === 'algolia' || siteMetadata.search.provider === 'kbar')
-  ) {
-    const SearchButtonWrapper =
-      siteMetadata.search.provider === 'algolia' ? AlgoliaButton : KBarButton
+  const searchConfig = siteMetadata.search
+
+  if (searchConfig && (searchConfig.provider === 'algolia' || searchConfig.provider === 'kbar')) {
+    const SearchButtonWrapper = searchConfig.provider === 'algolia' ? AlgoliaButton : KBarButton
 
     return (
-      <SearchButtonWrapper aria-label="Search">
+      <SearchButtonWrapper
+        aria-label="Search"
+        onClick={() =>
+          posthog.capture('search_opened', {
+            search_provider: searchConfig.provider,
+          })
+        }
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
           strokeWidth={1.5}
           stroke="currentColor"
-          className="h-6 w-6 text-black hover:text-gray-600 dark:text-white dark:hover:text-gray-400"
+          className="h-6 w-6 text-ink hover:text-stone dark:text-bone"
         >
           <path
             strokeLinecap="round"

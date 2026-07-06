@@ -1,10 +1,10 @@
 import 'css/tailwind.css'
 import 'pliny/search/algolia.css'
 import 'remark-github-blockquote-alert/alert.css'
+import '../instrumentation-client'
 import { Analytics } from '@vercel/analytics/react'
-import Script from 'next/script'
 
-import { Inter, Lobster } from 'next/font/google'
+import { IBM_Plex_Sans, IBM_Plex_Serif, IBM_Plex_Mono } from 'next/font/google'
 import { SearchProvider, SearchConfig } from 'pliny/search'
 import Header from '@/components/Header'
 import SectionContainer from '@/components/SectionContainer'
@@ -14,17 +14,25 @@ import { ThemeProviders } from './theme-providers'
 import { Metadata } from 'next'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 
-const inter = Inter({
+const plexSans = IBM_Plex_Sans({
   subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
   display: 'swap',
-  variable: '--font-inter',
+  variable: '--font-plex-sans',
 })
 
-const lobster = Lobster({
+const plexSerif = IBM_Plex_Serif({
   subsets: ['latin'],
-  weight: '400',
+  weight: ['500', '600', '700'],
   display: 'swap',
-  variable: '--font-lobster',
+  variable: '--font-plex-serif',
+})
+
+const plexMono = IBM_Plex_Mono({
+  subsets: ['latin'],
+  weight: ['400', '500', '600'],
+  display: 'swap',
+  variable: '--font-plex-mono',
 })
 
 export const metadata: Metadata = {
@@ -86,7 +94,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang={siteMetadata.language}
-      className={`${inter.variable} ${lobster.variable} scroll-smooth`}
+      className={`${plexSans.variable} ${plexSerif.variable} ${plexMono.variable} scroll-smooth`}
       suppressHydrationWarning
     >
       <link rel="icon" type="image/svg+xml" href={`${basePath}/static/favicons/favicon.svg`} />
@@ -114,8 +122,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         color="#5bbad5"
       />
       <meta name="msapplication-TileColor" content="#000000" />
-      <meta name="theme-color" media="(prefers-color-scheme: light)" content="#fff" />
-      <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000" />
+      <meta name="theme-color" media="(prefers-color-scheme: light)" content="#F5F6F2" />
+      <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0F1113" />
       <link rel="alternate" type="application/rss+xml" href={`${basePath}/feed.xml`} />
       <script
         type="application/ld+json"
@@ -128,7 +136,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             description: siteMetadata.description,
             worksFor: {
               '@type': 'Organization',
-              name: siteMetadata.authorInfo?.company || 'QimInfo basel',
+              name: siteMetadata.authorInfo?.company || '1MoreThing Ventures',
             },
             email: siteMetadata.authorInfo?.email || siteMetadata.email,
             image: siteMetadata.authorInfo?.image || siteMetadata.siteLogo,
@@ -182,13 +190,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           }),
         }}
       />
-      <body className="bg-white pl-[calc(100vw-100%)] text-black antialiased dark:bg-black dark:text-white">
-        <Script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4839732717123016"
-          crossOrigin="anonymous"
-          strategy="afterInteractive"
-        />
+      <body className="bg-paper pl-[calc(100vw-100%)] text-ink antialiased dark:bg-graphite dark:text-bone">
         <Analytics />
         <SpeedInsights />
         <ThemeProviders>

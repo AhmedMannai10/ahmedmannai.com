@@ -22,11 +22,25 @@ module.exports = {
         14: '3.5rem',
       },
       fontFamily: {
-        sans: ['var(--font-inter)', ...fontFamily.sans],
-        display: ['var(--font-inter)', ...fontFamily.sans], // Inter Display for headings
-        lobster: ['var(--font-lobster)', ...fontFamily.serif],
+        sans: ['var(--font-plex-sans)', ...fontFamily.sans],
+        display: ['var(--font-plex-serif)', ...fontFamily.serif], // IBM Plex Serif for headings
+        mono: ['var(--font-plex-mono)', ...fontFamily.mono],
       },
       colors: {
+        // Technical-paper palette — engineering-instrument inspired, not decorative
+        paper: '#F5F6F2',
+        graphite: '#0F1113',
+        ink: '#15181B',
+        bone: '#ECEAE4',
+        signal: {
+          DEFAULT: '#0E6B57',
+          dark: '#14B896',
+        },
+        alert: {
+          DEFAULT: '#C1442D',
+          dark: '#E2694C',
+        },
+        stone: '#8B877E',
         // Minimal primary color for compatibility with pliny components
         primary: {
           50: '#FAFAFA',
@@ -55,11 +69,11 @@ module.exports = {
         },
         // Text colors
         text: {
-          primary: '#000000',
-          secondary: '#1A1A1A',
+          primary: '#15181B',
+          secondary: '#2A2E33',
           tertiary: '#4A4A4A',
-          inverse: '#FFFFFF',
-          'inverse-secondary': '#E5E5E5',
+          inverse: '#ECEAE4',
+          'inverse-secondary': '#C9C6BE',
           'inverse-tertiary': '#B3B3B3',
         },
         // Border colors
@@ -69,12 +83,12 @@ module.exports = {
           dark: '#1A1A1A',
           'dark-subtle': '#2A2A2A',
         },
-        // Minimal accent (for links and interactive elements)
+        // Accent — signal green, used for links and interactive elements
         accent: {
-          DEFAULT: '#000000',
-          hover: '#1A1A1A',
-          dark: '#FFFFFF',
-          'dark-hover': '#E5E5E5',
+          DEFAULT: '#0E6B57',
+          hover: '#0B5445',
+          dark: '#14B896',
+          'dark-hover': '#5EEAC9',
         },
         // Keep gray for compatibility and use as neutral
         gray: colors.gray,

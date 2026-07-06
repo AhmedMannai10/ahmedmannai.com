@@ -1,43 +1,25 @@
 import Link from './Link'
 import siteMetadata from '@/data/siteMetadata'
 import SocialIcon from '@/components/social-icons'
+import AmbientGlow from '@/components/AmbientGlow'
 import NewsletterForm from 'pliny/ui/NewsletterForm'
 
 export default function Footer() {
   return (
     <footer className="relative overflow-hidden">
-      {/* Atmospheric orb */}
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
-        <div
-          className="absolute bottom-0 left-1/2 h-[300px] w-[600px] -translate-x-1/2 rounded-full opacity-40 blur-[100px]"
-          style={{
-            background:
-              'radial-gradient(ellipse, rgba(139,92,246,0.12) 0%, rgba(99,102,241,0.06) 50%, transparent 70%)',
-          }}
-        />
-      </div>
+      <AmbientGlow className="bottom-0 left-1/2 h-[300px] w-[600px] -translate-x-1/2" />
 
-      <div className="mt-16 border-t border-gray-200 pt-16 dark:border-gray-800">
+      <div className="mt-16 border-t border-stone/15 pt-16">
         {/* Newsletter */}
         {siteMetadata.newsletter?.provider && (
           <div className="mb-16 flex flex-col items-center text-center">
-            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.25em] text-gray-400 dark:text-gray-500">
-              Newsletter
+            <p className="mb-3 font-mono text-xs text-stone">
+              <span className="text-signal dark:text-signal-dark">$</span> subscribe
             </p>
-            <h2 className="mb-2 font-display text-3xl font-bold tracking-tight text-black dark:text-white sm:text-4xl">
-              Stay in{' '}
-              <span
-                style={{
-                  backgroundImage: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  backgroundClip: 'text',
-                }}
-              >
-                the loop.
-              </span>
+            <h2 className="mb-2 font-display text-3xl font-semibold tracking-tight text-ink dark:text-bone sm:text-4xl">
+              Stay in <span className="text-signal dark:text-signal-dark">the loop.</span>
             </h2>
-            <p className="mb-8 max-w-sm text-sm text-gray-500 dark:text-gray-400">
+            <p className="mb-8 max-w-sm text-sm text-stone">
               Devlogs, project updates, and notes from the lab. No spam — just what I'm shipping.
             </p>
             <div className="w-full max-w-md">
@@ -47,7 +29,7 @@ export default function Footer() {
         )}
 
         {/* Divider */}
-        <div className="mb-10 border-t border-gray-100 dark:border-gray-900" />
+        <div className="mb-10 border-t border-stone/15" />
 
         {/* Nav + socials + copyright */}
         <div className="mb-10 flex flex-col items-center gap-6">
@@ -56,7 +38,7 @@ export default function Footer() {
               <Link
                 key={item}
                 href={`/${item.toLowerCase()}`}
-                className="rounded-full border border-gray-200 px-4 py-1.5 text-sm font-medium text-gray-500 transition-all hover:border-gray-400 hover:text-black dark:border-gray-800 dark:text-gray-400 dark:hover:border-gray-600 dark:hover:text-white"
+                className="focus-ring rounded-full border border-stone/15 px-4 py-1.5 text-sm font-medium text-stone transition-all hover:border-stone/40 hover:text-ink dark:hover:text-bone"
               >
                 {item}
               </Link>
@@ -72,7 +54,7 @@ export default function Footer() {
             <SocialIcon kind="instagram" href={siteMetadata.instagram} size={5} />
           </div>
 
-          <p className="pb-8 text-xs text-gray-400 dark:text-gray-600">
+          <p className="pb-8 text-xs text-stone/70">
             {siteMetadata.author} · © {new Date().getFullYear()}
           </p>
         </div>

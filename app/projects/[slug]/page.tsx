@@ -59,15 +59,15 @@ export default function ProjectPage({ params }: { params: { slug: string } }) {
   }
 
   return (
-    <article className="divide-y divide-gray-200 dark:divide-gray-800">
+    <article className="divide-y divide-stone/15">
       <header className="space-y-2 pb-10 pt-8">
         <div>
-          <h1 className="font-display text-3xl font-bold leading-tight tracking-tight text-black dark:text-white sm:text-4xl md:text-5xl">
+          <h1 className="font-display text-3xl font-bold leading-tight tracking-tight text-ink dark:text-bone sm:text-4xl md:text-5xl">
             {project.title}
           </h1>
         </div>
       </header>
-      <div className="divide-y divide-gray-200 pb-10 pt-8 dark:divide-gray-800">
+      <div className="divide-y divide-stone/15 pb-10 pt-8">
         {project.imgSrc && (
           <div className="mb-10">
             <Image
@@ -75,11 +75,11 @@ export default function ProjectPage({ params }: { params: { slug: string } }) {
               alt={project.title}
               width={1200}
               height={630}
-              className="rounded-lg border border-gray-200 dark:border-gray-800"
+              className="rounded-lg border border-stone/15"
             />
           </div>
         )}
-        <div className="prose max-w-none pb-10 pt-8 text-gray-600 dark:text-gray-400">
+        <div className="prose max-w-none pb-10 pt-8 text-stone">
           <p className="text-lg leading-7">{project.description}</p>
         </div>
         {project.href && (
@@ -88,7 +88,7 @@ export default function ProjectPage({ params }: { params: { slug: string } }) {
               href={project.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center rounded-md border border-black bg-black px-6 py-3 text-base font-medium text-white transition-all hover:bg-gray-900 dark:border-white dark:bg-white dark:text-black dark:hover:bg-gray-100"
+              className="focus-ring inline-flex items-center rounded-md bg-signal px-6 py-3 text-base font-medium text-paper transition-all hover:bg-signal/90 dark:bg-signal-dark dark:text-graphite"
             >
               View Project →
             </Link>
@@ -97,7 +97,7 @@ export default function ProjectPage({ params }: { params: { slug: string } }) {
         <div className="pt-8">
           <Link
             href="/projects"
-            className="font-medium text-black underline underline-offset-4 hover:no-underline dark:text-white"
+            className="focus-ring rounded font-medium text-ink underline underline-offset-4 hover:no-underline dark:text-bone"
           >
             ← Back to Projects
           </Link>

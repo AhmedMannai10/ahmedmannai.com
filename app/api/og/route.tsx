@@ -24,7 +24,7 @@ export async function GET(req: NextRequest) {
         overflow: 'hidden',
       }}
     >
-      {/* Atmospheric glow — top right */}
+      {/* Signal glow — top right */}
       <div
         style={{
           position: 'absolute',
@@ -34,7 +34,7 @@ export async function GET(req: NextRequest) {
           height: '500px',
           borderRadius: '50%',
           background:
-            'radial-gradient(ellipse, rgba(139,92,246,0.4) 0%, rgba(99,102,241,0.18) 45%, transparent 70%)',
+            'radial-gradient(ellipse, rgba(14,107,87,0.4) 0%, rgba(20,184,150,0.18) 45%, transparent 70%)',
           filter: 'blur(90px)',
         }}
       />
@@ -47,7 +47,7 @@ export async function GET(req: NextRequest) {
           width: '450px',
           height: '350px',
           borderRadius: '50%',
-          background: 'radial-gradient(ellipse, rgba(168,85,247,0.2) 0%, transparent 70%)',
+          background: 'radial-gradient(ellipse, rgba(20,184,150,0.18) 0%, transparent 70%)',
           filter: 'blur(70px)',
         }}
       />
