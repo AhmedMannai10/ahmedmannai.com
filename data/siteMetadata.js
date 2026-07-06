@@ -44,7 +44,7 @@ const siteMetadata = {
   authorInfo: {
     name: 'Ahmed Mannai',
     jobTitle: 'Software Engineer',
-    company: 'QimInfo basel',
+    company: '1MoreThing Ventures',
     email: 'ahmedmannai.com@gmail.com',
     image: `${process.env.BASE_PATH || ''}/static/images/avatar.png`,
     sameAs: [
@@ -116,6 +116,8 @@ const siteMetadata = {
       lang: 'en',
     },
   },
+  // Cal.com booking link, e.g. 'ahmed-mannai/intro-call'. Set NEXT_PUBLIC_CAL_LINK in .env.local.
+  calLink: process.env.NEXT_PUBLIC_CAL_LINK || '',
   search: {
     provider: 'kbar', // kbar or algolia
     kbarConfig: {
