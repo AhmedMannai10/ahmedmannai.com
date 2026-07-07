@@ -7,13 +7,13 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 // You might need to insert additional domains in script-src if you are using external services
 const ContentSecurityPolicy = `
   default-src 'self';
-  script-src 'self' 'unsafe-eval' 'unsafe-inline' giscus.app analytics.umami.is;
+  script-src 'self' 'unsafe-eval' 'unsafe-inline' giscus.app analytics.umami.is cal.com *.cal.com;
   style-src 'self' 'unsafe-inline';
   img-src * blob: data:;
   media-src *.s3.amazonaws.com;
   connect-src *;
   font-src 'self';
-  frame-src giscus.app
+  frame-src giscus.app cal.com *.cal.com youtube-nocookie.com
 `
 
 const securityHeaders = [
@@ -67,6 +67,23 @@ module.exports = () => {
     output,
     basePath,
     reactStrictMode: true,
+    async rewrites() {
+      return [
+        {
+          source: '/ingest/static/:path*',
+          destination: 'https://eu-assets.i.posthog.com/static/:path*',
+        },
+        {
+          source: '/ingest/array/:path*',
+          destination: 'https://eu-assets.i.posthog.com/array/:path*',
+        },
+        {
+          source: '/ingest/:path*',
+          destination: 'https://eu.i.posthog.com/:path*',
+        },
+      ]
+    },
+    skipTrailingSlashRedirect: true,
     pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
     eslint: {
       dirs: ['app', 'components', 'layouts', 'scripts'],
@@ -76,6 +93,10 @@ module.exports = () => {
         {
           protocol: 'https',
           hostname: 'picsum.photos',
+        },
+        {
+          protocol: 'https',
+          hostname: 'img.youtube.com',
         },
       ],
       unoptimized,

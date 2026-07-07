@@ -30,6 +30,8 @@
     "next-themes": "^0.3.0",
     "pliny": "0.2.1",
     "postcss": "^8.4.24",
+    "posthog-js": "^1.397.0",
+    "posthog-node": "^5.39.4",
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "reading-time": "1.5.0",

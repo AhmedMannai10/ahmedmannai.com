@@ -1,6 +1,8 @@
 import ListLayout from '@/layouts/ListLayoutWithTags'
 import { allCoreContent, sortPosts } from 'pliny/utils/contentlayer'
 import { allBlogs } from 'contentlayer/generated'
+import { genPageMetadata } from 'app/seo'
+import { Metadata } from 'next'
 
 const POSTS_PER_PAGE = 5
 
@@ -9,6 +11,19 @@ export const generateStaticParams = async () => {
   const paths = Array.from({ length: totalPages }, (_, i) => ({ page: (i + 1).toString() }))
 
   return paths
+}
+
+export function generateMetadata({ params }: { params: { page: string } }): Metadata {
+  const pageNumber = parseInt(params.page as string)
+  const isFirstPage = pageNumber === 1
+
+  return genPageMetadata({
+    title: isFirstPage ? 'Blog' : `Blog - Page ${pageNumber}`,
+    alternates: {
+      canonical: isFirstPage ? '/blog' : `/blog/page/${pageNumber}`,
+    },
+    ...(isFirstPage ? {} : { robots: { index: false, follow: true } }),
+  })
 }
 
 export default function Page({ params }: { params: { page: string } }) {
