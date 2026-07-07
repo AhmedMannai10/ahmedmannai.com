@@ -1,7 +1,6 @@
 import 'css/tailwind.css'
 import 'pliny/search/algolia.css'
 import 'remark-github-blockquote-alert/alert.css'
-import '../instrumentation-client'
 import { Analytics } from '@vercel/analytics/react'
 
 import { IBM_Plex_Sans, IBM_Plex_Serif, IBM_Plex_Mono } from 'next/font/google'
@@ -13,6 +12,7 @@ import siteMetadata from '@/data/siteMetadata'
 import { ThemeProviders } from './theme-providers'
 import { Metadata } from 'next'
 import { SpeedInsights } from '@vercel/speed-insights/next'
+import PostHogInit from '@/components/PostHogInit'
 
 const plexSans = IBM_Plex_Sans({
   subsets: ['latin'],
@@ -191,6 +191,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         }}
       />
       <body className="bg-paper pl-[calc(100vw-100%)] text-ink antialiased dark:bg-graphite dark:text-bone">
+        <PostHogInit />
         <Analytics />
         <SpeedInsights />
         <ThemeProviders>
