@@ -100,7 +100,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <link rel="icon" type="image/svg+xml" href={`${basePath}/static/favicons/favicon.svg`} />
       <link
         rel="apple-touch-icon"
-        sizes="76x76"
+        sizes="180x180"
         href={`${basePath}/static/favicons/apple-touch-icon.png`}
       />
       <link
@@ -119,9 +119,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <link
         rel="mask-icon"
         href={`${basePath}/static/favicons/safari-pinned-tab.svg`}
-        color="#5bbad5"
+        color="#0E6B57"
       />
-      <meta name="msapplication-TileColor" content="#000000" />
+      <meta name="msapplication-TileColor" content="#0F1113" />
       <meta name="theme-color" media="(prefers-color-scheme: light)" content="#F5F6F2" />
       <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0F1113" />
       <link rel="alternate" type="application/rss+xml" href={`${basePath}/feed.xml`} />
