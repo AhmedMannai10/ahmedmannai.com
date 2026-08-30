@@ -1,11 +1,13 @@
 import { ReactNode } from 'react'
 
-interface Props {
-  children: ReactNode
-}
-
-export default function SectionContainer({ children }: Props) {
+/**
+ * The chassis. Instrument-panel routes run edge-to-edge inside this frame;
+ * reading routes constrain their own column (see layouts/*).
+ */
+export default function SectionContainer({ children }: { children: ReactNode }) {
   return (
-    <section className="mx-auto max-w-3xl px-4 sm:px-6 xl:max-w-5xl xl:px-0">{children}</section>
+    <div className="mx-auto w-full max-w-[1280px] border-panel-line dark:border-panel-dark-line lg:border-x">
+      {children}
+    </div>
   )
 }

@@ -1,3 +1,4 @@
+import ReadingContainer from '@/components/ReadingContainer'
 import Link from '@/components/Link'
 import Tag from '@/components/Tag'
 import { slug } from 'github-slugger'
@@ -15,7 +16,7 @@ export default async function Page() {
   const tagKeys = Object.keys(tagCounts)
   const sortedTags = tagKeys.sort((a, b) => tagCounts[b] - tagCounts[a])
   return (
-    <>
+    <ReadingContainer>
       <div className="flex flex-col items-start justify-start divide-y divide-stone/15 md:mt-24 md:flex-row md:items-center md:justify-center md:space-x-6 md:divide-y-0">
         <div className="space-x-2 pb-8 pt-6 md:space-y-5">
           <h1 className="font-display text-3xl font-bold leading-tight tracking-tight text-ink dark:text-bone sm:text-4xl md:border-r-2 md:border-stone/15 md:px-6 md:text-5xl lg:text-6xl">
@@ -40,6 +41,6 @@ export default async function Page() {
           })}
         </div>
       </div>
-    </>
+    </ReadingContainer>
   )
 }

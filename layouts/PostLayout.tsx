@@ -4,7 +4,7 @@ import type { Blog, Authors } from 'contentlayer/generated'
 import Comments from '@/components/Comments'
 import Link from '@/components/Link'
 import PageTitle from '@/components/PageTitle'
-import SectionContainer from '@/components/SectionContainer'
+import ReadingContainer from '@/components/ReadingContainer'
 import Image from '@/components/Image'
 import Tag from '@/components/Tag'
 import siteMetadata from '@/data/siteMetadata'
@@ -34,7 +34,7 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
   const basePath = path.split('/')[0]
 
   return (
-    <SectionContainer>
+    <ReadingContainer>
       <ScrollTopAndComment />
       <article>
         <div className="xl:divide-y xl:divide-stone/15">
@@ -221,6 +221,6 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
           </div>
         </div>
       </article>
-    </SectionContainer>
+    </ReadingContainer>
   )
 }

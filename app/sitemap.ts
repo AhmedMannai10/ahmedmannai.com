@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next'
 import { allBlogs } from 'contentlayer/generated'
 import siteMetadata from '@/data/siteMetadata'
-import projectsData from '@/data/projectsData'
+import appsData from '@/data/appsData'
 import { readFileSync } from 'fs'
 import { join } from 'path'
 
@@ -18,9 +18,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.7,
     }))
 
-  // Project routes - individual project pages
-  const projectRoutes = projectsData.map((project) => ({
-    url: `${siteUrl}/projects/${project.slug}`,
+  // App routes - individual unit pages
+  const projectRoutes = appsData.map((app) => ({
+    url: `${siteUrl}/apps/${app.slug}`,
     lastModified: new Date().toISOString().split('T')[0],
     changeFrequency: 'monthly' as const,
     priority: 0.8,
@@ -42,7 +42,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { route: '', priority: 1.0, changeFrequency: 'weekly' as const },
     { route: 'about', priority: 0.9, changeFrequency: 'monthly' as const },
     { route: 'blog', priority: 0.9, changeFrequency: 'weekly' as const },
-    { route: 'projects', priority: 0.8, changeFrequency: 'monthly' as const },
+    { route: 'apps', priority: 0.8, changeFrequency: 'monthly' as const },
+    { route: 'videos', priority: 0.7, changeFrequency: 'monthly' as const },
     { route: 'tags', priority: 0.7, changeFrequency: 'weekly' as const },
   ].map(({ route, priority, changeFrequency }) => ({
     url: `${siteUrl}/${route}`,

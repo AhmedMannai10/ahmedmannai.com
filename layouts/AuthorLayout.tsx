@@ -3,7 +3,6 @@ import type { Authors } from 'contentlayer/generated'
 import SocialIcon from '@/components/social-icons'
 import Image from '@/components/Image'
 import Link from '@/components/Link'
-import AmbientGlow from '@/components/AmbientGlow'
 import siteMetadata from '@/data/siteMetadata'
 
 interface Props {
@@ -29,8 +28,6 @@ export default function AuthorLayout({ children, content }: Props) {
 
   return (
     <div className="relative overflow-hidden">
-      <AmbientGlow className="-top-20 left-1/2 h-[400px] w-[600px] -translate-x-1/2" />
-
       {/* Page heading */}
       <div className="pb-10 pt-16">
         <p className="mb-3 font-mono text-xs text-stone">
@@ -51,14 +48,14 @@ export default function AuthorLayout({ children, content }: Props) {
           <div className="flex flex-col items-center gap-5 pb-10 xl:sticky xl:top-24 xl:pb-0">
             {/* Avatar with gradient ring */}
             {avatar && (
-              <div className="animate-fade-in rounded-full bg-signal p-[3px] shadow-xl shadow-signal/20 dark:bg-signal-dark">
-                <div className="rounded-full bg-paper p-0.5 dark:bg-graphite">
+              <div className="border border-panel-line p-1.5 dark:border-panel-dark-line">
+                <div className="bg-panel-sub dark:bg-panel-dark-sub">
                   <Image
                     src={avatar}
                     alt={name}
                     width={192}
                     height={192}
-                    className="h-48 w-48 rounded-full object-cover"
+                    className="h-48 w-48 object-cover"
                   />
                 </div>
               </div>
@@ -119,7 +116,7 @@ export default function AuthorLayout({ children, content }: Props) {
               <div className="mt-5 flex flex-wrap gap-3">
                 <Link
                   href="/book"
-                  className="focus-ring inline-flex items-center rounded-full bg-signal px-5 py-2 text-sm font-semibold text-paper shadow-lg shadow-signal/20 transition-all duration-200 hover:scale-[1.02] hover:bg-signal/90 dark:bg-signal-dark dark:text-graphite"
+                  className="focus-ring inline-flex items-center bg-signal px-5 py-3 font-mono text-xs font-bold uppercase tracking-[0.16em] text-panel-dark-base transition-colors hover:bg-signal-hover"
                 >
                   Book a Call
                 </Link>

@@ -23,25 +23,61 @@ module.exports = {
       },
       fontFamily: {
         sans: ['var(--font-plex-sans)', ...fontFamily.sans],
-        display: ['var(--font-plex-serif)', ...fontFamily.serif], // IBM Plex Serif for headings
-        mono: ['var(--font-plex-mono)', ...fontFamily.mono],
+        display: ['var(--font-space-grotesk)', ...fontFamily.sans],
+        mono: ['var(--font-jetbrains-mono)', ...fontFamily.mono],
+      },
+      spacing: {
+        4.5: '1.125rem',
+        5.5: '1.375rem',
       },
       colors: {
-        // Technical-paper palette — engineering-instrument inspired, not decorative
-        paper: '#F5F6F2',
-        graphite: '#0F1113',
-        ink: '#15181B',
-        bone: '#ECEAE4',
+        // ── Single accent. Status dots, one hairline rule, primary button, hover.
+        // Never a section background, never a gradient, never a glow.
         signal: {
-          DEFAULT: '#0E6B57',
-          dark: '#14B896',
+          DEFAULT: '#FF4D00',
+          hover: '#FF6A29',
+          dark: '#FF4D00', // same accent in both themes
         },
-        alert: {
-          DEFAULT: '#C1442D',
-          dark: '#E2694C',
+        accent: {
+          DEFAULT: '#FF4D00',
+          hover: '#FF6A29',
+          dark: '#FF4D00',
+          'dark-hover': '#FF7238',
         },
+
+        // ── Instrument panel — light theme (default)
+        panel: {
+          base: '#EDEAE3',
+          sub: '#E5E1D8',
+          line: '#C9C5BB',
+          soft: '#DCD8CE',
+        },
+        // ── Instrument panel — dark theme
+        'panel-dark': {
+          base: '#0E0F10',
+          sub: '#111314',
+          sub2: '#16181A',
+          line: '#26282A',
+          line2: '#3A3C3E',
+        },
+
+        text: {
+          primary: '#16181B',
+          secondary: '#4A4740',
+          tertiary: '#6B675F',
+          inverse: '#ECEAE4',
+          'inverse-secondary': '#9C9891',
+          'inverse-tertiary': '#6F6C67',
+          'inverse-bright': '#B9B5AD',
+        },
+
+        // ── Retained: referenced by pliny components and the not-yet-redesigned
+        // reading pages (blog, videos, about). Remapped onto the new palette.
+        paper: '#EDEAE3',
+        graphite: '#0E0F10',
+        ink: '#16181B',
+        bone: '#ECEAE4',
         stone: '#8B877E',
-        // Minimal primary color for compatibility with pliny components
         primary: {
           50: '#FAFAFA',
           100: '#F5F5F5',
@@ -49,48 +85,27 @@ module.exports = {
           300: '#D4D4D4',
           400: '#A3A3A3',
           500: '#737373',
-          600: '#000000', // Black for light mode
-          700: '#171717',
-          800: '#0A0A0A',
-          900: '#000000',
+          600: '#16181B',
+          700: '#16181B',
+          800: '#0E0F10',
+          900: '#0E0F10',
         },
-        // Linear-inspired neutral palette
-        // Light mode backgrounds
         bg: {
-          base: '#FFFFFF',
-          subtle: '#FAFAFA',
-          muted: '#F5F5F5',
+          base: '#EDEAE3',
+          subtle: '#E5E1D8',
+          muted: '#DCD8CE',
         },
-        // Dark mode backgrounds
         dark: {
-          base: '#000000',
-          subtle: '#0A0A0A',
-          muted: '#141414',
+          base: '#0E0F10',
+          subtle: '#111314',
+          muted: '#16181A',
         },
-        // Text colors
-        text: {
-          primary: '#15181B',
-          secondary: '#2A2E33',
-          tertiary: '#4A4A4A',
-          inverse: '#ECEAE4',
-          'inverse-secondary': '#C9C6BE',
-          'inverse-tertiary': '#B3B3B3',
-        },
-        // Border colors
         border: {
-          light: '#E5E5E5',
-          DEFAULT: '#D1D1D1',
-          dark: '#1A1A1A',
-          'dark-subtle': '#2A2A2A',
+          light: '#DCD8CE',
+          DEFAULT: '#C9C5BB',
+          dark: '#26282A',
+          'dark-subtle': '#3A3C3E',
         },
-        // Accent — signal green, used for links and interactive elements
-        accent: {
-          DEFAULT: '#0E6B57',
-          hover: '#0B5445',
-          dark: '#14B896',
-          'dark-hover': '#5EEAC9',
-        },
-        // Keep gray for compatibility and use as neutral
         gray: colors.gray,
       },
       typography: ({ theme }) => ({
@@ -98,36 +113,37 @@ module.exports = {
           css: {
             color: theme('colors.text.primary'),
             a: {
-              color: theme('colors.accent.DEFAULT'),
+              color: theme('colors.signal.DEFAULT'),
               textDecoration: 'underline',
               textDecorationThickness: '1px',
               textUnderlineOffset: '2px',
               '&:hover': {
-                color: theme('colors.accent.hover'),
+                color: theme('colors.signal.hover'),
                 textDecorationThickness: '2px',
               },
               code: {
-                color: theme('colors.accent.DEFAULT'),
+                color: theme('colors.signal.DEFAULT'),
               },
             },
             'h1,h2': {
               fontWeight: '700',
-              letterSpacing: theme('letterSpacing.tight'),
+              letterSpacing: '-0.02em',
               color: theme('colors.text.primary'),
             },
             h3: {
-              fontWeight: '600',
+              fontWeight: '700',
               color: theme('colors.text.primary'),
             },
             code: {
               color: theme('colors.text.primary'),
-              backgroundColor: theme('colors.bg.subtle'),
+              backgroundColor: theme('colors.panel.sub'),
               padding: '0.125rem 0.25rem',
-              borderRadius: '0.25rem',
+              borderRadius: '0',
             },
             pre: {
-              backgroundColor: theme('colors.bg.subtle'),
-              border: `1px solid ${theme('colors.border.light')}`,
+              backgroundColor: theme('colors.panel.sub'),
+              border: `1px solid ${theme('colors.panel.line')}`,
+              borderRadius: '0',
             },
           },
         },
@@ -135,16 +151,16 @@ module.exports = {
           css: {
             color: theme('colors.text.inverse'),
             a: {
-              color: theme('colors.accent.dark'),
+              color: theme('colors.signal.DEFAULT'),
               textDecoration: 'underline',
               textDecorationThickness: '1px',
               textUnderlineOffset: '2px',
               '&:hover': {
-                color: theme('colors.accent.dark-hover'),
+                color: theme('colors.signal.hover'),
                 textDecorationThickness: '2px',
               },
               code: {
-                color: theme('colors.accent.dark'),
+                color: theme('colors.signal.DEFAULT'),
               },
             },
             'h1,h2,h3,h4,h5,h6': {
@@ -152,36 +168,23 @@ module.exports = {
             },
             code: {
               color: theme('colors.text.inverse'),
-              backgroundColor: theme('colors.dark.muted'),
+              backgroundColor: theme('colors.panel-dark.sub2'),
             },
             pre: {
-              backgroundColor: theme('colors.dark.muted'),
-              border: `1px solid ${theme('colors.border.dark')}`,
+              backgroundColor: theme('colors.panel-dark.sub'),
+              border: `1px solid ${theme('colors.panel-dark.line')}`,
             },
           },
         },
       }),
       keyframes: {
-        fadeInUp: {
-          '0%': { opacity: '0', transform: 'translateY(20px)' },
-          '100%': { opacity: '1', transform: 'translateY(0)' },
-        },
-        fadeIn: {
-          '0%': { opacity: '0' },
-          '100%': { opacity: '1' },
+        blink: {
+          '0%, 100%': { opacity: '1' },
+          '50%': { opacity: '0.35' },
         },
       },
       animation: {
-        'fade-in-up': 'fadeInUp 0.6s ease-out forwards',
-        'fade-in': 'fadeIn 0.4s ease-out forwards',
-      },
-      boxShadow: {
-        subtle: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
-        DEFAULT: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1)',
-        md: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1)',
-        'dark-subtle': '0 1px 2px 0 rgba(255, 255, 255, 0.05)',
-        'dark-md':
-          '0 4px 6px -1px rgba(255, 255, 255, 0.05), 0 2px 4px -2px rgba(255, 255, 255, 0.05)',
+        blink: 'blink 2.4s ease-in-out infinite',
       },
     },
   },

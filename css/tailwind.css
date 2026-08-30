@@ -50,128 +50,110 @@ input:-webkit-autofill:focus {
   vertical-align: middle;
 }
 
-/* Newsletter Form Styling */
+/* ============================================
+   NEWSLETTER — square, hairline, orange submit
+   (pliny NewsletterForm / BlogNewsletterForm fallback styling;
+   components/NewsletterForm.tsx is the designed one)
+   ============================================ */
 form input[type='email'],
 form input#email-input,
 input#email-input {
-  @apply w-full rounded-full border border-gray-300 bg-white px-5 py-2.5 font-sans text-sm text-black placeholder-gray-400 focus:border-black focus:outline-none focus:ring-1 focus:ring-black dark:border-gray-700 dark:bg-black dark:text-white dark:placeholder-gray-500 dark:focus:border-white dark:focus:ring-white;
+  @apply w-full border border-panel-line bg-transparent px-4 py-3 font-sans text-[15px] text-text-primary placeholder-text-tertiary focus:border-signal focus:outline-none focus:ring-0 dark:border-panel-dark-line dark:text-text-inverse dark:placeholder-text-inverse-tertiary dark:focus:border-signal;
+  border-radius: 0;
 }
 
-/* NewsletterForm specific input - responsive width for desktop */
 form.flex input#email-input {
   @apply w-full sm:min-w-[280px] sm:flex-1;
 }
 
 form button[type='submit'],
 button[type='submit'] {
-  @apply w-full rounded-full border border-black bg-black px-6 py-2.5 font-sans text-sm font-semibold text-white shadow-lg shadow-black/20 transition-all hover:scale-[1.02] hover:bg-gray-900 focus:outline-none focus:ring-1 focus:ring-black dark:border-white dark:bg-white dark:text-black dark:shadow-white/10 dark:hover:bg-gray-100 dark:focus:ring-white;
+  @apply w-full border border-signal bg-signal px-6 py-3 font-mono text-xs font-bold uppercase tracking-[0.16em] text-panel-dark-base transition-colors hover:bg-signal-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-signal;
+  border-radius: 0;
 }
 
-/* NewsletterForm button in flex layout */
 form.flex button[type='submit'] {
   @apply sm:w-auto sm:flex-shrink-0;
 }
 
-/* NewsletterForm title override */
 div > div.pb-1.text-lg.font-semibold {
-  @apply font-sans text-black dark:text-white;
+  @apply font-mono text-[10px] uppercase tracking-[0.22em] text-text-tertiary dark:text-text-inverse-tertiary;
 }
 
-/* NewsletterForm form container - better spacing */
 form.flex.flex-col.sm\:flex-row {
-  @apply gap-3;
+  @apply gap-0;
 }
 
-/* NewsletterForm input container */
 form.flex > div:first-child {
   @apply w-full sm:flex-1;
 }
 
-/* NewsletterForm button container */
 form.flex div.mt-2.sm\:mt-0,
 form.flex > div:last-child {
-  @apply w-full sm:w-auto sm:flex-shrink-0;
+  @apply mt-0 w-full sm:ml-0 sm:w-auto sm:flex-shrink-0;
+  box-shadow: none;
+  border-radius: 0;
 }
 
 /* ============================================
-   KBAR — Apple Spotlight style
+   KBAR — square instrument search
    ============================================ */
 
-/* Backdrop — strong blur like iOS */
 div[class*='bg-gray-300'][class*='backdrop-blur'],
 div[class*='bg-black'][class*='backdrop-blur'] {
-  @apply bg-black/40 backdrop-blur-md !important;
+  @apply bg-panel-dark-base/50 !important;
+  backdrop-filter: none !important;
 }
 
-/* Main container — frosted glass card, positioned in top third */
 div[class*='rounded-2xl'][class*='border-gray-100'],
 div[class*='rounded-2xl'][class*='border-gray-800'] {
-  @apply mt-[15vh] border border-gray-200/60 bg-white/95 shadow-2xl backdrop-blur-2xl dark:border-gray-800/60 dark:bg-black/95 !important;
+  @apply mt-[15vh] border border-panel-line bg-panel-base dark:border-panel-dark-line dark:bg-panel-dark-sub !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
 }
 
-/* Search input */
 input[class*='bg-transparent'][class*='text-gray-600'],
 input[class*='bg-transparent'][class*='text-gray-200'] {
-  @apply text-lg text-black placeholder-gray-400 dark:text-white dark:placeholder-gray-500 !important;
+  @apply text-base text-text-primary placeholder-text-tertiary dark:text-text-inverse dark:placeholder-text-inverse-tertiary !important;
 }
 
-/* Search icon */
 div[class*='flex'][class*='items-center'][class*='space-x-4'] svg {
-  @apply text-gray-400 dark:text-gray-500 !important;
+  @apply text-text-tertiary dark:text-text-inverse-tertiary !important;
 }
 
-/* ESC badge */
-kbd[class*='rounded'][class*='border'][class*='text-gray-400'] {
-  @apply rounded-md border-gray-200 bg-gray-100 text-xs text-gray-500 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-400 !important;
-}
-
-/* Section label */
-div[class*='uppercase'][class*='text-primary-600'] {
-  @apply px-4 py-2 text-xs font-semibold tracking-widest text-gray-400 dark:text-gray-500 !important;
-}
-
-/* List items — normal */
-div[class*='flex'][class*='cursor-pointer'][class*='text-gray-700'],
-div[class*='flex'][class*='cursor-pointer'][class*='text-gray-100'] {
-  @apply mx-2 rounded-xl text-black dark:text-white !important;
-}
-
-/* Active/highlighted item */
-div[class*='bg-primary-600'][class*='text-gray-100'] {
-  @apply mx-2 rounded-xl bg-gray-100 text-black dark:bg-gray-900 dark:text-white !important;
-}
-
-/* Active item children */
-div[class*='bg-primary-600'] > div,
-div[class*='bg-gray-100'][class*='text-black'] > div {
-  @apply text-black dark:text-white !important;
-}
-
-div[class*='bg-primary-600'] div,
-div[class*='bg-gray-100'][class*='text-black'] div {
-  @apply text-black dark:text-white !important;
-}
-
-/* Item subtitle — normal */
-div[class*='text-gray-400'][class*='text-xs']:not([class*='bg-primary']):not(
-    [class*='bg-gray-100']
-  ):not([class*='bg-gray-900']) {
-  @apply text-gray-400 dark:text-gray-500 !important;
-}
-
-/* Shortcut keys */
+kbd[class*='rounded'][class*='border'][class*='text-gray-400'],
 kbd[class*='border-gray-400'],
 kbd[class*='border-gray-200'] {
-  @apply rounded-md border-gray-200 bg-gray-100 text-xs text-gray-500 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-400 !important;
+  @apply border-panel-line bg-panel-sub font-mono text-[10px] uppercase tracking-[0.14em] text-text-tertiary dark:border-panel-dark-line dark:bg-panel-dark-sub2 dark:text-text-inverse-tertiary !important;
+  border-radius: 0 !important;
 }
 
-/* No results / loading */
+div[class*='uppercase'][class*='text-primary-600'] {
+  @apply px-4 py-2 font-mono text-[10px] uppercase tracking-[0.22em] text-text-tertiary dark:text-text-inverse-tertiary !important;
+}
+
+div[class*='flex'][class*='cursor-pointer'][class*='text-gray-700'],
+div[class*='flex'][class*='cursor-pointer'][class*='text-gray-100'] {
+  @apply text-text-primary dark:text-text-inverse !important;
+  border-radius: 0 !important;
+}
+
+div[class*='bg-primary-600'][class*='text-gray-100'] {
+  @apply bg-panel-sub text-text-primary dark:bg-panel-dark-sub2 dark:text-text-inverse !important;
+  border-radius: 0 !important;
+}
+
+div[class*='bg-primary-600'] > div,
+div[class*='bg-primary-600'] div {
+  @apply text-text-primary dark:text-text-inverse !important;
+}
+
 div[class*='text-center'][class*='text-gray-400'],
 div[class*='text-center'][class*='text-gray-600'] {
-  @apply text-gray-400 dark:text-gray-500 !important;
+  @apply text-text-tertiary dark:text-text-inverse-tertiary !important;
 }
 
-/* Plex Sans throughout search UI */
 [data-kb-positioner],
 [data-kb-animator],
 [data-kb-search],
@@ -179,58 +161,40 @@ div[class*='text-center'][class*='text-gray-600'] {
   font-family: var(--font-plex-sans), sans-serif;
 }
 
-/* Base state for animated elements — starts invisible, animation fills to visible */
-.animate-fade-in-up,
-.animate-fade-in {
-  opacity: 0;
-  animation-fill-mode: forwards;
-}
-
-/* Ghost project number — large watermark behind project row content */
-.project-number-bg {
-  position: absolute;
-  top: -0.5rem;
-  right: 0;
-  font-size: 8rem;
-  font-weight: 700;
-  line-height: 1;
-  color: transparent;
-  -webkit-text-stroke: 1px rgba(0, 0, 0, 0.04);
-  pointer-events: none;
-  user-select: none;
-  z-index: 0;
-}
-
-.dark .project-number-bg {
-  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.04);
-}
-
 /* ============================================
-   SPARKLINE — signature readout draw-in
+   UTILITIES
    ============================================ */
-.sparkline-path {
-  stroke-dasharray: 500;
-  stroke-dashoffset: 500;
-  animation: sparkline-draw 1.4s ease-out 0.2s forwards;
+
+/* Ship-log strip scrolls horizontally on mobile without a visible scrollbar */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
-@keyframes sparkline-draw {
-  to {
-    stroke-dashoffset: 0;
-  }
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Edge ruler / tick rule — see handoff 02-tokens.md §Geometry */
+.tick-rule-h {
+  background-image: repeating-linear-gradient(to right, #c9c5bb 0 1px, transparent 1px 11px);
+}
+
+.dark .tick-rule-h {
+  background-image: repeating-linear-gradient(to right, #3a3c3e 0 1px, transparent 1px 11px);
+}
+
+.tick-rule-v {
+  background-image: repeating-linear-gradient(to bottom, #c9c5bb 0 1px, transparent 1px 16px);
+}
+
+.dark .tick-rule-v {
+  background-image: repeating-linear-gradient(to bottom, #3a3c3e 0 1px, transparent 1px 16px);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .sparkline-path {
+  .animate-blink {
     animation: none;
-    stroke-dashoffset: 0;
-  }
-
-  .animate-fade-in-up,
-  .animate-fade-in {
-    animation: none;
-    opacity: 1;
-    transform: none;
   }
 }
 
@@ -238,5 +202,5 @@ div[class*='text-center'][class*='text-gray-600'] {
    FOCUS RING — consistent keyboard focus treatment
    ============================================ */
 .focus-ring {
-  @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal focus-visible:ring-offset-2 focus-visible:ring-offset-paper dark:focus-visible:ring-signal-dark dark:focus-visible:ring-offset-graphite;
+  @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal focus-visible:ring-offset-2 focus-visible:ring-offset-panel-base dark:focus-visible:ring-offset-panel-dark-base;
 }

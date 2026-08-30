@@ -6,7 +6,7 @@ const siteMetadata = {
   description:
     'Ahmed Mannai is a Software & DevOps Engineer building web apps, mobile products, and open source tools. Read devlogs, project breakdowns, and technical writing.',
   language: 'en-us',
-  theme: 'system', // system, dark or light
+  theme: 'light', // system, dark or light — light is the designed default
   siteUrl: process.env.NEXT_PUBLIC_SITE_URL || 'https://ahmedmannai.com',
   //siteRepo: 'https://github.com/ahmedmannai10/ahmedmannai.com',
   siteLogo: `${process.env.BASE_PATH || ''}/static/images/logo.png`,
@@ -117,7 +117,6 @@ const siteMetadata = {
     },
   },
   // Cal.com booking link, e.g. 'ahmed-mannai/intro-call'. Set NEXT_PUBLIC_CAL_LINK in .env.local.
-  calLink: process.env.NEXT_PUBLIC_CAL_LINK || '',
   search: {
     provider: 'kbar', // kbar or algolia
     kbarConfig: {
