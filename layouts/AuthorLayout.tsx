@@ -48,14 +48,14 @@ export default function AuthorLayout({ children, content }: Props) {
           <div className="flex flex-col items-center gap-5 pb-10 xl:sticky xl:top-24 xl:pb-0">
             {/* Avatar with gradient ring */}
             {avatar && (
-              <div className="animate-fade-in rounded-full bg-signal p-[3px] shadow-xl shadow-signal/20 dark:bg-signal-dark">
-                <div className="rounded-full bg-paper p-0.5 dark:bg-graphite">
+              <div className="border border-panel-line p-1.5 dark:border-panel-dark-line">
+                <div className="bg-panel-sub dark:bg-panel-dark-sub">
                   <Image
                     src={avatar}
                     alt={name}
                     width={192}
                     height={192}
-                    className="h-48 w-48 rounded-full object-cover"
+                    className="h-48 w-48 object-cover"
                   />
                 </div>
               </div>

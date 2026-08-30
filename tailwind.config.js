@@ -78,10 +78,6 @@ module.exports = {
         ink: '#16181B',
         bone: '#ECEAE4',
         stone: '#8B877E',
-        alert: {
-          DEFAULT: '#C1442D',
-          dark: '#E2694C',
-        },
         primary: {
           50: '#FAFAFA',
           100: '#F5F5F5',
