@@ -14,7 +14,7 @@ export const videosData: Video[] = [
     publishedAt: '2022-08-13',
   },
   {
-    title: 'I built an app that rate your Calisthenics skills',
+    title: 'I built an app that rates your Calisthenics skills',
     youtubeId: 'ocElt08sIOQ',
     description:
       'Devlog 01 of building SkillScan in the open — week one is app validation: what the thing measures, who it is for, and whether anyone actually wants it.',
