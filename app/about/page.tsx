@@ -1,3 +1,4 @@
+import ReadingContainer from '@/components/ReadingContainer'
 import { Authors, allAuthors } from 'contentlayer/generated'
 import { MDXLayoutRenderer } from 'pliny/mdx-components'
 import AuthorLayout from '@/layouts/AuthorLayout'
@@ -15,10 +16,10 @@ export default function Page() {
   const mainContent = coreContent(author)
 
   return (
-    <>
+    <ReadingContainer>
       <AuthorLayout content={mainContent}>
         <MDXLayoutRenderer code={author.body.code} />
       </AuthorLayout>
-    </>
+    </ReadingContainer>
   )
 }
