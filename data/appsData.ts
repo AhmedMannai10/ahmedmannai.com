@@ -17,6 +17,10 @@ export interface Milestone {
 export interface Screenshot {
   src: string
   caption: string
+  /** Tailwind aspect class. Defaults to the portrait phone frame. */
+  ratio?: string
+  /** Landscape captures fill the column instead of sitting in a phone-width frame. */
+  wide?: boolean
 }
 
 export interface AppUnit {
@@ -64,7 +68,14 @@ const appsRaw: Omit<AppUnit, 'slug'>[] = [
       { label: 'CHAT', value: 'PER MATCH' },
       { label: 'LAST SHIP', value: '2026-04-02' },
     ],
-    screenshots: [{ src: '/static/images/sportzme.png', caption: '01 · GAME FEED' }],
+    screenshots: [
+      {
+        src: '/static/images/sportzme.png',
+        caption: '01 · LANDING PAGE',
+        ratio: 'aspect-[2032/950]',
+        wide: true,
+      },
+    ],
   },
   {
     serial: '02',
@@ -91,7 +102,7 @@ const appsRaw: Omit<AppUnit, 'slug'>[] = [
       { label: 'ORGANISE', value: 'TAGS · NOTES · NEXT ACTION' },
       { label: 'LAST SHIP', value: '2026-05-14' },
     ],
-    screenshots: [{ src: '/static/images/tantap.png', caption: '01 · CONTACT LIST' }],
+    screenshots: [{ src: '/static/images/tantap.png', caption: '01 · RECENT ACTIVITY' }],
   },
   {
     serial: '03',

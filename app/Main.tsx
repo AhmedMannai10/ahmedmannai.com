@@ -54,10 +54,11 @@ export default function Home({ posts }) {
             Independent software · Est. 2021
           </p>
 
-          <h1 className="mt-7 max-w-[12ch] font-display font-bold leading-[0.94] tracking-[-0.04em] text-text-primary dark:text-text-inverse">
-            <span style={{ fontSize: 'clamp(2.75rem, 6vw, 4.75rem)' }}>
-              Three apps, built to be used.
-            </span>
+          <h1
+            className="mt-7 max-w-[12ch] font-display font-bold leading-[0.94] tracking-[-0.04em] text-text-primary dark:text-text-inverse"
+            style={{ fontSize: 'clamp(2.75rem, 6vw, 4.75rem)' }}
+          >
+            Three apps, built to be used.
           </h1>
 
           <p className="mt-7 max-w-[44ch] text-base leading-[1.65] text-text-secondary dark:text-text-inverse-secondary">
@@ -217,13 +218,13 @@ export default function Home({ posts }) {
                 </div>
               </div>
 
-              <div className="flex items-center gap-4">
+              <div className="flex items-start justify-center gap-4">
                 {(benchApp.screenshots || []).slice(0, 2).map((shot) => (
                   <ScreenFrame
                     key={shot.src}
                     src={shot.src}
                     alt={`${benchApp.name} — ${shot.caption}`}
-                    className="flex-1"
+                    className="w-full max-w-[230px]"
                   />
                 ))}
               </div>

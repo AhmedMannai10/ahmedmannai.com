@@ -69,7 +69,7 @@ function IndexVariant({ app }: { app: AppUnitType }) {
       }`}
     >
       {/* Copy cell — first on mobile so the name leads */}
-      <div className="order-2 px-5 py-8 md:order-none md:col-start-2 md:border-x md:border-panel-line md:px-8 md:dark:border-panel-dark-line">
+      <div className="order-1 px-5 py-8 md:order-none md:col-start-2 md:border-x md:border-panel-line md:px-8 md:dark:border-panel-dark-line">
         <span
           aria-hidden="true"
           className={`font-display text-[44px] font-bold leading-none tracking-[-0.05em] ${numeralClass}`}
@@ -103,7 +103,7 @@ function IndexVariant({ app }: { app: AppUnitType }) {
 
       {/* Screen cell */}
       <div
-        className={`order-1 flex items-center justify-center px-5 py-8 md:order-none md:col-start-1 md:row-start-1 ${
+        className={`order-2 flex items-center justify-center px-5 py-8 md:order-none md:col-start-1 md:row-start-1 ${
           app.status === 'building' ? '' : 'bg-panel-sub dark:bg-panel-dark-sub'
         }`}
       >

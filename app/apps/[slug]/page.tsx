@@ -183,10 +183,15 @@ export default function AppDetail({ params }: { params: { slug: string } }) {
           />
           <div className="mt-8 grid grid-cols-2 gap-5 md:grid-cols-3">
             {app.screenshots.map((shot, i) => (
-              <figure key={shot.src}>
+              <figure
+                key={shot.src}
+                className={shot.wide ? 'col-span-2 md:col-span-3' : 'mx-auto w-full max-w-[240px]'}
+              >
                 <ScreenFrame
                   src={shot.src}
                   alt={`${app.name} — ${shot.caption}`}
+                  ratio={shot.ratio}
+                  wide={shot.wide}
                   priority={i === 0}
                 />
                 <figcaption className="mt-3 font-mono text-[10px] uppercase tracking-[0.14em] text-text-tertiary dark:text-text-inverse-tertiary">
@@ -204,7 +209,11 @@ export default function AppDetail({ params }: { params: { slug: string } }) {
         className="grid scroll-mt-4 grid-cols-1 border-b border-panel-line dark:border-panel-dark-line md:grid-cols-[1fr_360px]"
       >
         <div className="px-5 py-10 md:px-10 md:py-12">
-          <SectionHeader numeral="02" title="Devlog" meta={`${devlog.length} entries`} />
+          <SectionHeader
+            numeral="02"
+            title="Devlog"
+            meta={`${devlog.length} ${devlog.length === 1 ? 'entry' : 'entries'}`}
+          />
 
           <div className="mt-8">
             {devlog.length === 0 ? (

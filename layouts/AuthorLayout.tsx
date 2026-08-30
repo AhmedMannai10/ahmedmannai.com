@@ -116,7 +116,7 @@ export default function AuthorLayout({ children, content }: Props) {
               <div className="mt-5 flex flex-wrap gap-3">
                 <Link
                   href="/book"
-                  className="focus-ring inline-flex items-center rounded-full bg-signal px-5 py-2 text-sm font-semibold text-paper shadow-lg shadow-signal/20 transition-all duration-200 hover:scale-[1.02] hover:bg-signal/90 dark:bg-signal-dark dark:text-graphite"
+                  className="focus-ring inline-flex items-center bg-signal px-5 py-3 font-mono text-xs font-bold uppercase tracking-[0.16em] text-panel-dark-base transition-colors hover:bg-signal-hover"
                 >
                   Book a Call
                 </Link>

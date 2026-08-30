@@ -54,7 +54,7 @@ export default function Videos() {
               href={siteMetadata.youtube || '#'}
               target="_blank"
               rel="noopener noreferrer"
-              className="focus-ring inline-flex items-center gap-2 rounded-full bg-signal px-6 py-2.5 text-sm font-semibold text-paper shadow-lg shadow-signal/20 transition-all duration-200 hover:scale-[1.02] hover:bg-signal/90 dark:bg-signal-dark dark:text-graphite"
+              className="focus-ring inline-flex items-center gap-2 bg-signal px-6 py-3 font-mono text-xs font-bold uppercase tracking-[0.16em] text-panel-dark-base transition-colors hover:bg-signal-hover"
             >
               <Youtube className="h-4 w-4 fill-current" />
               Subscribe on YouTube

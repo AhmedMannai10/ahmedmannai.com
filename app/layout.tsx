@@ -125,72 +125,72 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <meta name="theme-color" media="(prefers-color-scheme: light)" content="#EDEAE3" />
       <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0E0F10" />
       <link rel="alternate" type="application/rss+xml" href={`${basePath}/feed.xml`} />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'Person',
-            name: siteMetadata.authorInfo?.name || siteMetadata.author,
-            jobTitle: siteMetadata.authorInfo?.jobTitle || 'Software Engineer',
-            description: siteMetadata.description,
-            worksFor: {
-              '@type': 'Organization',
-              name: siteMetadata.authorInfo?.company || '1MoreThing Ventures',
-            },
-            email: siteMetadata.authorInfo?.email || siteMetadata.email,
-            image: siteMetadata.authorInfo?.image || siteMetadata.siteLogo,
-            url: siteMetadata.siteUrl,
-            knowsAbout: [
-              'Software Engineering',
-              'DevOps',
-              'Web Development',
-              'Mobile Development',
-              'TypeScript',
-              'React',
-              'Next.js',
-            ],
-            sameAs:
-              siteMetadata.authorInfo?.sameAs ||
-              [
-                siteMetadata.github,
-                siteMetadata.x,
-                siteMetadata.linkedin,
-                siteMetadata.youtube,
-              ].filter(Boolean),
-          }),
-        }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'WebSite',
-            name: siteMetadata.title,
-            description: siteMetadata.description,
-            url: siteMetadata.siteUrl,
-            inLanguage: 'en-US',
-            author: {
-              '@type': 'Person',
-              name: siteMetadata.author,
-            },
-            publisher: {
-              '@type': 'Person',
-              name: siteMetadata.author,
-            },
-            potentialAction: {
-              '@type': 'SearchAction',
-              target: {
-                '@type': 'EntryPoint',
-                urlTemplate: `${siteMetadata.siteUrl}/search?q={search_term_string}`,
-              },
-              'query-input': 'required name=search_term_string',
-            },
-          }),
-        }}
-      />
       <body className="bg-panel-base pl-[calc(100vw-100%)] text-text-primary antialiased dark:bg-panel-dark-base dark:text-text-inverse">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'Person',
+              name: siteMetadata.authorInfo?.name || siteMetadata.author,
+              jobTitle: siteMetadata.authorInfo?.jobTitle || 'Software Engineer',
+              description: siteMetadata.description,
+              worksFor: {
+                '@type': 'Organization',
+                name: siteMetadata.authorInfo?.company || '1MoreThing Ventures',
+              },
+              email: siteMetadata.authorInfo?.email || siteMetadata.email,
+              image: siteMetadata.authorInfo?.image || siteMetadata.siteLogo,
+              url: siteMetadata.siteUrl,
+              knowsAbout: [
+                'Software Engineering',
+                'DevOps',
+                'Web Development',
+                'Mobile Development',
+                'TypeScript',
+                'React',
+                'Next.js',
+              ],
+              sameAs:
+                siteMetadata.authorInfo?.sameAs ||
+                [
+                  siteMetadata.github,
+                  siteMetadata.x,
+                  siteMetadata.linkedin,
+                  siteMetadata.youtube,
+                ].filter(Boolean),
+            }),
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'WebSite',
+              name: siteMetadata.title,
+              description: siteMetadata.description,
+              url: siteMetadata.siteUrl,
+              inLanguage: 'en-US',
+              author: {
+                '@type': 'Person',
+                name: siteMetadata.author,
+              },
+              publisher: {
+                '@type': 'Person',
+                name: siteMetadata.author,
+              },
+              potentialAction: {
+                '@type': 'SearchAction',
+                target: {
+                  '@type': 'EntryPoint',
+                  urlTemplate: `${siteMetadata.siteUrl}/search?q={search_term_string}`,
+                },
+                'query-input': 'required name=search_term_string',
+              },
+            }),
+          }}
+        />
         <PostHogInit />
         <Analytics />
         <SpeedInsights />

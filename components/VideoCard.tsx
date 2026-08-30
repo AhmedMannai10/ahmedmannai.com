@@ -43,7 +43,7 @@ export default function VideoCard({ title, youtubeId, description, publishedAt }
               className="object-cover"
             />
             <span className="absolute inset-0 flex items-center justify-center bg-black/20 transition-colors group-hover:bg-black/30">
-              <span className="flex h-14 w-14 items-center justify-center rounded-full bg-signal/90 shadow-lg transition-transform group-hover:scale-110 dark:bg-signal-dark/90">
+              <span className="flex h-14 w-14 items-center justify-center rounded-full bg-signal transition-colors group-hover:bg-signal-hover">
                 <svg viewBox="0 0 24 24" className="ml-1 h-6 w-6 fill-paper dark:fill-graphite">
                   <path d="M8 5v14l11-7z" />
                 </svg>
