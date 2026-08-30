@@ -117,7 +117,6 @@ const siteMetadata = {
     },
   },
   // Cal.com booking link, e.g. 'ahmed-mannai/intro-call'. Set NEXT_PUBLIC_CAL_LINK in .env.local.
-  calLink: process.env.NEXT_PUBLIC_CAL_LINK || '',
   search: {
     provider: 'kbar', // kbar or algolia
     kbarConfig: {

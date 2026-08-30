@@ -9,7 +9,6 @@ import type { Blog } from 'contentlayer/generated'
 import Link from '@/components/Link'
 import ReadingContainer from '@/components/ReadingContainer'
 import Tag from '@/components/Tag'
-import AmbientGlow from '@/components/AmbientGlow'
 import siteMetadata from '@/data/siteMetadata'
 import tagData from 'app/tag-data.json'
 
@@ -89,8 +88,6 @@ export default function ListLayoutWithTags({
   return (
     <ReadingContainer>
       <div className="relative overflow-hidden">
-        <AmbientGlow className="-top-20 left-1/2 h-[350px] w-[500px] -translate-x-1/2" />
-
         {/* Page header */}
         <div className="pb-8 pt-16 sm:hidden">
           <p className="mb-3 font-mono text-xs text-stone">

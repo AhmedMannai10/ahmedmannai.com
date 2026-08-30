@@ -1,7 +1,6 @@
 import ReadingContainer from '@/components/ReadingContainer'
 import Link from '@/components/Link'
 import VideoCard from '@/components/VideoCard'
-import AmbientGlow from '@/components/AmbientGlow'
 import { Youtube } from '@/components/social-icons/icons'
 import siteMetadata from '@/data/siteMetadata'
 import { videosData } from '@/data/videosData'
@@ -20,8 +19,6 @@ export default function Videos() {
   return (
     <ReadingContainer>
       <div className="relative overflow-hidden">
-        <AmbientGlow className="-top-20 left-1/2 h-[400px] w-[600px] -translate-x-1/2" />
-
         <div className="pb-12 pt-16">
           <p className="mb-3 font-mono text-xs text-stone">
             <span className="text-signal dark:text-signal-dark">$</span> videos --list

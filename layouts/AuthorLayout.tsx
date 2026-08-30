@@ -3,7 +3,6 @@ import type { Authors } from 'contentlayer/generated'
 import SocialIcon from '@/components/social-icons'
 import Image from '@/components/Image'
 import Link from '@/components/Link'
-import AmbientGlow from '@/components/AmbientGlow'
 import siteMetadata from '@/data/siteMetadata'
 
 interface Props {
@@ -29,8 +28,6 @@ export default function AuthorLayout({ children, content }: Props) {
 
   return (
     <div className="relative overflow-hidden">
-      <AmbientGlow className="-top-20 left-1/2 h-[400px] w-[600px] -translate-x-1/2" />
-
       {/* Page heading */}
       <div className="pb-10 pt-16">
         <p className="mb-3 font-mono text-xs text-stone">
