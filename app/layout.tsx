@@ -3,7 +3,7 @@ import 'pliny/search/algolia.css'
 import 'remark-github-blockquote-alert/alert.css'
 import { Analytics } from '@vercel/analytics/react'
 
-import { IBM_Plex_Sans, IBM_Plex_Serif, IBM_Plex_Mono } from 'next/font/google'
+import { IBM_Plex_Sans, Space_Grotesk, JetBrains_Mono } from 'next/font/google'
 import { SearchProvider, SearchConfig } from 'pliny/search'
 import Header from '@/components/Header'
 import SectionContainer from '@/components/SectionContainer'
@@ -21,18 +21,18 @@ const plexSans = IBM_Plex_Sans({
   variable: '--font-plex-sans',
 })
 
-const plexSerif = IBM_Plex_Serif({
+const spaceGrotesk = Space_Grotesk({
   subsets: ['latin'],
-  weight: ['500', '600', '700'],
+  weight: ['400', '500', '700'],
   display: 'swap',
-  variable: '--font-plex-serif',
+  variable: '--font-space-grotesk',
 })
 
-const plexMono = IBM_Plex_Mono({
+const jetbrainsMono = JetBrains_Mono({
   subsets: ['latin'],
-  weight: ['400', '500', '600'],
+  weight: ['400', '500', '700'],
   display: 'swap',
-  variable: '--font-plex-mono',
+  variable: '--font-jetbrains-mono',
 })
 
 export const metadata: Metadata = {
@@ -94,7 +94,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang={siteMetadata.language}
-      className={`${plexSans.variable} ${plexSerif.variable} ${plexMono.variable} scroll-smooth`}
+      className={`${plexSans.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable} scroll-smooth`}
       suppressHydrationWarning
     >
       <link rel="icon" type="image/svg+xml" href={`${basePath}/static/favicons/favicon.svg`} />
@@ -119,11 +119,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <link
         rel="mask-icon"
         href={`${basePath}/static/favicons/safari-pinned-tab.svg`}
-        color="#0E6B57"
+        color="#FF4D00"
       />
-      <meta name="msapplication-TileColor" content="#0F1113" />
-      <meta name="theme-color" media="(prefers-color-scheme: light)" content="#F5F6F2" />
-      <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0F1113" />
+      <meta name="msapplication-TileColor" content="#0E0F10" />
+      <meta name="theme-color" media="(prefers-color-scheme: light)" content="#EDEAE3" />
+      <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0E0F10" />
       <link rel="alternate" type="application/rss+xml" href={`${basePath}/feed.xml`} />
       <script
         type="application/ld+json"
@@ -190,7 +190,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           }),
         }}
       />
-      <body className="bg-paper pl-[calc(100vw-100%)] text-ink antialiased dark:bg-graphite dark:text-bone">
+      <body className="bg-panel-base pl-[calc(100vw-100%)] text-text-primary antialiased dark:bg-panel-dark-base dark:text-text-inverse">
         <PostHogInit />
         <Analytics />
         <SpeedInsights />
