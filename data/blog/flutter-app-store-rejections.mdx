@@ -1,0 +1,287 @@
+---
+title: 'The 6 App Store rejections that cost Flutter devs a review cycle'
+date: '2026-09-13'
+lastmod: '2026-09-13'
+tags: ['Flutter', 'App Store', 'iOS', 'App Review', 'skillscan', 'TanBase']
+draft: false
+summary: 'Guidelines 5.1.1(v), 3.1.2, 3.1.1, 4.8, 2.1 and 5.1.1 reject Flutter apps over and over. What sets each one off, what the reviewer actually does, and how to pass all six before you submit.'
+authors: ['default']
+---
+
+Hey — if you have a Flutter app sitting in App Store Connect with the Submit button one tap away, give me ten minutes first.
+
+I submitted SkillScan on 27 August. Apple came back on the 28th: **Guideline 2.1, Information Needed.** Seven questions and a request for a video recording of the full flow. I answered all seven and resubmitted the same afternoon, which is about as cheap as a rejection gets. It was still a day I didn't need to spend.
+
+Here's the annoying part. Five of the six rejections below have nothing to do with what your app actually _does_. They're plumbing. Reviewers check them on nearly every paid app, and every single one can be designed out before you ever hit Submit.
+
+So this is the list I run now. Guideline number, what sets it off, what the reviewer does, and the fix.
+
+## What a review cycle actually costs you
+
+A cycle is 24–48 hours when the fix is a checkbox — a missing link, a reworded purpose string.
+
+It's a week when the fix is architectural. When "let users delete their account" turns out to mean a privileged server endpoint you haven't built, and you're writing it under deadline, with no tests, while your launch date slides.
+
+Three cycles is a month of calendar time you don't get back. That's the whole argument for doing this before you submit instead of after.
+
+Everything below is verified against code I can point at. Where I say "here's what the fix looks like," there's a file and a line number from [TanBase](https://tanfust.com), the Flutter + Supabase kit I build on. You don't need the kit to use any of this — the _shape_ of the fix is the useful part, and the shape is free.
+
+<TOCInline toc={props.toc} exclude="What a review cycle actually costs you" toHeading={2} />
+
+## 1. Guideline 5.1.1(v) — account deletion has to happen inside the app
+
+**What sets it off:** your app lets someone create an account, and there's no way to delete that account from inside the app. A `mailto:` link doesn't count. A web form doesn't count. A "contact support" button definitely doesn't count.
+
+**What the reviewer does:** creates an account, opens Settings, and hunts for Delete Account. If getting rid of it means leaving your app, you're rejected.
+
+**Why it's more work than it sounds:** deleting a user isn't one delete. It's the auth record, the profile row, everything holding a foreign key to it, the avatar sitting in object storage, the push tokens for every device they signed in on. And you can't do it from the client — the client doesn't have permission to delete an auth user, and it shouldn't. So it has to be a privileged server-side operation, which means an endpoint, which is exactly why people discover this requirement _after_ they've built everything else.
+
+I watched this cost a client a full week a few years back. Not a crash, not a bug — nobody had ever asked for a delete button, so there wasn't one. I built the deletion flow while they asked me every day why their app still wasn't live.
+
+**How to pass:** one server-side function, running with elevated privileges, deleting in this order — storage objects owned by the user, then rows referencing the user, then the auth record itself. Let your database cascades do as much as possible so the function stays short enough to read in one sitting. Then a Settings row that confirms, calls it, and signs out.
+
+The security detail people get wrong: deploy it with JWT verification **on**. The caller's own token decides whose account dies. Never accept a user ID in the request body.
+
+```ts
+// The caller's JWT identifies the account — never a user_id from the body.
+const {
+  data: { user },
+} = await asCaller.auth.getUser()
+if (!user) return new Response('{"error":"Not authenticated"}', { status: 401 })
+
+// Storage isn't covered by FK cascades — clear it first.
+const { data: files } = await admin.storage.from('avatars').list(user.id)
+if (files?.length) {
+  await admin.storage.from('avatars').remove(files.map((f) => `${user.id}/${f.name}`))
+}
+
+// Then the auth record. `on delete cascade` wipes profiles, tokens, entitlements.
+await admin.auth.admin.deleteUser(user.id)
+```
+
+> **In TanBase:** `supabase/functions/delete-account/index.ts` — the whole thing is about fifty lines because the cascades carry the weight. The Settings row lives at `lib/screens/settings/settings_screen.dart:162`, and the confirm-then-call handler at `:212`.
+
+## 2. Guideline 3.1.2 — terms and privacy have to be on the paywall itself
+
+**What sets it off:** your subscription screen shows a price and a Subscribe button, and your legal links live in Settings. Or worse, only on your website.
+
+**What the reviewer does:** opens the paywall and looks for a link to your Terms of Use and your Privacy Policy, plus a plain statement of what recurs, how often, and at what price. On that screen. Not one level up. And they'll often look at it **while signed out**, so make sure it renders in that state.
+
+**Why people miss it:** the paywall is usually designed last, designed for conversion, and legal links feel like friction you're volunteering for. They're not optional.
+
+**How to pass:** both links directly on the paywall, adjacent to the purchase control. They have to open real content — an in-app document screen is fine, and it loads faster than a web view. Then state the renewal terms in plain language near the price: what you're billed, how often, and that it renews until cancelled.
+
+```dart
+// Terms, privacy and restore, adjacent to the purchase control.
+Wrap(
+  alignment: WrapAlignment.center,
+  children: [
+    TextButton(onPressed: () => context.push('/legal/terms'), child: Text(l10n.settingsTerms)),
+    TextButton(onPressed: () => context.push('/legal/privacy'), child: Text(l10n.settingsPrivacyPolicy)),
+    TextButton(onPressed: onRestore, child: Text(l10n.paywallRestore)),
+  ],
+)
+```
+
+A `Wrap` rather than a `Row` of equal flexes, incidentally — equal flexes truncated "Restore purch…" on a narrow device in a sister app, and a `FittedBox` isn't the fix because it shrinks the 44pt tap target along with the text.
+
+While you're on that screen, one more thing reviewers bounce apps for: **the close control has to be visible from the first frame.** If your paywall animates its dismiss button in after the entrance stagger, that's the delayed-dismiss pattern, and it gets rejected on its own.
+
+> **In TanBase:** `lib/screens/paywall/paywall_screen.dart:699–735` is the legal row, rendered at `:421`. The rules it satisfies are written as a doc comment at `:38` so nobody refactors them away by accident.
+
+## 3. Guideline 3.1.1 — you need a Restore Purchases button
+
+**What sets it off:** someone who already paid reinstalls your app, or signs in on a second device, and has no way back to what they bought short of paying for it twice.
+
+**What the reviewer does:** looks for a visible Restore Purchases control. The paywall is where it belongs — that's where a paying customer is standing at the exact moment your app asks them for money they've already handed over.
+
+**Why it bites:** if you gate features on a local flag, or on a row you wrote to your own database at purchase time, a reinstall wipes it. The purchase still exists in the user's App Store account. Your app just doesn't know about it.
+
+**How to pass:** call the platform's restore API, then re-sync your entitlement state from what it returns. Don't trust a local cache to survive.
+
+```dart
+static Future<PurchaseOutcome> restore() async {
+  final info = await Purchases.restorePurchases();
+  Analytics.log(AnalyticsEvent.purchaseRestored);
+  return PurchaseOutcome.completed(info);
+}
+```
+
+Log an event on it. Restore rate is a genuinely useful number — a spike usually means something upstream broke.
+
+> **In TanBase:** `lib/services/purchase_service.dart:166`, wired to the button in that same legal row, with the handler at `paywall_screen.dart:268`.
+
+<LeadMagnet
+  label="The pre-flight checklist"
+  title="Want this as a one-page PDF you can run before every submission?"
+  blurb="Same six checks, stripped to the checklist and the guideline numbers. Built to be printed, or pasted into whatever your team uses for release gates."
+  bullets={[
+    'All six guidelines with what triggers each one',
+    'The reviewer-side behaviour, so you can test it yourself',
+    'The submission-notes template that heads off a 2.1',
+  ]}
+  fileUrl="/static/flutter-app-store-rejections-preflight.pdf"
+  fileMeta="PDF · 1 page"
+  section="post-section-3"
+/>
+
+## 4. Guideline 4.8 — offer Google sign-in and you owe a private one
+
+**What sets it off:** you offer Google (or Facebook, or any third-party login service) and don't offer a privacy-preserving option alongside it.
+
+**The nuance worth knowing:** 4.8 doesn't literally say "Sign in with Apple." It says that if you use a third-party login service, you also have to offer one that limits collection to the user's name and email, lets them keep that email private, and doesn't collect their interactions for advertising without consent. Sign in with Apple qualifies out of the box, which is why everyone just reaches for it.
+
+The corollary matters more than the rule: **email and password alone doesn't trigger 4.8 at all.** The moment you add Google, you've opted into needing the other one too. A lot of people add Google on a Friday and find this out three weeks later.
+
+**How to pass:** use the native sheet, not a web redirect. The web flow technically works, looks wrong, and converts worse. Two things reliably catch people out:
+
+- Apple gives you the user's **name and email only on the first authorization**, and never again. Persist them the instant you receive them. There's no second chance and no API to go ask.
+- Use a nonce. The sheet gets the SHA-256 hash, your backend verifies against the raw value, and that's what stops a token minted for someone else being replayed at you.
+
+```dart
+// The sheet gets the hash; Supabase gets the raw value and verifies the
+// token was minted for this request.
+final rawNonce = _generateNonce();
+final hashedNonce = sha256.convert(utf8.encode(rawNonce)).toString();
+
+final credential = await SignInWithApple.getAppleIDCredential(
+  scopes: [AppleIDAuthorizationScopes.email, AppleIDAuthorizationScopes.fullName],
+  nonce: hashedNonce,
+);
+await _db.auth.signInWithIdToken(
+  provider: OAuthProvider.apple,
+  idToken: credential.identityToken!,
+  nonce: rawNonce,
+);
+```
+
+One more trap, since it cost me an evening: if you're using PKCE, be careful not to handle the auth callback twice. It fails silently and it is genuinely miserable to debug.
+
+> **In TanBase:** `lib/backend/supabase_backend.dart:158` — native Apple sheet beside Google and email, nonce generation at `:183`, and the PKCE double-handling documented where it happens rather than in a wiki nobody opens.
+
+## 5. Guideline 2.1 — the reviewer opened your app and saw nothing
+
+This is the one that got me, so I'll be specific about it.
+
+**What sets it off:** the reviewer opens your app and hits a login wall with no credentials, a crash, an empty list, or a spinner that never resolves because your backend rejected their request from wherever they're sitting.
+
+**What the reviewer does:** tries to use the thing. They are not going to debug it for you, and they're not obliged to guess what you meant.
+
+**Why it's the most common rejection of all:** it usually isn't a bug. It's that your app assumes a configured environment and the reviewer doesn't have one. Or your demo account quietly expired. Or everything worth seeing is behind the paywall and you didn't tell them how to get past it.
+
+Mine was the Information Needed flavour — seven questions and a request for a recording of the full flow. Which taught me the cheapest trick on this entire list: **record the demo video before you submit, and attach it to the review notes unprompted.** Nobody asks you for it if it's already sitting there. It costs you twenty minutes and it removes a whole category of round-trip.
+
+**How to pass, in order of reliability:**
+
+1. Ship a demo mode, or seeded data, so a fresh install shows something real instead of an empty state.
+2. If an account is genuinely required, put working demo credentials in the review notes — and test them **the day you submit**, not the week before.
+3. If the good stuff is behind the paywall, say so in the notes and spell out how to reach it.
+4. Every failure state shows readable text. Never an infinite spinner. A reviewer can't tell "still loading" from "broken," so they'll assume broken.
+5. Record the video. Attach it.
+
+> **In TanBase:** a fresh clone builds and runs with no credentials at all. `lib/config/app_config.dart:25–41` falls back to an in-memory demo backend when there are no Supabase keys, so the first run is the whole app — onboarding, sign-in, a populated dashboard, an inbox, a paywall you can buy from — rather than a crash or a configuration checklist. CI proves that on both platforms every commit.
+
+## 6. Guideline 5.1.1 — purpose strings and a privacy label that matches reality
+
+**What sets it off:** you touch the camera, photo library, location, contacts or microphone with a missing or lazy purpose string — or your App Privacy label doesn't match what your app and its SDKs actually collect.
+
+**What the reviewer checks:** two things. That every permission your binary can request has a purpose string explaining _why_, in language a normal person understands. And that your privacy label matches reality, including data collected by your analytics, crash reporting and attribution SDKs — not just the code you wrote.
+
+**The part that catches everyone:** your SDKs collect things you never thought about. Crash reporters collect device identifiers. Analytics collects usage data. If your label says "no data collected" and you shipped an analytics SDK, that's a mismatch, and it is exactly the kind they find.
+
+**How to pass:** grep your `Info.plist` for `UsageDescription` and rewrite every string that says something like "This app needs camera access." Say what you _do_ with it. Then list every third-party SDK in your build and check each one's documented collection against your label.
+
+```xml
+<key>NSCameraUsageDescription</key>
+<string>$(PRODUCT_NAME) needs access to your camera to take a profile picture.</string>
+<key>NSPhotoLibraryAddUsageDescription</key>
+<string>$(PRODUCT_NAME) needs permission to save photos to your library.</string>
+<key>NSPhotoLibraryUsageDescription</key>
+<string>$(PRODUCT_NAME) needs access to your photo library to set your profile picture.</string>
+```
+
+Each one names the feature it serves. That's the whole bar, and most apps don't clear it.
+
+> **In TanBase:** `ios/Runner/Info.plist:50–55`, pre-written, plus a swappable analytics service so you always know precisely which vendor is collecting what when you fill the label in.
+
+## The pre-flight checklist
+
+Run this before every submission:
+
+| #   | Guideline | The check                                                                                                       |
+| --- | --------- | --------------------------------------------------------------------------------------------------------------- |
+| 1   | 5.1.1(v)  | Account deletion works from inside the app, and removes storage, rows and the auth record                       |
+| 2   | 3.1.2     | Terms and Privacy are on the paywall itself, renewal terms stated near the price, and it all renders signed out |
+| 3   | 3.1.1     | Restore Purchases is visible on the paywall, and actually restores after a reinstall                            |
+| 4   | 4.8       | Sign in with Apple sits wherever a third-party login does, using the native sheet                               |
+| 5   | 2.1       | A fresh install shows something real; demo credentials tested _today_; demo video attached unprompted           |
+| 6   | 5.1.1     | Every purpose string explains why; the privacy label includes what your SDKs collect                            |
+
+Six checks. Each one you skip is a cycle.
+
+## Where this list came from
+
+I build Flutter apps and ship them to the App Store. These six are the ones I've either been rejected for personally or watched land on someone else's desk.
+
+[SkillScan](/apps/skillscan) — my calisthenics form-check app, which measures how many seconds of a planche hold actually met the standard — collected the 2.1 on the way in. The reviewer opened it and couldn't get anywhere. It came back, I fixed it, resubmitted the same day, and the fix became part of the template I build everything on now.
+
+That template is [TanBase](https://tanfust.com), a Flutter + Supabase starter where all six of these are handled before you write a line of your own code, along with auth, subscriptions, push, an in-app inbox and RTL-verified localization. A fresh clone builds and runs before you configure anything, and 275 tests prove it with no credentials and no device attached.
+
+But you don't need it to use this list, and the list works fine on its own. That's rather the point of handing it over.
+
+## Questions people ask me about this
+
+<FaqSchema
+  items={[
+    {
+      q: 'Does Apple really require in-app account deletion?',
+      a: 'Yes, for any app that offers account creation. It has been enforced since mid-2022. A support email address or a web form does not satisfy it — the deletion has to be startable and completable inside the app itself.',
+    },
+    {
+      q: 'Do I need Sign in with Apple if I only offer email and password?',
+      a: 'No. Guideline 4.8 is triggered by using a third-party or social login service. Email and password against your own backend does not trigger it. The moment you add Google sign-in, it applies.',
+    },
+    {
+      q: 'Can I put Terms and Privacy in Settings instead of on the paywall?',
+      a: 'No. Guideline 3.1.2 wants them reachable from the subscription screen itself. Having them in Settings as well is good practice; having them only in Settings is a rejection.',
+    },
+    {
+      q: 'How long does App Store review take?',
+      a: 'SkillScan was submitted on 27 August 2026 and had a verdict on the 28th. Under a day is common now, which is exactly why a rejection stings — writing the fix and resubmitting is usually slower than the review itself.',
+    },
+    {
+      q: 'Do these six guidelines apply to Google Play too?',
+      a: 'Only partly. Play has its own account-deletion policy with different mechanics, including a route to request deletion from outside the app, which is the opposite of what Apple wants. Billing handles restores differently, and guideline 4.8 is Apple-specific. Treat them as two separate checklists.',
+    },
+  ]}
+/>
+
+**Does Apple really require in-app account deletion?**
+Yes, for any app that offers account creation, and it's been enforced since mid-2022. A support email address or a web form doesn't satisfy it — deletion has to be startable and completable inside the app.
+
+**Do I need Sign in with Apple if I only offer email and password?**
+No. 4.8 is triggered by using a third-party or social login service. Email and password against your own backend doesn't trigger it. Add Google sign-in and it applies.
+
+**Can I put Terms and Privacy in Settings instead of on the paywall?**
+No. 3.1.2 wants them reachable from the subscription screen itself. In Settings as well is good practice; in Settings _instead_ is a rejection.
+
+**How long does App Store review take?**
+SkillScan was submitted on 27 August and had a verdict on the 28th. Under a day is common now — which is exactly why a rejection stings. Writing the fix and resubmitting is usually slower than the review.
+
+**Do these apply to Google Play too?**
+Only partly. Play has its own account-deletion policy with different mechanics, including a route to request deletion from _outside_ the app, which is the opposite of what Apple wants. Billing handles restores differently, and 4.8 is Apple-specific. Two separate checklists.
+
+<LeadMagnet
+  label="Before you submit"
+  title="Take the checklist with you"
+  blurb="One page, six guidelines, plus the review-notes template that heads off a 2.1 before it happens. Free, and the list stands on its own without the kit."
+  bullets={[
+    'Print it, or paste it into your release-gate checklist',
+    'Updated whenever a reader reports a rejection class that is not on it',
+  ]}
+  fileUrl="/static/flutter-app-store-rejections-preflight.pdf"
+  fileMeta="PDF · 1 page"
+  section="post-end"
+/>
+
+Found an error, or hit a rejection class that isn't here? Tell me — this list gets better every time somebody does.
