@@ -127,6 +127,13 @@ module.exports = () => {
           source: '/(.*)',
           headers: securityHeaders,
         },
+        {
+          // Lead-magnet PDFs must not compete with the post they belong to.
+          // Without this Google can rank the file above the page and the
+          // email capture never gets seen.
+          source: '/static/:path*.pdf',
+          headers: [{ key: 'X-Robots-Tag', value: 'noindex' }],
+        },
       ]
     },
     webpack: (config, options) => {
