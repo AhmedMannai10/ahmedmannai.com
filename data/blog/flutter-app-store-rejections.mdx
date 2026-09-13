@@ -47,15 +47,18 @@ The security detail people get wrong: deploy it with JWT verification **on**. Th
 const {
   data: { user },
 } = await asCaller.auth.getUser()
-if (!user) return new Response('{"error":"Not authenticated"}', { status: 401 })
+if (!user) {
+  return new Response('{"error":"Not authenticated"}', { status: 401 })
+}
 
 // Storage isn't covered by FK cascades — clear it first.
 const { data: files } = await admin.storage.from('avatars').list(user.id)
 if (files?.length) {
-  await admin.storage.from('avatars').remove(files.map((f) => `${user.id}/${f.name}`))
+  const paths = files.map((f) => `${user.id}/${f.name}`)
+  await admin.storage.from('avatars').remove(paths)
 }
 
-// Then the auth record. `on delete cascade` wipes profiles, tokens, entitlements.
+// Then the auth record. `on delete cascade` wipes profiles and tokens.
 await admin.auth.admin.deleteUser(user.id)
 ```
 
@@ -76,9 +79,18 @@ await admin.auth.admin.deleteUser(user.id)
 Wrap(
   alignment: WrapAlignment.center,
   children: [
-    TextButton(onPressed: () => context.push('/legal/terms'), child: Text(l10n.settingsTerms)),
-    TextButton(onPressed: () => context.push('/legal/privacy'), child: Text(l10n.settingsPrivacyPolicy)),
-    TextButton(onPressed: onRestore, child: Text(l10n.paywallRestore)),
+    TextButton(
+      onPressed: () => context.push('/legal/terms'),
+      child: Text(l10n.settingsTerms),
+    ),
+    TextButton(
+      onPressed: () => context.push('/legal/privacy'),
+      child: Text(l10n.settingsPrivacyPolicy),
+    ),
+    TextButton(
+      onPressed: onRestore,
+      child: Text(l10n.paywallRestore),
+    ),
   ],
 )
 ```
@@ -145,7 +157,10 @@ final rawNonce = _generateNonce();
 final hashedNonce = sha256.convert(utf8.encode(rawNonce)).toString();
 
 final credential = await SignInWithApple.getAppleIDCredential(
-  scopes: [AppleIDAuthorizationScopes.email, AppleIDAuthorizationScopes.fullName],
+  scopes: [
+    AppleIDAuthorizationScopes.email,
+    AppleIDAuthorizationScopes.fullName,
+  ],
   nonce: hashedNonce,
 );
 await _db.auth.signInWithIdToken(
@@ -193,11 +208,11 @@ Mine was the Information Needed flavour — seven questions and a request for a 
 
 ```xml
 <key>NSCameraUsageDescription</key>
-<string>$(PRODUCT_NAME) needs access to your camera to take a profile picture.</string>
-<key>NSPhotoLibraryAddUsageDescription</key>
-<string>$(PRODUCT_NAME) needs permission to save photos to your library.</string>
+<string>$(PRODUCT_NAME) uses the camera to take your profile picture.</string>
 <key>NSPhotoLibraryUsageDescription</key>
-<string>$(PRODUCT_NAME) needs access to your photo library to set your profile picture.</string>
+<string>$(PRODUCT_NAME) opens your library to choose a profile picture.</string>
+<key>NSPhotoLibraryAddUsageDescription</key>
+<string>$(PRODUCT_NAME) saves photos you export to your library.</string>
 ```
 
 Each one names the feature it serves. That's the whole bar, and most apps don't clear it.
