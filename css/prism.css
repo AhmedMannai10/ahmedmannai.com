@@ -220,3 +220,45 @@
 .dark .token.variable {
   color: rgb(214, 222, 235);
 }
+
+/**
+ * Horizontal scroll affordance for code blocks.
+ *
+ * A long line still scrolls on a narrow viewport, and macOS hides overlay
+ * scrollbars until you have already scrolled — so the line just looks
+ * truncated and the reader never learns there is more code to the right.
+ *
+ * Defining ::-webkit-scrollbar opts Chromium out of overlay scrollbars, so the
+ * track stays visible whenever a block overflows (and takes no space when it
+ * does not). The standard properties would override that and hand back an
+ * overlay, so they are scoped to engines without the WebKit pseudo-elements.
+ *
+ * Square, per the panel spec: no radius anywhere.
+ */
+.prose pre::-webkit-scrollbar {
+  height: 6px;
+}
+
+.prose pre::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.prose pre::-webkit-scrollbar-thumb {
+  background: theme('colors.panel.line');
+  border-radius: 0;
+}
+
+.dark .prose pre::-webkit-scrollbar-thumb {
+  background: theme('colors.panel-dark.line2');
+}
+
+@supports not selector(::-webkit-scrollbar) {
+  .prose pre {
+    scrollbar-width: thin;
+    scrollbar-color: theme('colors.panel.line') transparent;
+  }
+
+  .dark .prose pre {
+    scrollbar-color: theme('colors.panel-dark.line2') transparent;
+  }
+}

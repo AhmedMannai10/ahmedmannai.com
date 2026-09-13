@@ -141,6 +141,11 @@ module.exports = {
               borderRadius: '0',
             },
             pre: {
+              // Typography's stock --tw-prose-pre-code is gray-200, picked for
+              // the plugin's dark pre background. This block is cream, so any
+              // text Prism doesn't tokenise (bare identifiers) came out nearly
+              // invisible. Set it explicitly to the body ink.
+              color: theme('colors.text.primary'),
               backgroundColor: theme('colors.panel.sub'),
               border: `1px solid ${theme('colors.panel.line')}`,
               borderRadius: '0',
@@ -171,6 +176,7 @@ module.exports = {
               backgroundColor: theme('colors.panel-dark.sub2'),
             },
             pre: {
+              color: theme('colors.text.inverse'),
               backgroundColor: theme('colors.panel-dark.sub'),
               border: `1px solid ${theme('colors.panel-dark.line')}`,
             },
