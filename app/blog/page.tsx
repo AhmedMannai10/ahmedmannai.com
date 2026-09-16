@@ -7,6 +7,9 @@ const POSTS_PER_PAGE = 5
 
 export const metadata = genPageMetadata({ title: 'Blog' })
 
+const DESCRIPTION =
+  'Devlogs, infrastructure notes and the occasional plan I am holding myself to. Everything I learn building the apps, written down while it is still fresh.'
+
 export default function BlogPage() {
   const posts = allCoreContent(sortPosts(allBlogs))
   const pageNumber = 1
@@ -17,6 +20,7 @@ export default function BlogPage() {
   const pagination = {
     currentPage: pageNumber,
     totalPages: Math.ceil(posts.length / POSTS_PER_PAGE),
+    basePath: 'blog',
   }
 
   return (
@@ -24,7 +28,8 @@ export default function BlogPage() {
       posts={posts}
       initialDisplayPosts={initialDisplayPosts}
       pagination={pagination}
-      title="All Posts"
+      title="Writing"
+      description={DESCRIPTION}
     />
   )
 }

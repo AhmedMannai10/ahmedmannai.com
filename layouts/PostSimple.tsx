@@ -1,82 +1,109 @@
 import { ReactNode } from 'react'
-import { formatDate } from 'pliny/utils/formatDate'
 import { CoreContent } from 'pliny/utils/contentlayer'
 import type { Blog } from 'contentlayer/generated'
 import Comments from '@/components/Comments'
 import Link from '@/components/Link'
 import PageTitle from '@/components/PageTitle'
-import ReadingContainer from '@/components/ReadingContainer'
-import siteMetadata from '@/data/siteMetadata'
+import SectionHeader from '@/components/SectionHeader'
 import ScrollTopAndComment from '@/components/ScrollTopAndComment'
+import siteMetadata from '@/data/siteMetadata'
+import { entryNumber } from '../lib/entries'
+
+interface PostRef {
+  path: string
+  slug: string
+  title: string
+}
 
 interface LayoutProps {
   content: CoreContent<Blog>
   children: ReactNode
-  next?: { path: string; title: string }
-  prev?: { path: string; title: string }
+  next?: PostRef
+  prev?: PostRef
 }
 
-export default function PostLayout({ content, next, prev, children }: LayoutProps) {
-  const { path, slug, date, title } = content
+export default function PostSimple({ content, next, prev, children }: LayoutProps) {
+  const { slug, date, title } = content
+  const serial = entryNumber(slug)
+  const minutes = Math.max(1, Math.round(content.readingTime?.minutes ?? 1))
 
   return (
-    <ReadingContainer>
+    <>
       <ScrollTopAndComment />
+
+      <div className="flex items-center justify-between gap-4 border-b border-panel-line px-5 py-2.5 font-mono text-[10px] uppercase tracking-[0.16em] text-text-tertiary dark:border-panel-dark-line dark:text-text-inverse-tertiary md:px-10">
+        <span className="flex min-w-0 items-center gap-2">
+          <Link href="/blog" className="focus-ring shrink-0 hover:text-signal">
+            Writing
+          </Link>
+          <span aria-hidden="true">/</span>
+          <span className="truncate text-text-primary dark:text-text-inverse">
+            Entry {serial} · {title}
+          </span>
+        </span>
+        <span className="hidden shrink-0 items-center gap-2 md:flex">
+          <time dateTime={date}>{date.slice(0, 10)}</time>
+          <span className="before:mr-2 before:content-['·']">{minutes} min</span>
+        </span>
+      </div>
+
       <article>
-        <div>
-          <header>
-            <div className="space-y-1 border-b border-stone/15 pb-10 text-center">
-              <dl>
-                <div>
-                  <dt className="sr-only">Published on</dt>
-                  <dd className="text-sm font-medium leading-6 text-stone">
-                    <time dateTime={date}>{formatDate(date, siteMetadata.locale)}</time>
-                  </dd>
-                </div>
-              </dl>
-              <div>
-                <PageTitle>{title}</PageTitle>
-              </div>
+        <header className="border-b border-panel-line px-5 py-12 dark:border-panel-dark-line md:px-10 md:py-16">
+          <div className="flex flex-col gap-4 md:flex-row md:items-start md:gap-7">
+            <span
+              aria-hidden="true"
+              className="font-display text-[48px] font-bold leading-[0.85] tracking-[-0.05em] text-text-tertiary dark:text-text-inverse-tertiary md:text-[84px]"
+            >
+              {serial}
+            </span>
+            <div className="min-w-0">
+              <PageTitle>{title}</PageTitle>
             </div>
-          </header>
-          <div className="grid-rows-[auto_1fr] divide-y divide-stone/15 pb-8 xl:divide-y-0">
-            <div className="divide-y divide-stone/15 xl:col-span-3 xl:row-span-2 xl:pb-0">
-              <div className="prose max-w-none pb-8 pt-10 dark:prose-invert">{children}</div>
-            </div>
-            {siteMetadata.comments && (
-              <div className="pb-6 pt-6 text-center text-stone" id="comment">
-                <Comments slug={slug} />
-              </div>
-            )}
-            <footer>
-              <div className="flex flex-col text-sm font-medium sm:flex-row sm:justify-between sm:text-base">
-                {prev && prev.path && (
-                  <div className="pt-4 xl:pt-8">
-                    <Link
-                      href={`/${prev.path}`}
-                      className="focus-ring rounded text-ink underline underline-offset-4 hover:no-underline dark:text-bone"
-                      aria-label={`Previous post: ${prev.title}`}
-                    >
-                      &larr; {prev.title}
-                    </Link>
-                  </div>
-                )}
-                {next && next.path && (
-                  <div className="pt-4 xl:pt-8">
-                    <Link
-                      href={`/${next.path}`}
-                      className="focus-ring rounded text-ink underline underline-offset-4 hover:no-underline dark:text-bone"
-                      aria-label={`Next post: ${next.title}`}
-                    >
-                      {next.title} &rarr;
-                    </Link>
-                  </div>
-                )}
-              </div>
-            </footer>
           </div>
+        </header>
+
+        <div className="border-b border-panel-line px-5 py-12 dark:border-panel-dark-line md:px-10 md:py-14">
+          <div className="prose max-w-[72ch] dark:prose-invert">{children}</div>
         </div>
       </article>
-    </ReadingContainer>
+
+      {siteMetadata.comments && (
+        <section
+          id="comment"
+          className="border-b border-panel-line px-5 py-10 dark:border-panel-dark-line md:px-10 md:py-12"
+        >
+          <SectionHeader numeral="01" title="Comments" meta="GitHub" />
+          <div className="mt-8">
+            <Comments slug={slug} />
+          </div>
+        </section>
+      )}
+
+      <nav className="flex flex-col gap-3 px-5 py-6 font-mono text-[10px] uppercase tracking-[0.16em] md:flex-row md:items-center md:px-10">
+        {prev && prev.path ? (
+          <Link
+            href={`/${prev.path}`}
+            className="focus-ring inline-flex min-h-[44px] items-center text-text-secondary hover:text-signal dark:text-text-inverse-secondary"
+          >
+            ← Entry {entryNumber(prev.slug)} · {prev.title}
+          </Link>
+        ) : (
+          <span className="inline-flex min-h-[44px] items-center text-stone">
+            ← Start of the archive
+          </span>
+        )}
+        <span aria-hidden="true" className="tick-rule-h hidden h-1 flex-1 md:block" />
+        {next && next.path ? (
+          <Link
+            href={`/${next.path}`}
+            className="focus-ring inline-flex min-h-[44px] items-center text-text-secondary hover:text-signal dark:text-text-inverse-secondary"
+          >
+            Entry {entryNumber(next.slug)} · {next.title} →
+          </Link>
+        ) : (
+          <span className="inline-flex min-h-[44px] items-center text-stone">Newest entry →</span>
+        )}
+      </nav>
+    </>
   )
 }

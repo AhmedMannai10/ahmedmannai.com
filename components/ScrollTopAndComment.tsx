@@ -24,13 +24,13 @@ const ScrollTopAndComment = () => {
   }
   return (
     <div
-      className={`fixed bottom-8 right-8 hidden flex-col gap-3 ${show ? 'md:flex' : 'md:hidden'}`}
+      className={`fixed bottom-8 right-8 hidden flex-col gap-2 ${show ? 'md:flex' : 'md:hidden'}`}
     >
       {siteMetadata.comments?.provider && (
         <button
           aria-label="Scroll To Comment"
           onClick={handleScrollToComment}
-          className="focus-ring rounded-full bg-stone/15 p-2 text-stone transition-all hover:bg-stone/25 dark:bg-stone/20 dark:hover:bg-stone/30"
+          className="focus-ring border border-panel-line bg-panel-base p-2.5 text-text-tertiary transition-colors hover:border-signal hover:text-signal dark:border-panel-dark-line dark:bg-panel-dark-sub dark:text-text-inverse-tertiary"
         >
           <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
             <path
@@ -44,7 +44,7 @@ const ScrollTopAndComment = () => {
       <button
         aria-label="Scroll To Top"
         onClick={handleScrollTop}
-        className="focus-ring rounded-full bg-stone/15 p-2 text-stone transition-all hover:bg-stone/25 dark:bg-stone/20 dark:hover:bg-stone/30"
+        className="focus-ring border border-panel-line bg-panel-base p-2.5 text-text-tertiary transition-colors hover:border-signal hover:text-signal dark:border-panel-dark-line dark:bg-panel-dark-sub dark:text-text-inverse-tertiary"
       >
         <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
           <path

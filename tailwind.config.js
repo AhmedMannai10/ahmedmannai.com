@@ -2,6 +2,11 @@
 const { fontFamily } = require('tailwindcss/defaultTheme')
 const colors = require('tailwindcss/colors')
 
+// Prose runs the same three faces as the rest of the panel: grotesk headings,
+// mono for engraved labels and table heads, Plex Sans for paragraphs.
+const displayFont = 'var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif'
+const monoFont = 'var(--font-jetbrains-mono), ui-monospace, monospace'
+
 /** @type {import("tailwindcss/types").Config } */
 module.exports = {
   content: [
@@ -134,6 +139,71 @@ module.exports = {
               fontWeight: '700',
               color: theme('colors.text.primary'),
             },
+            'h1,h2,h3,h4,h5,h6': {
+              fontFamily: displayFont,
+            },
+            // Every section of an article opens on a hairline, the way the
+            // panels elsewhere on the site are divided.
+            h2: {
+              marginTop: '3rem',
+              paddingTop: '2rem',
+              borderTopWidth: '1px',
+              borderTopColor: theme('colors.panel.line'),
+            },
+            // Posts that already separate their sections with `---` get one
+            // rule, not two.
+            'hr + h2': {
+              marginTop: '2rem',
+              paddingTop: '0',
+              borderTopWidth: '0',
+            },
+            strong: {
+              color: theme('colors.text.primary'),
+              fontWeight: '600',
+            },
+            blockquote: {
+              fontStyle: 'normal',
+              fontWeight: '400',
+              color: theme('colors.text.secondary'),
+              borderLeftWidth: '2px',
+              borderLeftColor: theme('colors.signal.DEFAULT'),
+              paddingLeft: '1.25rem',
+            },
+            'blockquote p:first-of-type::before': { content: 'none' },
+            'blockquote p:last-of-type::after': { content: 'none' },
+            hr: {
+              borderColor: theme('colors.panel.line'),
+            },
+            'ul > li::marker': {
+              color: theme('colors.text.tertiary'),
+            },
+            'ol > li::marker': {
+              color: theme('colors.text.tertiary'),
+            },
+            thead: {
+              borderBottomColor: theme('colors.panel.line'),
+            },
+            'thead th': {
+              fontFamily: monoFont,
+              fontSize: '11px',
+              fontWeight: '500',
+              letterSpacing: '0.12em',
+              textTransform: 'uppercase',
+              color: theme('colors.text.tertiary'),
+            },
+            'tbody tr': {
+              borderBottomColor: theme('colors.panel.soft'),
+            },
+            img: {
+              borderRadius: '0',
+            },
+            figcaption: {
+              fontFamily: monoFont,
+              fontSize: '11px',
+              letterSpacing: '0.14em',
+              textTransform: 'uppercase',
+              color: theme('colors.text.tertiary'),
+            },
             code: {
               color: theme('colors.text.primary'),
               backgroundColor: theme('colors.panel.sub'),
@@ -170,6 +240,38 @@ module.exports = {
             },
             'h1,h2,h3,h4,h5,h6': {
               color: theme('colors.text.inverse'),
+              fontFamily: displayFont,
+            },
+            h2: {
+              borderTopColor: theme('colors.panel-dark.line'),
+            },
+            strong: {
+              color: theme('colors.text.inverse'),
+            },
+            blockquote: {
+              color: theme('colors.text.inverse-secondary'),
+              borderLeftColor: theme('colors.signal.DEFAULT'),
+            },
+            hr: {
+              borderColor: theme('colors.panel-dark.line'),
+            },
+            'ul > li::marker': {
+              color: theme('colors.text.inverse-tertiary'),
+            },
+            'ol > li::marker': {
+              color: theme('colors.text.inverse-tertiary'),
+            },
+            thead: {
+              borderBottomColor: theme('colors.panel-dark.line'),
+            },
+            'thead th': {
+              color: theme('colors.text.inverse-tertiary'),
+            },
+            'tbody tr': {
+              borderBottomColor: theme('colors.panel-dark.line'),
+            },
+            figcaption: {
+              color: theme('colors.text.inverse-tertiary'),
             },
             code: {
               color: theme('colors.text.inverse'),

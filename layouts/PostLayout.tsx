@@ -3,224 +3,271 @@ import { CoreContent } from 'pliny/utils/contentlayer'
 import type { Blog, Authors } from 'contentlayer/generated'
 import Comments from '@/components/Comments'
 import Link from '@/components/Link'
-import PageTitle from '@/components/PageTitle'
-import ReadingContainer from '@/components/ReadingContainer'
 import Image from '@/components/Image'
+import Panel from '@/components/Panel'
 import Tag from '@/components/Tag'
-import siteMetadata from '@/data/siteMetadata'
+import SectionHeader from '@/components/SectionHeader'
+import NewsletterForm from '@/components/NewsletterForm'
 import ScrollTopAndComment from '@/components/ScrollTopAndComment'
+import siteMetadata from '@/data/siteMetadata'
+import { entryNumber, pad, totalEntries } from '../lib/entries'
 
 const editUrl = (path) => `${siteMetadata.siteRepo}/blob/main/data/${path}`
 const discussUrl = (path) =>
   `https://mobile.twitter.com/search?q=${encodeURIComponent(`${siteMetadata.siteUrl}/${path}`)}`
 
-const postDateTemplate: Intl.DateTimeFormatOptions = {
-  weekday: 'long',
-  year: 'numeric',
-  month: 'long',
-  day: 'numeric',
+type TocItem = { value: string; url: string; depth: number }
+
+interface PostRef {
+  path: string
+  slug: string
+  title: string
 }
 
 interface LayoutProps {
   content: CoreContent<Blog>
   authorDetails: CoreContent<Authors>[]
-  next?: { path: string; title: string }
-  prev?: { path: string; title: string }
+  next?: PostRef
+  prev?: PostRef
   children: ReactNode
 }
 
+const SPEC_ROW =
+  'flex items-center justify-between gap-4 border-b border-panel-line px-4.5 py-3.5 font-mono text-[11px] uppercase tracking-[0.1em] last:border-b-0 dark:border-panel-dark-line'
+
 export default function PostLayout({ content, authorDetails, next, prev, children }: LayoutProps) {
-  const { filePath, path, slug, date, title, tags } = content
-  const basePath = path.split('/')[0]
+  const { filePath, path, slug, date, lastmod, title, summary, tags } = content
+  const serial = entryNumber(slug)
+
+  const minutes = Math.max(1, Math.round(content.readingTime?.minutes ?? 1))
+  const words: number = content.readingTime?.words ?? 0
+  const wordCount = words >= 1000 ? `${(words / 1000).toFixed(1)}K` : String(words)
+  const author = authorDetails[0]
+
+  const updated = lastmod && lastmod.slice(0, 10) !== date.slice(0, 10) ? lastmod : null
+
+  const toc = ((content.toc as unknown as TocItem[]) || []).filter((h) => h.depth === 2)
+
+  const spec: { label: string; value: string; signal?: boolean }[] = [
+    { label: 'Entry', value: `${serial} / ${pad(totalEntries)}` },
+    { label: 'Published', value: date.slice(0, 10) },
+    ...(updated ? [{ label: 'Updated', value: updated.slice(0, 10), signal: true }] : []),
+    { label: 'Read time', value: `${minutes} min` },
+    { label: 'Words', value: wordCount },
+    ...(author?.name ? [{ label: 'Author', value: author.name }] : []),
+  ]
 
   return (
-    <ReadingContainer>
+    <>
       <ScrollTopAndComment />
+
+      {/* ─── Breadcrumb ───────────────────────────────────────── */}
+      <div className="flex items-center justify-between gap-4 border-b border-panel-line px-5 py-2.5 font-mono text-[10px] uppercase tracking-[0.16em] text-text-tertiary dark:border-panel-dark-line dark:text-text-inverse-tertiary md:px-10">
+        <span className="flex min-w-0 items-center gap-2">
+          <Link href="/blog" className="focus-ring shrink-0 hover:text-signal">
+            Writing
+          </Link>
+          <span aria-hidden="true">/</span>
+          <span className="truncate text-text-primary dark:text-text-inverse">
+            Entry {serial} · {title}
+          </span>
+        </span>
+        <span className="hidden shrink-0 items-center gap-2 md:flex">
+          <time dateTime={date}>{date.slice(0, 10)}</time>
+          <span className="before:mr-2 before:content-['·']">{minutes} min</span>
+        </span>
+      </div>
+
       <article>
-        <div className="xl:divide-y xl:divide-stone/15">
-          {/* Article header */}
-          <header className="pb-8 pt-10 xl:pb-8">
-            <div className="space-y-4 text-center">
-              {/* Date eyebrow */}
-              <p className="text-xs font-semibold uppercase tracking-[0.25em] text-stone">
-                <time dateTime={date}>
-                  {new Date(date).toLocaleDateString(siteMetadata.locale, postDateTemplate)}
-                </time>
-              </p>
-              {/* Title */}
-              <PageTitle>{title}</PageTitle>
+        {/* ─── Title + specification ──────────────────────────── */}
+        <section className="grid grid-cols-1 border-b border-panel-line dark:border-panel-dark-line md:grid-cols-[1fr_400px]">
+          <div className="px-5 py-12 md:px-10 md:py-16">
+            <div className="flex flex-col gap-4 md:flex-row md:items-start md:gap-7">
+              <span
+                aria-hidden="true"
+                className="font-display text-[48px] font-bold leading-[0.85] tracking-[-0.05em] text-text-tertiary dark:text-text-inverse-tertiary md:text-[84px]"
+              >
+                {serial}
+              </span>
+              <div className="min-w-0">
+                <h1
+                  className="font-display font-bold leading-[0.98] tracking-[-0.04em] text-text-primary dark:text-text-inverse"
+                  style={{ fontSize: 'clamp(2.125rem, 4.5vw, 3.25rem)' }}
+                >
+                  {title}
+                </h1>
+              </div>
             </div>
-          </header>
 
-          <div className="grid-rows-[auto_1fr] divide-y divide-stone/15 pb-8 xl:grid xl:grid-cols-4 xl:gap-x-8 xl:divide-y-0">
-            {/* Sidebar — author */}
-            <dl className="pb-10 pt-6 xl:border-b xl:border-stone/15 xl:pt-11">
-              <dt className="sr-only">Authors</dt>
-              <dd>
-                <ul className="flex flex-wrap justify-center gap-4 sm:space-x-12 xl:block xl:space-x-0 xl:space-y-8">
-                  {authorDetails.map((author) => (
-                    <li className="flex items-center space-x-3" key={author.name}>
-                      {author.avatar && (
-                        <Image
-                          src={author.avatar}
-                          width={40}
-                          height={40}
-                          alt="avatar"
-                          className="h-10 w-10 rounded-full ring-2 ring-stone/15"
-                        />
-                      )}
-                      <dl className="whitespace-nowrap text-sm font-medium leading-5">
-                        <dt className="sr-only">Name</dt>
-                        <dd className="text-ink dark:text-bone">{author.name}</dd>
-                        <dt className="sr-only">Twitter</dt>
-                        <dd>
-                          {author.twitter && (
-                            <Link
-                              href={author.twitter}
-                              className="focus-ring rounded text-xs text-stone underline underline-offset-4 hover:text-ink hover:no-underline dark:hover:text-bone"
-                            >
-                              {author.twitter
-                                .replace('https://twitter.com/', '@')
-                                .replace('https://x.com/', '@')}
-                            </Link>
-                          )}
-                        </dd>
-                      </dl>
-                    </li>
-                  ))}
-                </ul>
-              </dd>
-            </dl>
+            {summary && (
+              <p className="mt-8 max-w-[56ch] text-base leading-[1.7] text-text-secondary dark:text-text-inverse-secondary">
+                {summary}
+              </p>
+            )}
 
-            {/* Main content */}
-            <div className="divide-y divide-stone/15 xl:col-span-3 xl:row-span-2 xl:pb-0">
-              <div className="prose max-w-none pb-8 pt-10 dark:prose-invert">{children}</div>
-
-              {/* Post-read author card */}
-              <div className="py-8">
-                {authorDetails.map((author) => (
-                  <div
-                    key={author.name}
-                    className="flex items-start gap-4 rounded-2xl border border-stone/15 bg-stone/5 p-6"
-                  >
-                    {author.avatar && (
-                      <Image
-                        src={author.avatar}
-                        width={48}
-                        height={48}
-                        alt={author.name}
-                        className="h-12 w-12 flex-shrink-0 rounded-full ring-2 ring-stone/15"
-                      />
-                    )}
-                    <div className="min-w-0 flex-1">
-                      <p className="font-semibold text-ink dark:text-bone">{author.name}</p>
-                      <p className="mt-0.5 text-sm text-stone">
-                        Software & DevOps Engineer · Builder · Writer
-                      </p>
-                      <div className="mt-4 flex flex-wrap gap-3">
-                        {author.twitter && (
-                          <Link
-                            href={author.twitter}
-                            className="focus-ring inline-flex items-center rounded-full bg-ink px-4 py-1.5 text-xs font-semibold text-paper transition-all hover:scale-[1.02] hover:opacity-90 dark:bg-bone dark:text-graphite"
-                          >
-                            Follow on X →
-                          </Link>
-                        )}
-                        <Link
-                          href="/blog"
-                          className="focus-ring inline-flex items-center rounded-full border border-stone/20 px-4 py-1.5 text-xs font-semibold text-stone transition-all hover:scale-[1.02] hover:border-stone/40 hover:text-ink dark:hover:text-bone"
-                        >
-                          More posts →
-                        </Link>
-                      </div>
-                    </div>
-                  </div>
+            {tags && tags.length > 0 && (
+              <div className="mt-8 flex flex-wrap gap-2">
+                {tags.map((tag) => (
+                  <Tag key={tag} text={tag} />
                 ))}
               </div>
-
-              <div className="pb-6 pt-4 text-sm text-stone">
-                <Link
-                  href={discussUrl(path)}
-                  rel="nofollow"
-                  className="focus-ring rounded hover:text-ink hover:underline dark:hover:text-bone"
-                >
-                  Discuss on Twitter
-                </Link>
-                {` · `}
-                <Link
-                  href={editUrl(filePath)}
-                  className="focus-ring rounded hover:text-ink hover:underline dark:hover:text-bone"
-                >
-                  View on GitHub
-                </Link>
-              </div>
-
-              {siteMetadata.comments && (
-                <div className="pb-6 pt-6 text-center text-stone" id="comment">
-                  <Comments slug={slug} />
-                </div>
-              )}
-            </div>
-
-            {/* Sidebar footer — tags + prev/next */}
-            <footer>
-              <div className="divide-stone/15 text-sm font-medium leading-5 xl:col-start-1 xl:row-start-2 xl:divide-y">
-                {tags && (
-                  <div className="py-4 xl:py-8">
-                    <h2 className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-stone">
-                      Tags
-                    </h2>
-                    <div className="flex flex-wrap gap-2">
-                      {tags.map((tag) => (
-                        <Tag key={tag} text={tag} />
-                      ))}
-                    </div>
-                  </div>
-                )}
-                {(next || prev) && (
-                  <div className="flex justify-between gap-4 py-4 xl:block xl:space-y-6 xl:py-8">
-                    {prev && prev.path && (
-                      <div className="flex-1">
-                        <h2 className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-stone">
-                          Previous
-                        </h2>
-                        <Link
-                          href={`/${prev.path}`}
-                          className="focus-ring block rounded-xl border border-stone/15 bg-paper p-3 text-sm font-medium text-ink transition-all hover:-translate-y-0.5 hover:border-stone/30 hover:shadow-md dark:border-stone/20 dark:bg-graphite dark:text-bone"
-                        >
-                          ← {prev.title}
-                        </Link>
-                      </div>
-                    )}
-                    {next && next.path && (
-                      <div className="flex-1">
-                        <h2 className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-stone">
-                          Next
-                        </h2>
-                        <Link
-                          href={`/${next.path}`}
-                          className="focus-ring block rounded-xl border border-stone/15 bg-paper p-3 text-sm font-medium text-ink transition-all hover:-translate-y-0.5 hover:border-stone/30 hover:shadow-md dark:border-stone/20 dark:bg-graphite dark:text-bone"
-                        >
-                          {next.title} →
-                        </Link>
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-              <div className="pt-4 xl:pt-8">
-                <Link
-                  href={`/${basePath}`}
-                  className="focus-ring inline-flex items-center rounded-full border border-stone/15 px-4 py-1.5 text-sm font-medium text-stone transition-all hover:border-stone/40 hover:text-ink dark:hover:text-bone"
-                  aria-label="Back to the blog"
-                >
-                  ← Back to blog
-                </Link>
-              </div>
-            </footer>
+            )}
           </div>
-        </div>
+
+          <div className="border-t border-panel-line px-5 py-10 dark:border-panel-dark-line md:border-l md:border-t-0 md:px-8">
+            <Panel label="Specification" indicator>
+              {spec.map((row) => (
+                <div key={row.label} className={SPEC_ROW}>
+                  <span className="text-text-tertiary dark:text-text-inverse-tertiary">
+                    {row.label}
+                  </span>
+                  <span
+                    className={
+                      row.signal ? 'text-signal' : 'text-text-primary dark:text-text-inverse'
+                    }
+                  >
+                    {row.value}
+                  </span>
+                </div>
+              ))}
+            </Panel>
+          </div>
+        </section>
+
+        {/* ─── Body ───────────────────────────────────────────── */}
+        <section className="grid grid-cols-1 border-b border-panel-line dark:border-panel-dark-line md:grid-cols-[1fr_320px]">
+          <div className="min-w-0 px-5 py-12 md:px-10 md:py-14">
+            <div className="prose max-w-[72ch] dark:prose-invert">{children}</div>
+          </div>
+
+          <div className="flex flex-col gap-8 border-t border-panel-line px-5 py-10 dark:border-panel-dark-line md:border-l md:border-t-0 md:px-8 md:py-14">
+            {toc.length >= 3 && (
+              <Panel label={`Contents · ${pad(toc.length)}`}>
+                {toc.map((heading, i) => (
+                  <a
+                    key={heading.url}
+                    href={heading.url}
+                    className="focus-ring flex min-h-[44px] items-start gap-3 border-b border-panel-line px-4.5 py-2.5 font-mono text-[11px] leading-[1.5] tracking-[0.04em] text-text-secondary transition-colors last:border-b-0 hover:text-signal dark:border-panel-dark-line dark:text-text-inverse-secondary"
+                  >
+                    <span
+                      aria-hidden="true"
+                      className="shrink-0 pt-px text-text-tertiary dark:text-text-inverse-tertiary"
+                    >
+                      {pad(i + 1)}
+                    </span>
+                    <span className="min-w-0">{heading.value}</span>
+                  </a>
+                ))}
+              </Panel>
+            )}
+
+            <NewsletterForm label="Get the ship log" section={`post_${slug}`} />
+
+            <div className="flex flex-col gap-2 font-mono text-[10px] uppercase tracking-[0.16em] text-text-tertiary dark:text-text-inverse-tertiary">
+              <Link
+                href={discussUrl(path)}
+                rel="nofollow"
+                className="focus-ring inline-flex min-h-[44px] items-center hover:text-signal"
+              >
+                Discuss on X →
+              </Link>
+              <Link
+                href={editUrl(filePath)}
+                className="focus-ring inline-flex min-h-[44px] items-center hover:text-signal"
+              >
+                View source on GitHub →
+              </Link>
+            </div>
+          </div>
+        </section>
       </article>
-    </ReadingContainer>
+
+      {/* ─── 01 The author ──────────────────────────────────── */}
+      {author && (
+        <section className="border-b border-panel-line px-5 py-10 dark:border-panel-dark-line md:px-10 md:py-12">
+          <SectionHeader numeral="01" title="The author" />
+          <div className="mt-8 flex flex-col gap-5 md:flex-row md:items-start md:gap-7">
+            {author.avatar && (
+              <div className="w-[72px] shrink-0 border border-panel-line p-1.5 dark:border-panel-dark-line">
+                <Image
+                  src={author.avatar}
+                  width={72}
+                  height={72}
+                  alt={author.name}
+                  className="block w-full"
+                />
+              </div>
+            )}
+            <div className="min-w-0">
+              <p className="font-display text-[22px] font-bold tracking-[-0.02em] text-text-primary dark:text-text-inverse">
+                {author.name}
+              </p>
+              <p className="mt-2 font-mono text-[10px] uppercase tracking-[0.16em] text-text-tertiary dark:text-text-inverse-tertiary">
+                {[author.occupation, author.company].filter(Boolean).join(' · ')}
+              </p>
+              <p className="mt-4 max-w-[56ch] text-[15px] leading-[1.65] text-text-secondary dark:text-text-inverse-secondary">
+                I build small software instruments and write down what the work actually costs.
+              </p>
+              <div className="mt-6 flex flex-wrap gap-5 font-mono text-[10px] uppercase tracking-[0.16em]">
+                {author.twitter && (
+                  <Link
+                    href={author.twitter}
+                    className="focus-ring inline-flex min-h-[44px] items-center text-signal hover:text-signal-hover"
+                  >
+                    Follow on X →
+                  </Link>
+                )}
+                <Link
+                  href="/blog"
+                  className="focus-ring inline-flex min-h-[44px] items-center text-text-secondary hover:text-signal dark:text-text-inverse-secondary"
+                >
+                  All {pad(totalEntries)} entries →
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ─── 02 Comments ────────────────────────────────────── */}
+      {siteMetadata.comments && (
+        <section
+          id="comment"
+          className="border-b border-panel-line px-5 py-10 dark:border-panel-dark-line md:px-10 md:py-12"
+        >
+          <SectionHeader numeral="02" title="Comments" meta="GitHub" />
+          <div className="mt-8">
+            <Comments slug={slug} />
+          </div>
+        </section>
+      )}
+
+      {/* ─── Prev / next ────────────────────────────────────── */}
+      <nav className="flex flex-col gap-3 px-5 py-6 font-mono text-[10px] uppercase tracking-[0.16em] md:flex-row md:items-center md:px-10">
+        {prev && prev.path ? (
+          <Link
+            href={`/${prev.path}`}
+            className="focus-ring inline-flex min-h-[44px] items-center text-text-secondary hover:text-signal dark:text-text-inverse-secondary"
+          >
+            ← Entry {entryNumber(prev.slug)} · {prev.title}
+          </Link>
+        ) : (
+          <span className="inline-flex min-h-[44px] items-center text-stone">
+            ← Start of the archive
+          </span>
+        )}
+        <span aria-hidden="true" className="tick-rule-h hidden h-1 flex-1 md:block" />
+        {next && next.path ? (
+          <Link
+            href={`/${next.path}`}
+            className="focus-ring inline-flex min-h-[44px] items-center text-right text-text-secondary hover:text-signal dark:text-text-inverse-secondary"
+          >
+            Entry {entryNumber(next.slug)} · {next.title} →
+          </Link>
+        ) : (
+          <span className="inline-flex min-h-[44px] items-center text-stone">Newest entry →</span>
+        )}
+      </nav>
+    </>
   )
 }
