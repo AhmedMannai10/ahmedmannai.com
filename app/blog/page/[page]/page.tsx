@@ -36,6 +36,7 @@ export default function Page({ params }: { params: { page: string } }) {
   const pagination = {
     currentPage: pageNumber,
     totalPages: Math.ceil(posts.length / POSTS_PER_PAGE),
+    basePath: 'blog',
   }
 
   return (
@@ -43,7 +44,8 @@ export default function Page({ params }: { params: { page: string } }) {
       posts={posts}
       initialDisplayPosts={initialDisplayPosts}
       pagination={pagination}
-      title="All Posts"
+      title="Writing"
+      eyebrow={`Index · Page ${pageNumber}`}
     />
   )
 }

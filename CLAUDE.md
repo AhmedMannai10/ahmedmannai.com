@@ -29,12 +29,24 @@ Spec: `docs/handoff/`. Direction 1C, light default.
 
 ### Designed vs inherited routes
 
-Designed: `/`, `/apps`, `/apps/[slug]`. These run edge-to-edge inside
-`SectionContainer` (1280px chassis with hairline sides).
+Designed: `/`, `/apps`, `/apps/[slug]`, `/blog`, `/blog/[...slug]`, `/blog/page/[page]`,
+`/tags`, `/tags/[tag]`. These run edge-to-edge inside `SectionContainer` (1280px
+chassis with hairline sides) — no `ReadingContainer`.
 
-Inherited: `/blog`, `/videos`, `/about`, `/tags`. These are **not** redesigned — they
-pick up the new tokens, header, ship-log strip and footer only, and constrain their
-own column with `ReadingContainer`. Don't invent designs for them.
+Inherited: `/videos`, `/about`. These are **not** redesigned — they pick up the new
+tokens, header, ship-log strip and footer only, and constrain their own column with
+`ReadingContainer`. Don't invent designs for them.
+
+### Writing routes
+
+- The index is a full-bleed list of `PostRow` — numeral rail, copy cell, readout
+  cell — with a scrollable topics strip above it. Same idiom as the `/apps` index.
+- A post is: breadcrumb strip → numeral + title + **Specification** panel → prose
+  beside a sidebar (**Contents** from `post.toc`, newsletter, source links) →
+  `01 The author` → `02 Comments` → prev/next strip.
+- Article prose is themed in the `typography` block of `tailwind.config.js`, not in
+  the layouts. Headings run `font-display`, each `h2` opens on a hairline (and the
+  `hr + h2` rule keeps posts that already separate sections with `---` to one line).
 
 ## Content
 
@@ -45,3 +57,6 @@ own column with `ReadingContainer`. Don't invent designs for them.
   entry count.
 - A post belongs to an app's devlog when it carries a **tag equal to the app slug**
   (`skillscan`, `tantap`, `sportzme`).
+- Writing **entry numbers** come from `lib/entries.ts` — a post's ordinal by date,
+  oldest at 01. Like the app serials they are permanent; publishing appends and
+  never renumbers. Derived, never hardcoded.

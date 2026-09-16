@@ -55,5 +55,14 @@ export default function TagPage({ params }: { params: { tag: string } }) {
   const filteredPosts = allCoreContent(
     sortPosts(allBlogs.filter((post) => post.tags && post.tags.map((t) => slug(t)).includes(tag)))
   )
-  return <ListLayout posts={filteredPosts} title={title} />
+  return (
+    <ListLayout
+      posts={filteredPosts}
+      title={title}
+      activeTag={tag}
+      description={`Every entry filed under ${title.toLowerCase()} — ${filteredPosts.length} ${
+        filteredPosts.length === 1 ? 'entry' : 'entries'
+      } from the archive.`}
+    />
+  )
 }

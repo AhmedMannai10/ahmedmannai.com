@@ -1,214 +1,208 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
-'use client'
-
-import { usePathname } from 'next/navigation'
 import { slug } from 'github-slugger'
-import { formatDate } from 'pliny/utils/formatDate'
 import { CoreContent } from 'pliny/utils/contentlayer'
 import type { Blog } from 'contentlayer/generated'
 import Link from '@/components/Link'
-import ReadingContainer from '@/components/ReadingContainer'
-import Tag from '@/components/Tag'
-import siteMetadata from '@/data/siteMetadata'
+import PostRow from '@/components/PostRow'
+import SectionHeader from '@/components/SectionHeader'
+import NewsletterForm from '@/components/NewsletterForm'
 import tagData from 'app/tag-data.json'
+import { pad, totalEntries } from '../lib/entries'
+
+const TOPICS_SHOWN = 6
 
 interface PaginationProps {
   totalPages: number
   currentPage: number
+  basePath: string
 }
+
 interface ListLayoutProps {
   posts: CoreContent<Blog>[]
   title: string
+  description?: string
+  eyebrow?: string
   initialDisplayPosts?: CoreContent<Blog>[]
   pagination?: PaginationProps
+  /** Slug of the tag being viewed, when this is a `/tags/…` page. */
+  activeTag?: string
 }
 
-function Pagination({ totalPages, currentPage }: PaginationProps) {
-  const pathname = usePathname()
-  const basePath = pathname.split('/')[1]
+const CELL =
+  'flex min-h-[44px] shrink-0 items-center gap-2.5 whitespace-nowrap border-r border-panel-line px-5 font-mono text-[10px] uppercase tracking-[0.16em] transition-colors dark:border-panel-dark-line'
+
+function Pagination({ totalPages, currentPage, basePath }: PaginationProps) {
   const prevPage = currentPage - 1 > 0
   const nextPage = currentPage + 1 <= totalPages
+  const link =
+    'focus-ring inline-flex min-h-[44px] items-center text-text-secondary hover:text-signal dark:text-text-inverse-secondary'
+  const dead = 'inline-flex min-h-[44px] items-center text-stone'
 
   return (
-    <div className="pb-8 pt-6">
-      <nav className="flex items-center justify-between">
-        {!prevPage ? (
-          <button
-            className="cursor-auto rounded-full border border-stone/15 px-5 py-2 text-sm font-medium text-stone/40"
-            disabled
-          >
-            ← Previous
-          </button>
-        ) : (
-          <Link
-            href={currentPage - 1 === 1 ? `/${basePath}/` : `/${basePath}/page/${currentPage - 1}`}
-            rel="prev"
-            className="focus-ring rounded-full border border-stone/20 px-5 py-2 text-sm font-medium text-ink transition-all hover:border-stone/40 hover:bg-stone/5 dark:text-bone"
-          >
-            ← Previous
-          </Link>
-        )}
-        <span className="text-sm text-stone">
-          {currentPage} / {totalPages}
-        </span>
-        {!nextPage ? (
-          <button
-            className="cursor-auto rounded-full border border-stone/15 px-5 py-2 text-sm font-medium text-stone/40"
-            disabled
-          >
-            Next →
-          </button>
-        ) : (
-          <Link
-            href={`/${basePath}/page/${currentPage + 1}`}
-            rel="next"
-            className="focus-ring rounded-full border border-stone/20 px-5 py-2 text-sm font-medium text-ink transition-all hover:border-stone/40 hover:bg-stone/5 dark:text-bone"
-          >
-            Next →
-          </Link>
-        )}
-      </nav>
-    </div>
+    <nav
+      aria-label="Pagination"
+      className="flex flex-col gap-3 border-b border-panel-line px-5 py-4 font-mono text-[10px] uppercase tracking-[0.16em] dark:border-panel-dark-line md:flex-row md:items-center md:px-10"
+    >
+      {prevPage ? (
+        <Link
+          href={currentPage - 1 === 1 ? `/${basePath}` : `/${basePath}/page/${currentPage - 1}`}
+          rel="prev"
+          className={link}
+        >
+          ← Newer entries
+        </Link>
+      ) : (
+        <span className={dead}>← Newest entry</span>
+      )}
+
+      <span aria-hidden="true" className="tick-rule-h hidden h-1 flex-1 md:block" />
+
+      <span className="inline-flex min-h-[44px] items-center text-text-tertiary dark:text-text-inverse-tertiary">
+        Page {pad(currentPage)} / {pad(totalPages)}
+      </span>
+
+      <span aria-hidden="true" className="tick-rule-h hidden h-1 flex-1 md:block" />
+
+      {nextPage ? (
+        <Link href={`/${basePath}/page/${currentPage + 1}`} rel="next" className={link}>
+          Older entries →
+        </Link>
+      ) : (
+        <span className={dead}>Start of the archive →</span>
+      )}
+    </nav>
   )
 }
 
 export default function ListLayoutWithTags({
   posts,
   title,
+  description,
+  eyebrow,
   initialDisplayPosts = [],
   pagination,
+  activeTag,
 }: ListLayoutProps) {
-  const pathname = usePathname()
   const tagCounts = tagData as Record<string, number>
-  const tagKeys = Object.keys(tagCounts)
-  const sortedTags = tagKeys.sort((a, b) => tagCounts[b] - tagCounts[a])
+  const allTags = Object.keys(tagCounts).sort((a, b) => tagCounts[b] - tagCounts[a])
+
+  // The strip shows the busiest topics; the tag being viewed is always on it,
+  // however rarely it is used.
+  const topics = allTags.slice(0, TOPICS_SHOWN)
+  if (activeTag && !topics.includes(activeTag)) topics.push(activeTag)
 
   const displayPosts = initialDisplayPosts.length > 0 ? initialDisplayPosts : posts
 
   return (
-    <ReadingContainer>
-      <div className="relative overflow-hidden">
-        {/* Page header */}
-        <div className="pb-8 pt-16 sm:hidden">
-          <p className="mb-3 font-mono text-xs text-stone">
-            <span className="text-signal dark:text-signal-dark">$</span> writing
+    <>
+      {/* ─── Intro ────────────────────────────────────────────── */}
+      <section className="grid grid-cols-1 border-b border-panel-line dark:border-panel-dark-line md:grid-cols-[1fr_320px]">
+        <div className="px-5 py-14 md:px-10 md:py-20">
+          <p className="flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.24em] text-text-tertiary dark:text-text-inverse-tertiary">
+            <span aria-hidden="true" className="h-px w-10 bg-signal" />
+            {eyebrow ?? (activeTag ? `Index · Filed under ${activeTag}` : 'Index · All writing')}
           </p>
           <h1
-            className="font-display font-semibold tracking-tight text-ink dark:text-bone"
-            style={{ fontSize: 'clamp(2rem, 6vw, 3.5rem)' }}
+            className="mt-7 font-display font-bold leading-[0.96] tracking-[-0.04em] text-text-primary dark:text-text-inverse"
+            style={{ fontSize: 'clamp(2.75rem, 6vw, 3.625rem)' }}
           >
             {title}
           </h1>
+          {description && (
+            <p className="mt-6 max-w-[52ch] text-base leading-[1.65] text-text-secondary dark:text-text-inverse-secondary">
+              {description}
+            </p>
+          )}
         </div>
+        <div className="border-t border-panel-line px-5 py-8 dark:border-panel-dark-line md:border-l md:border-t-0 md:px-8 md:py-10">
+          <SectionHeader
+            numeral="01"
+            title="Entries"
+            meta={activeTag ? `${pad(posts.length)} filed` : `${pad(posts.length)} total`}
+          />
+        </div>
+      </section>
 
-        <div className="flex sm:space-x-10">
-          {/* Tag sidebar */}
-          <div className="hidden h-full max-h-screen min-w-[240px] max-w-[240px] flex-wrap overflow-auto rounded-2xl border border-stone/15 bg-paper pt-5 dark:border-stone/20 dark:bg-graphite sm:flex">
-            <div className="px-5 py-4">
-              {/* Page header (desktop, inside sidebar) */}
-              <div className="mb-5 border-b border-stone/15 pb-5">
-                <p className="mb-1 font-mono text-xs text-stone">
-                  <span className="text-signal dark:text-signal-dark">$</span> writing
-                </p>
-                <h1
-                  className="font-display font-semibold tracking-tight text-ink dark:text-bone"
-                  style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)' }}
-                >
-                  {title}
-                </h1>
-              </div>
-
-              {/* All posts link */}
-              {pathname.startsWith('/blog') ? (
-                <p className="mb-3 text-sm font-bold text-ink dark:text-bone">All Posts</p>
-              ) : (
-                <Link
-                  href="/blog"
-                  className="focus-ring mb-3 block rounded text-sm font-bold text-stone hover:text-ink hover:underline dark:hover:text-bone"
-                >
-                  All Posts
-                </Link>
-              )}
-
-              {/* Tags */}
-              <ul className="space-y-1">
-                {sortedTags.map((t) => {
-                  const isActive = pathname.split('/tags/')[1] === slug(t)
-                  return (
-                    <li key={t}>
-                      {isActive ? (
-                        <span className="flex items-center justify-between rounded-full bg-signal px-3 py-1.5 text-xs font-medium text-paper dark:bg-signal-dark dark:text-graphite">
-                          <span className="uppercase">{t}</span>
-                          <span className="ml-2 opacity-60">{tagCounts[t]}</span>
-                        </span>
-                      ) : (
-                        <Link
-                          href={`/tags/${slug(t)}`}
-                          className="focus-ring flex items-center justify-between rounded-full px-3 py-1.5 text-xs font-medium uppercase text-stone transition-all hover:bg-stone/10 hover:text-ink dark:hover:text-bone"
-                          aria-label={`View posts tagged ${t}`}
-                        >
-                          <span>{t}</span>
-                          <span className="ml-2 opacity-50">{tagCounts[t]}</span>
-                        </Link>
-                      )}
-                    </li>
-                  )
-                })}
-              </ul>
-            </div>
+      {/* ─── Topics strip ─────────────────────────────────────── */}
+      <div className="border-b border-panel-line dark:border-panel-dark-line">
+        <div className="no-scrollbar flex items-stretch overflow-x-auto">
+          <div
+            className={`${CELL} text-text-tertiary dark:text-text-inverse-tertiary md:px-10`}
+            aria-hidden="true"
+          >
+            Topics
           </div>
 
-          {/* Post list */}
-          <div className="min-w-0 flex-1">
-            <ul className="space-y-4 pt-6">
-              {displayPosts.map((post) => {
-                const { path, date, title, summary, tags } = post
-                return (
-                  <li key={path}>
-                    <article className="group rounded-2xl border border-stone/15 bg-paper p-6 transition-all duration-300 hover:-translate-y-0.5 hover:border-stone/30 hover:shadow-lg dark:border-stone/20 dark:bg-graphite dark:hover:border-stone/40 dark:hover:shadow-[0_10px_30px_rgba(255,255,255,0.04)]">
-                      <time
-                        dateTime={date}
-                        className="mb-3 block font-mono text-xs uppercase tracking-[0.2em] text-stone"
-                        suppressHydrationWarning
-                      >
-                        {formatDate(date, siteMetadata.locale)}
-                      </time>
-                      <h2 className="mb-2 text-xl font-bold tracking-tight">
-                        <Link
-                          href={`/${path}`}
-                          className="focus-ring rounded text-ink hover:underline dark:text-bone"
-                        >
-                          {title}
-                        </Link>
-                      </h2>
-                      <div className="mb-3 flex flex-wrap gap-2">
-                        {tags?.map((tag) => (
-                          <Tag key={tag} text={tag} />
-                        ))}
-                      </div>
-                      <p className="text-sm leading-relaxed text-stone">{summary}</p>
-                      <div className="mt-4">
-                        <Link
-                          href={`/${path}`}
-                          className="focus-ring inline-flex items-center gap-1 rounded text-xs font-semibold text-stone transition-colors group-hover:text-ink dark:group-hover:text-bone"
-                        >
-                          Read more
-                          <span className="inline-block transition-transform duration-150 group-hover:translate-x-0.5">
-                            →
-                          </span>
-                        </Link>
-                      </div>
-                    </article>
-                  </li>
-                )
-              })}
-            </ul>
-            {pagination && pagination.totalPages > 1 && (
-              <Pagination currentPage={pagination.currentPage} totalPages={pagination.totalPages} />
-            )}
-          </div>
+          <Link
+            href="/blog"
+            className={`focus-ring ${CELL} ${
+              activeTag
+                ? 'text-text-secondary hover:text-signal dark:text-text-inverse-secondary'
+                : 'bg-panel-sub text-text-primary dark:bg-panel-dark-sub dark:text-text-inverse'
+            }`}
+          >
+            All
+            <span className="text-text-tertiary dark:text-text-inverse-tertiary">
+              {pad(totalEntries)}
+            </span>
+          </Link>
+
+          {topics.map((t) => {
+            const selected = activeTag === t
+            return (
+              <Link
+                key={t}
+                href={`/tags/${slug(t)}`}
+                aria-current={selected ? 'page' : undefined}
+                className={`focus-ring ${CELL} ${
+                  selected
+                    ? 'bg-panel-sub text-signal dark:bg-panel-dark-sub'
+                    : 'text-text-secondary hover:text-signal dark:text-text-inverse-secondary'
+                }`}
+              >
+                {selected && (
+                  <span aria-hidden="true" className="h-[7px] w-[7px] rounded-full bg-signal" />
+                )}
+                {t}
+                <span className="text-text-tertiary dark:text-text-inverse-tertiary">
+                  {pad(tagCounts[t] ?? 0)}
+                </span>
+              </Link>
+            )
+          })}
+
+          <Link
+            href="/tags"
+            className={`focus-ring ${CELL} border-r-0 text-signal hover:text-signal-hover`}
+          >
+            All {allTags.length} topics →
+          </Link>
         </div>
       </div>
-    </ReadingContainer>
+
+      {/* ─── Entries ──────────────────────────────────────────── */}
+      {displayPosts.length === 0 ? (
+        <p className="border-b border-panel-line px-5 py-12 font-mono text-[11px] uppercase tracking-[0.16em] text-stone dark:border-panel-dark-line md:px-10">
+          No entries under this topic yet
+        </p>
+      ) : (
+        displayPosts.map((post) => <PostRow key={post.path} post={post} />)
+      )}
+
+      {pagination && pagination.totalPages > 1 && <Pagination {...pagination} />}
+
+      {/* ─── 02 Ship log ──────────────────────────────────────── */}
+      <section className="grid grid-cols-1 border-b border-panel-line dark:border-panel-dark-line md:grid-cols-[1fr_400px]">
+        <div className="px-5 py-10 md:px-10 md:py-12">
+          <SectionHeader numeral="02" title="Ship log" meta="Email" />
+          <p className="mt-6 max-w-[48ch] text-[15px] leading-[1.65] text-text-secondary dark:text-text-inverse-secondary">
+            One email when I ship something — what shipped, what broke, and what is on the bench
+            next. No sequence, no drip, unsubscribe in one click.
+          </p>
+        </div>
+        <div className="border-t border-panel-line px-5 py-10 dark:border-panel-dark-line md:border-l md:border-t-0 md:px-8 md:py-12">
+          <NewsletterForm label="Get the ship log" section="writing_index" />
+        </div>
+      </section>
+    </>
   )
 }
