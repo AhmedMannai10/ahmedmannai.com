@@ -7,13 +7,13 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 // You might need to insert additional domains in script-src if you are using external services
 const ContentSecurityPolicy = `
   default-src 'self';
-  script-src 'self' 'unsafe-eval' 'unsafe-inline' giscus.app analytics.umami.is;
+  script-src 'self' 'unsafe-eval' 'unsafe-inline' giscus.app analytics.umami.is app.cal.com;
   style-src 'self' 'unsafe-inline';
   img-src * blob: data:;
   media-src *.s3.amazonaws.com;
   connect-src *;
   font-src 'self';
-  frame-src giscus.app youtube-nocookie.com
+  frame-src giscus.app youtube-nocookie.com app.cal.com
 `
 
 const securityHeaders = [
@@ -83,8 +83,6 @@ module.exports = () => {
           permanent: true,
         },
         { source: '/projects/:slug', destination: '/apps/:slug', permanent: true },
-        // The consulting booking page is gone.
-        { source: '/book', destination: '/about', permanent: true },
       ]
     },
     async rewrites() {

@@ -43,6 +43,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { route: 'about', priority: 0.9, changeFrequency: 'monthly' as const },
     { route: 'blog', priority: 0.9, changeFrequency: 'weekly' as const },
     { route: 'apps', priority: 0.8, changeFrequency: 'monthly' as const },
+    { route: 'book', priority: 0.8, changeFrequency: 'monthly' as const },
     { route: 'videos', priority: 0.7, changeFrequency: 'monthly' as const },
     { route: 'tags', priority: 0.7, changeFrequency: 'weekly' as const },
   ].map(({ route, priority, changeFrequency }) => ({
