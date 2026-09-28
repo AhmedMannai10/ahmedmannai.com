@@ -6,6 +6,7 @@ export interface ShipLogEntry {
 }
 
 const shipLog: ShipLogEntry[] = [
+  { date: '2026-09-28', text: 'SkillScan 1.1.0 on the App Store' },
   { date: '2026-05-14', text: 'TanTap 2.3 sync engine' },
   { date: '2026-04-02', text: 'SportzMe Android release' },
   { date: '2026-03-11', text: 'SkillScan pose tracker' },

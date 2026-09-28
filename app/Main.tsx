@@ -62,8 +62,7 @@ export default function Home({ posts }) {
           </h1>
 
           <p className="mt-7 max-w-[44ch] text-base leading-[1.65] text-text-secondary dark:text-text-inverse-secondary">
-            Small software instruments, made with care. Two are in the field. One is on the bench,
-            and you can watch it come together.
+            Small software instruments, made with care. All three are in the field.
           </p>
 
           <div className="mt-9 flex flex-wrap gap-3">
@@ -157,8 +156,11 @@ export default function Home({ posts }) {
           {fieldApps.map((app, i) => (
             <div
               key={app.slug}
-              className={`border-panel-line dark:border-panel-dark-line ${
-                i > 0 ? 'border-t md:border-l md:border-t-0' : ''
+              className={`border-panel-line dark:border-panel-dark-line ${i > 0 ? 'border-t' : ''} ${
+                i === 1 ? 'md:border-t-0' : ''
+              } ${i % 2 === 1 ? 'md:border-l' : ''} ${
+                // An odd unit out spans the row instead of leaving an empty cell.
+                i % 2 === 0 && i === fieldApps.length - 1 ? 'md:col-span-2' : ''
               }`}
             >
               <AppUnit app={app} variant="row" />
