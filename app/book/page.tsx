@@ -28,7 +28,7 @@ export default function Book() {
       {/* ─── Breadcrumb ───────────────────────────────────────── */}
       <div className="flex items-center justify-between gap-4 border-b border-panel-line px-5 py-2.5 font-mono text-[10px] uppercase tracking-[0.16em] text-text-tertiary dark:border-panel-dark-line dark:text-text-inverse-tertiary md:px-10">
         <span className="flex items-center gap-2">
-          <Link href="/" className="focus-ring hover:text-signal">
+          <Link href="/" className="focus-ring press hover:text-signal">
             Index
           </Link>
           <span aria-hidden="true">/</span>
@@ -116,7 +116,7 @@ export default function Book() {
                 Online booking is being set up right now. In the meantime, email me directly at{' '}
                 <Link
                   href={`mailto:${siteMetadata.email}`}
-                  className="focus-ring font-semibold text-signal underline underline-offset-4"
+                  className="focus-ring press font-semibold text-signal underline underline-offset-4"
                 >
                   {siteMetadata.email}
                 </Link>{' '}

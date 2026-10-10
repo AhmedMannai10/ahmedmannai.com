@@ -27,6 +27,19 @@ Spec: `docs/handoff/`. Direction 1C, light default.
 - Type: `font-display` Space Grotesk (headings, numerals), `font-mono` JetBrains Mono
   (labels, data, status, dates), `font-sans` IBM Plex Sans (paragraphs).
 
+### Interaction and motion
+
+- Every `a` and `button` already eases its colour (base rule in `css/tailwind.css`).
+  Don't add `transition-colors` to them.
+- `hover:` only applies to real pointers (`hoverOnlyWhenSupported`), so on touch the
+  press state is the feedback. Anything tappable takes one of `.press` (text links),
+  `.press-fill` (cells, chips, outline buttons) or `.press-solid` (signal buttons).
+  Press is a colour change, never a scale — a scaled hairline goes soft.
+- `ease-out` and `ease-in-out` are replaced with stronger curves in the Tailwind theme.
+  Never `ease-in`, never `transition-all`, nothing over 300ms on UI.
+- Motion is `transform`/`opacity` only and sits behind `motion-safe:`. The home gauge
+  (`animate-rise`) is the one decorative animation; don't add a second.
+
 ### Designed vs inherited routes
 
 Designed: `/`, `/apps`, `/apps/[slug]`, `/blog`, `/blog/[...slug]`, `/blog/page/[page]`,

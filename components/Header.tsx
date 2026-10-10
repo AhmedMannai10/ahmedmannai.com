@@ -2,6 +2,7 @@ import siteMetadata from '@/data/siteMetadata'
 import headerNavLinks from '@/data/headerNavLinks'
 import { currentFocus } from '@/data/appsData'
 import Link from './Link'
+import NavLink from './NavLink'
 import Logo from './Logo'
 import ShipLog from './ShipLog'
 import MobileNav from './MobileNav'
@@ -15,7 +16,7 @@ const Header = () => (
       <Link
         href="/"
         aria-label={siteMetadata.headerTitle}
-        className="focus-ring flex items-center px-5 md:px-10"
+        className="focus-ring press-fill flex items-center px-5 md:px-10"
       >
         <Logo />
       </Link>
@@ -23,13 +24,15 @@ const Header = () => (
       <div className="flex items-stretch">
         <nav className="hidden items-stretch sm:flex">
           {headerNavLinks.map((link) => (
-            <Link
+            <NavLink
               key={link.title}
               href={link.href}
-              className="focus-ring flex min-h-[44px] items-center border-l border-panel-line px-5 font-mono text-xs uppercase tracking-[0.16em] text-text-secondary transition-colors hover:text-signal dark:border-panel-dark-line dark:text-text-inverse-secondary"
+              className="focus-ring press-fill flex min-h-[44px] items-center border-l border-panel-line px-5 font-mono text-xs uppercase tracking-[0.16em] dark:border-panel-dark-line"
+              idleClassName="text-text-secondary hover:text-signal dark:text-text-inverse-secondary"
+              activeClassName="bg-panel-sub text-text-primary dark:bg-panel-dark-sub dark:text-text-inverse"
             >
               {link.title}
-            </Link>
+            </NavLink>
           ))}
         </nav>
 

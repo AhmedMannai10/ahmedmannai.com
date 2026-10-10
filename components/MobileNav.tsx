@@ -3,7 +3,7 @@
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useState } from 'react'
 import posthog from '../lib/posthog-browser'
-import Link from './Link'
+import NavLink from './NavLink'
 import headerNavLinks from '@/data/headerNavLinks'
 
 const MobileNav = () => {
@@ -23,7 +23,7 @@ const MobileNav = () => {
       <button
         aria-label="Toggle Menu"
         onClick={onToggleNav}
-        className="focus-ring flex h-11 w-11 items-center justify-center text-text-primary dark:text-text-inverse sm:hidden"
+        className="focus-ring press-fill flex h-11 w-11 items-center justify-center text-text-primary dark:text-text-inverse sm:hidden"
       >
         <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
           <rect x="3" y="4" width="14" height="1.5" />
@@ -39,7 +39,7 @@ const MobileNav = () => {
             enter="ease-out duration-200"
             enterFrom="opacity-0"
             enterTo="opacity-100"
-            leave="ease-in duration-150"
+            leave="ease-out duration-150"
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
@@ -51,7 +51,7 @@ const MobileNav = () => {
                 <button
                   onClick={onToggleNav}
                   aria-label="Close menu"
-                  className="focus-ring flex h-11 w-11 items-center justify-center text-text-primary dark:text-text-inverse"
+                  className="focus-ring press-fill flex h-11 w-11 items-center justify-center text-text-primary dark:text-text-inverse"
                 >
                   <svg
                     width="16"
@@ -67,17 +67,18 @@ const MobileNav = () => {
 
               <nav className="flex flex-col">
                 {headerNavLinks.map((link) => (
-                  <Link
+                  <NavLink
                     key={link.title}
                     href={link.href}
                     onClick={onToggleNav}
-                    className="focus-ring flex min-h-[56px] items-center justify-between border-b border-panel-line px-5 font-mono text-lg uppercase tracking-[0.14em] text-text-primary transition-colors hover:text-signal dark:border-panel-dark-line dark:text-text-inverse"
+                    className="focus-ring press-fill flex min-h-[56px] items-center justify-between border-b border-panel-line px-5 font-mono text-lg uppercase tracking-[0.14em] text-text-primary hover:text-signal dark:border-panel-dark-line dark:text-text-inverse"
+                    activeClassName="bg-panel-sub dark:bg-panel-dark-sub"
                   >
                     {link.title}
                     <span aria-hidden="true" className="font-mono text-sm text-text-tertiary">
                       →
                     </span>
-                  </Link>
+                  </NavLink>
                 ))}
               </nav>
             </Dialog.Panel>

@@ -103,11 +103,13 @@ export default function Home({ posts }) {
             {/* Ships per quarter */}
             <div className="px-4.5 pb-4 pt-5">
               <div className="flex h-[88px] items-end gap-2.5">
+                {/* The one readout that moves: each bar comes up from the
+                    baseline once, on load, the way a gauge finds its reading. */}
                 {SHIPS_PER_QUARTER.map((h, i) => (
                   <div
                     key={i}
-                    style={{ height: `${h}%` }}
-                    className={`w-4 ${
+                    style={{ height: `${h}%`, animationDelay: `${i * 40}ms` }}
+                    className={`w-4 origin-bottom motion-safe:animate-rise ${
                       i === SHIPS_PER_QUARTER.length - 1
                         ? 'bg-signal'
                         : 'bg-panel-line dark:bg-panel-dark-line2'
@@ -131,8 +133,12 @@ export default function Home({ posts }) {
                   } ${i < 2 ? 'border-b border-panel-line' : ''}`}
                 >
                   <div
-                    className={`font-display font-bold tracking-[-0.04em] ${
-                      r.small ? 'text-[17px]' : 'text-[40px] leading-none'
+                    className={`font-display font-bold ${
+                      // Tracking follows size: tight on the big numerals, eased off
+                      // on the small values.
+                      r.small
+                        ? 'text-[17px] tracking-[-0.02em]'
+                        : 'text-[40px] leading-none tracking-[-0.04em]'
                     } ${r.signal ? 'text-signal' : 'text-text-primary dark:text-text-inverse'}`}
                   >
                     {r.value}
@@ -182,7 +188,10 @@ export default function Home({ posts }) {
                   {benchApp.serial}
                 </span>
                 <h2 className="mt-4 font-display text-[32px] font-bold tracking-[-0.03em] text-text-primary dark:text-text-inverse">
-                  <Link href={`/apps/${benchApp.slug}`} className="focus-ring hover:text-signal">
+                  <Link
+                    href={`/apps/${benchApp.slug}`}
+                    className="focus-ring press hover:text-signal"
+                  >
                     {benchApp.name}
                   </Link>
                 </h2>
@@ -254,12 +263,12 @@ export default function Home({ posts }) {
                         section: 'writing_and_video',
                       })
                     }
-                    className="focus-ring group flex min-h-[44px] items-center gap-4"
+                    className="focus-ring press group flex min-h-[44px] items-center gap-4"
                   >
                     <span className="min-w-6 font-mono text-[10px] uppercase tracking-[0.16em] text-text-tertiary dark:text-text-inverse-tertiary">
                       {item.kind}
                     </span>
-                    <span className="text-[15px] text-text-primary group-hover:text-signal dark:text-text-inverse">
+                    <span className="text-[15px] text-text-primary transition-colors duration-150 group-hover:text-signal group-active:text-signal-press group-active:duration-0 dark:text-text-inverse">
                       {item.title}
                     </span>
                     <span
@@ -286,7 +295,7 @@ export default function Home({ posts }) {
                   section: 'writing_and_video',
                 })
               }
-              className="focus-ring mt-7 inline-flex min-h-[44px] items-center font-mono text-[11px] uppercase tracking-[0.16em] text-signal hover:text-signal-hover"
+              className="focus-ring press mt-7 inline-flex min-h-[44px] items-center font-mono text-[11px] uppercase tracking-[0.16em] text-signal hover:text-signal-hover"
             >
               All {posts.length} posts →
             </Link>

@@ -14,7 +14,7 @@ const SearchButton = () => {
     return (
       <SearchButtonWrapper
         aria-label="Search"
-        className="focus-ring flex h-11 min-w-[44px] items-center justify-center gap-2 px-3.5 font-mono text-[10px] uppercase tracking-[0.16em] text-text-tertiary transition-colors hover:text-signal dark:text-text-inverse-tertiary"
+        className="focus-ring press-fill flex h-11 min-w-[44px] items-center justify-center gap-2 px-3.5 font-mono text-[10px] uppercase tracking-[0.16em] text-text-tertiary hover:text-signal dark:text-text-inverse-tertiary"
         onClick={() =>
           posthog.capture('search_opened', {
             search_provider: searchConfig.provider,

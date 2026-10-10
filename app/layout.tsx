@@ -94,7 +94,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang={siteMetadata.language}
-      className={`${plexSans.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable} scroll-smooth`}
+      className={`${plexSans.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable} motion-safe:scroll-smooth`}
       suppressHydrationWarning
     >
       <link rel="icon" type="image/svg+xml" href={`${basePath}/static/favicons/favicon.svg`} />

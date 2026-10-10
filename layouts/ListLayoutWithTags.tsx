@@ -28,13 +28,13 @@ interface ListLayoutProps {
 }
 
 const CELL =
-  'flex min-h-[44px] shrink-0 items-center gap-2.5 whitespace-nowrap border-r border-panel-line px-5 font-mono text-[10px] uppercase tracking-[0.16em] transition-colors dark:border-panel-dark-line'
+  'flex min-h-[44px] shrink-0 items-center gap-2.5 whitespace-nowrap border-r border-panel-line px-5 font-mono text-[10px] uppercase tracking-[0.16em] dark:border-panel-dark-line'
 
 function Pagination({ totalPages, currentPage, basePath }: PaginationProps) {
   const prevPage = currentPage - 1 > 0
   const nextPage = currentPage + 1 <= totalPages
   const link =
-    'focus-ring inline-flex min-h-[44px] items-center text-text-secondary hover:text-signal dark:text-text-inverse-secondary'
+    'focus-ring press inline-flex min-h-[44px] items-center text-text-secondary hover:text-signal dark:text-text-inverse-secondary'
   const dead = 'inline-flex min-h-[44px] items-center text-stone'
 
   return (
@@ -124,7 +124,7 @@ export default function ListLayoutWithTags({
 
       {/* ─── Topics strip ─────────────────────────────────────── */}
       <div className="border-b border-panel-line dark:border-panel-dark-line">
-        <div className="no-scrollbar flex items-stretch overflow-x-auto">
+        <div className="no-scrollbar flex items-stretch overflow-x-auto overscroll-x-contain">
           <div
             className={`${CELL} text-text-tertiary dark:text-text-inverse-tertiary md:px-10`}
             aria-hidden="true"
@@ -134,7 +134,7 @@ export default function ListLayoutWithTags({
 
           <Link
             href="/blog"
-            className={`focus-ring ${CELL} ${
+            className={`focus-ring press-fill ${CELL} ${
               activeTag
                 ? 'text-text-secondary hover:text-signal dark:text-text-inverse-secondary'
                 : 'bg-panel-sub text-text-primary dark:bg-panel-dark-sub dark:text-text-inverse'
@@ -153,7 +153,7 @@ export default function ListLayoutWithTags({
                 key={t}
                 href={`/tags/${slug(t)}`}
                 aria-current={selected ? 'page' : undefined}
-                className={`focus-ring ${CELL} ${
+                className={`focus-ring press-fill ${CELL} ${
                   selected
                     ? 'bg-panel-sub text-signal dark:bg-panel-dark-sub'
                     : 'text-text-secondary hover:text-signal dark:text-text-inverse-secondary'
@@ -172,7 +172,7 @@ export default function ListLayoutWithTags({
 
           <Link
             href="/tags"
-            className={`focus-ring ${CELL} border-r-0 text-signal hover:text-signal-hover`}
+            className={`focus-ring press-fill ${CELL} border-r-0 text-signal hover:text-signal-hover`}
           >
             All {allTags.length} topics →
           </Link>

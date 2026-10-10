@@ -117,7 +117,7 @@ export default function LeadMagnet({
         {!delivered ? (
           <form
             onSubmit={subscribe}
-            className="mt-5 flex border border-panel-line dark:border-panel-dark-line"
+            className="mt-5 flex border border-panel-line transition-colors duration-150 has-[input:focus]:border-signal dark:border-panel-dark-line dark:has-[input:focus]:border-signal"
           >
             <label htmlFor={fieldId} className="flex-1">
               <span className="sr-only">Email address</span>
@@ -129,13 +129,13 @@ export default function LeadMagnet({
                 autoComplete="email"
                 required
                 placeholder="you@domain.com"
-                className="h-11 w-full border-0 bg-transparent px-3.5 font-sans text-[15px] text-text-primary placeholder-text-tertiary focus:outline-none focus:ring-0 dark:text-text-inverse dark:placeholder-text-inverse-tertiary"
+                className="h-11 w-full border-0 bg-transparent px-3.5 font-sans text-base text-text-primary placeholder-text-tertiary focus:outline-none focus:ring-0 dark:text-text-inverse dark:placeholder-text-inverse-tertiary md:text-[15px]"
               />
             </label>
             <button
               type="submit"
               disabled={status === 'sending'}
-              className="focus-ring h-11 shrink-0 border-l border-signal bg-signal px-5 font-mono text-xs font-bold uppercase tracking-[0.16em] text-panel-dark-base transition-colors hover:bg-signal-hover disabled:cursor-default"
+              className="focus-ring press-solid h-11 shrink-0 border-l border-signal bg-signal px-5 font-mono text-xs font-bold uppercase tracking-[0.16em] text-panel-dark-base hover:bg-signal-hover disabled:cursor-default"
             >
               {status === 'sending' ? 'Sending' : buttonLabel}
             </button>
@@ -144,14 +144,17 @@ export default function LeadMagnet({
           <a
             href={fileUrl}
             download
-            className="focus-ring mt-5 flex h-11 items-center justify-center border border-signal bg-signal px-5 font-mono text-xs font-bold uppercase tracking-[0.16em] text-panel-dark-base transition-colors hover:bg-signal-hover"
+            className="focus-ring press-solid mt-5 flex h-11 items-center justify-center border border-signal bg-signal px-5 font-mono text-xs font-bold uppercase tracking-[0.16em] text-panel-dark-base hover:bg-signal-hover"
           >
             Download the checklist
           </a>
         )}
 
         {status === 'error' && (
-          <p className="mt-2 font-mono text-[10px] uppercase tracking-[0.14em] text-signal">
+          <p
+            role="alert"
+            className="mt-2 font-mono text-[10px] uppercase tracking-[0.14em] text-signal"
+          >
             {message}
           </p>
         )}
@@ -163,7 +166,11 @@ export default function LeadMagnet({
             <>
               One email when I ship something. No sequence, no drip, unsubscribe in one click. Or
               skip the box —{' '}
-              <a href={fileUrl} download className="underline underline-offset-2 hover:text-signal">
+              <a
+                href={fileUrl}
+                download
+                className="press underline underline-offset-2 hover:text-signal"
+              >
                 the file is right here
               </a>
               .

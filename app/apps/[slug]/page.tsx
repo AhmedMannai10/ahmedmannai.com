@@ -68,7 +68,7 @@ export default function AppDetail({ params }: { params: { slug: string } }) {
       {/* ─── Breadcrumb ───────────────────────────────────────── */}
       <div className="flex items-center justify-between border-b border-panel-line px-5 py-2.5 font-mono text-[10px] uppercase tracking-[0.16em] text-text-tertiary dark:border-panel-dark-line dark:text-text-inverse-tertiary md:px-10">
         <span className="flex items-center gap-2">
-          <Link href="/apps" className="focus-ring hover:text-signal">
+          <Link href="/apps" className="focus-ring press hover:text-signal">
             Apps
           </Link>
           <span aria-hidden="true">/</span>
@@ -238,12 +238,15 @@ export default function AppDetail({ params }: { params: { slug: string } }) {
                   />
                   <div className="order-3 col-span-2 mt-3 md:order-none md:col-span-1 md:mt-0">
                     <h3 className="font-display text-[17px] font-bold text-text-primary dark:text-text-inverse">
-                      <Link href={`/blog/${post.slug}`} className="focus-ring hover:text-signal">
+                      <Link
+                        href={`/blog/${post.slug}`}
+                        className="focus-ring press hover:text-signal"
+                      >
                         {post.title}
                       </Link>
                     </h3>
                     {post.summary && (
-                      <p className="mt-2 max-w-[56ch] text-sm leading-[1.6] text-text-secondary dark:text-text-inverse-secondary">
+                      <p className="mt-2 max-w-[56ch] text-[15px] leading-[1.65] text-text-secondary dark:text-text-inverse-secondary">
                         {post.summary}
                       </p>
                     )}
@@ -255,7 +258,7 @@ export default function AppDetail({ params }: { params: { slug: string } }) {
             <div className="border-t border-panel-line dark:border-panel-dark-line">
               <Link
                 href={`/tags/${app.slug}`}
-                className="focus-ring inline-flex min-h-[44px] items-center font-mono text-[11px] uppercase tracking-[0.16em] text-signal hover:text-signal-hover"
+                className="focus-ring press inline-flex min-h-[44px] items-center font-mono text-[11px] uppercase tracking-[0.16em] text-signal hover:text-signal-hover"
               >
                 Full devlog →
               </Link>
@@ -313,7 +316,7 @@ export default function AppDetail({ params }: { params: { slug: string } }) {
         {prev ? (
           <Link
             href={`/apps/${prev.slug}`}
-            className="focus-ring inline-flex min-h-[44px] items-center text-text-secondary hover:text-signal dark:text-text-inverse-secondary"
+            className="focus-ring press inline-flex min-h-[44px] items-center text-text-secondary hover:text-signal dark:text-text-inverse-secondary"
           >
             ← Ser. no. {prev.serial} · {prev.name}
           </Link>
@@ -324,7 +327,7 @@ export default function AppDetail({ params }: { params: { slug: string } }) {
         {next ? (
           <Link
             href={`/apps/${next.slug}`}
-            className="focus-ring inline-flex min-h-[44px] items-center text-text-secondary hover:text-signal dark:text-text-inverse-secondary"
+            className="focus-ring press inline-flex min-h-[44px] items-center text-text-secondary hover:text-signal dark:text-text-inverse-secondary"
           >
             Ser. no. {next.serial} · {next.name} →
           </Link>

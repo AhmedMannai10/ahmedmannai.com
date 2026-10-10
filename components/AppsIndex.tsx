@@ -26,7 +26,7 @@ export default function AppsIndex({ apps }: { apps: AppUnitType[] }) {
     <>
       {/* Filter — a horizontal scroll row on mobile, a panel on desktop */}
       <div className="border-b border-panel-line dark:border-panel-dark-line">
-        <div className="no-scrollbar flex items-stretch overflow-x-auto">
+        <div className="no-scrollbar flex items-stretch overflow-x-auto overscroll-x-contain">
           <div className="flex shrink-0 items-center border-r border-panel-line px-5 font-mono text-[10px] uppercase tracking-[0.22em] text-text-tertiary dark:border-panel-dark-line dark:text-text-inverse-tertiary md:px-10">
             Filter
           </div>
@@ -40,11 +40,13 @@ export default function AppsIndex({ apps }: { apps: AppUnitType[] }) {
                 type="button"
                 onClick={() => setFilter(row.key)}
                 aria-pressed={selected}
-                className={`focus-ring flex min-h-[44px] shrink-0 items-center gap-2.5 whitespace-nowrap border-r border-panel-line px-5 font-mono text-[10px] uppercase tracking-[0.16em] transition-colors dark:border-panel-dark-line ${
+                // A filter with nothing behind it would only blank the list.
+                disabled={empty}
+                className={`focus-ring press-fill flex min-h-[44px] shrink-0 items-center gap-2.5 whitespace-nowrap border-r border-panel-line px-5 font-mono text-[10px] uppercase tracking-[0.16em] dark:border-panel-dark-line ${
                   selected ? 'bg-panel-sub dark:bg-panel-dark-sub' : ''
                 } ${
                   empty
-                    ? 'text-stone'
+                    ? 'cursor-default text-stone'
                     : 'text-text-secondary hover:text-signal dark:text-text-inverse-secondary'
                 }`}
               >

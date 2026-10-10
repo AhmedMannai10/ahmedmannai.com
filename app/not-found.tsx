@@ -1,4 +1,4 @@
-import Link from '@/components/Link'
+import Button from '@/components/Button'
 
 export default function NotFound() {
   return (
@@ -15,12 +15,7 @@ export default function NotFound() {
         <p className="mb-8 text-stone">
           But dont worry, you can find plenty of other things on our homepage.
         </p>
-        <Link
-          href="/"
-          className="focus-ring inline rounded-lg bg-signal px-4 py-2 text-sm font-medium leading-5 text-paper shadow transition-colors duration-150 hover:bg-signal/90 dark:bg-signal-dark dark:text-graphite"
-        >
-          Back to homepage
-        </Link>
+        <Button href="/">Back to homepage</Button>
       </div>
     </div>
   )

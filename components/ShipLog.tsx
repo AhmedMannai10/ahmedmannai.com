@@ -14,7 +14,7 @@ export default function ShipLog() {
 
   return (
     <div className="border-y border-panel-line dark:border-panel-dark-line">
-      <div className="no-scrollbar flex items-stretch overflow-x-auto font-mono text-[10px] uppercase tracking-[0.18em] text-text-tertiary dark:text-text-inverse-tertiary">
+      <div className="no-scrollbar flex items-stretch overflow-x-auto overscroll-x-contain font-mono text-[10px] uppercase tracking-[0.18em] text-text-tertiary dark:text-text-inverse-tertiary">
         <div className={`${CELL} text-text-secondary dark:text-text-inverse-bright`}>Ship log</div>
 
         {entries.map((entry, i) => (

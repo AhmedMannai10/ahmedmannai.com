@@ -12,7 +12,7 @@ const ScrollTopAndComment = () => {
       else setShow(false)
     }
 
-    window.addEventListener('scroll', handleWindowScroll)
+    window.addEventListener('scroll', handleWindowScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleWindowScroll)
   }, [])
 
@@ -22,15 +22,21 @@ const ScrollTopAndComment = () => {
   const handleScrollToComment = () => {
     document.getElementById('comment')?.scrollIntoView()
   }
+  // Fades in and out instead of popping. `visibility` rides the same transition
+  // so the hidden buttons are out of the tab order once the fade has finished.
   return (
     <div
-      className={`fixed bottom-8 right-8 hidden flex-col gap-2 ${show ? 'md:flex' : 'md:hidden'}`}
+      className={`fixed bottom-8 right-8 hidden flex-col gap-2 transition-[opacity,transform,visibility] ease-out md:flex ${
+        show
+          ? 'duration-200'
+          : 'invisible translate-y-1 opacity-0 duration-150 motion-reduce:translate-y-0'
+      }`}
     >
       {siteMetadata.comments?.provider && (
         <button
           aria-label="Scroll To Comment"
           onClick={handleScrollToComment}
-          className="focus-ring border border-panel-line bg-panel-base p-2.5 text-text-tertiary transition-colors hover:border-signal hover:text-signal dark:border-panel-dark-line dark:bg-panel-dark-sub dark:text-text-inverse-tertiary"
+          className="focus-ring press-fill border border-panel-line bg-panel-base p-2.5 text-text-tertiary hover:border-signal hover:text-signal dark:border-panel-dark-line dark:bg-panel-dark-sub dark:text-text-inverse-tertiary"
         >
           <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
             <path
@@ -44,7 +50,7 @@ const ScrollTopAndComment = () => {
       <button
         aria-label="Scroll To Top"
         onClick={handleScrollTop}
-        className="focus-ring border border-panel-line bg-panel-base p-2.5 text-text-tertiary transition-colors hover:border-signal hover:text-signal dark:border-panel-dark-line dark:bg-panel-dark-sub dark:text-text-inverse-tertiary"
+        className="focus-ring press-fill border border-panel-line bg-panel-base p-2.5 text-text-tertiary hover:border-signal hover:text-signal dark:border-panel-dark-line dark:bg-panel-dark-sub dark:text-text-inverse-tertiary"
       >
         <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
           <path

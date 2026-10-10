@@ -96,7 +96,7 @@ export default function AuthorLayout({ children, content }: Props) {
                 {SKILLS.map((skill) => (
                   <span
                     key={skill}
-                    className="rounded-full border border-stone/15 bg-stone/5 px-3 py-1 font-mono text-xs font-medium text-stone transition-all hover:border-signal/40 hover:bg-signal/5 hover:text-signal dark:hover:border-signal-dark/40 dark:hover:bg-signal-dark/10 dark:hover:text-signal-dark"
+                    className="rounded-full border border-stone/15 bg-stone/5 px-3 py-1 font-mono text-xs font-medium text-stone"
                   >
                     {skill}
                   </span>
@@ -116,7 +116,7 @@ export default function AuthorLayout({ children, content }: Props) {
               <div className="mt-5 flex flex-wrap gap-3">
                 <Link
                   href="/book"
-                  className="focus-ring inline-flex items-center bg-signal px-5 py-3 font-mono text-xs font-bold uppercase tracking-[0.16em] text-panel-dark-base transition-colors hover:bg-signal-hover"
+                  className="focus-ring press-solid inline-flex items-center bg-signal px-5 py-3 font-mono text-xs font-bold uppercase tracking-[0.16em] text-panel-dark-base hover:bg-signal-hover"
                 >
                   Book a Call
                 </Link>
@@ -124,13 +124,13 @@ export default function AuthorLayout({ children, content }: Props) {
                   href={siteMetadata.x}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="focus-ring inline-flex items-center rounded-full border border-stone/20 bg-paper px-5 py-2 text-sm font-semibold text-ink transition-all duration-200 hover:scale-[1.02] hover:border-stone/40 dark:border-stone/20 dark:bg-graphite dark:text-bone dark:hover:border-stone/40"
+                  className="focus-ring press-fill inline-flex items-center rounded-full border border-stone/20 bg-paper px-5 py-2 text-sm font-semibold text-ink hover:border-stone/40 dark:border-stone/20 dark:bg-graphite dark:text-bone dark:hover:border-stone/40"
                 >
                   Follow on X
                 </Link>
                 <Link
                   href="/blog"
-                  className="focus-ring inline-flex items-center rounded-full border border-stone/20 bg-paper px-5 py-2 text-sm font-semibold text-ink transition-all duration-200 hover:scale-[1.02] hover:border-stone/40 dark:border-stone/20 dark:bg-graphite dark:text-bone dark:hover:border-stone/40"
+                  className="focus-ring press-fill inline-flex items-center rounded-full border border-stone/20 bg-paper px-5 py-2 text-sm font-semibold text-ink hover:border-stone/40 dark:border-stone/20 dark:bg-graphite dark:text-bone dark:hover:border-stone/40"
                 >
                   Read the devlogs
                 </Link>

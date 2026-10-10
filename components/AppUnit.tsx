@@ -35,7 +35,7 @@ function RowVariant({ app }: { app: AppUnitType }) {
       </span>
       <div className="min-w-0 flex-1">
         <h3 className="font-display text-[22px] font-bold tracking-[-0.02em] text-text-primary dark:text-text-inverse md:text-[26px]">
-          <Link href={`/apps/${app.slug}`} className="focus-ring hover:text-signal">
+          <Link href={`/apps/${app.slug}`} className="focus-ring press hover:text-signal">
             {app.name}
           </Link>
         </h3>
@@ -77,7 +77,7 @@ function IndexVariant({ app }: { app: AppUnitType }) {
           {app.serial}
         </span>
         <h2 className="mt-3 font-display text-[28px] font-bold tracking-[-0.02em] text-text-primary dark:text-text-inverse">
-          <Link href={`/apps/${app.slug}`} className="focus-ring hover:text-signal">
+          <Link href={`/apps/${app.slug}`} className="focus-ring press hover:text-signal">
             {app.name}
           </Link>
         </h2>
@@ -142,7 +142,7 @@ function IndexVariant({ app }: { app: AppUnitType }) {
         ))}
         <Link
           href={app.href || `/apps/${app.slug}`}
-          className="focus-ring flex items-center justify-end px-4.5 py-3.5 font-mono text-[10px] uppercase tracking-[0.14em] text-signal hover:text-signal-hover"
+          className="focus-ring press-fill flex items-center justify-end px-4.5 py-3.5 font-mono text-[10px] uppercase tracking-[0.14em] text-signal hover:text-signal-hover"
         >
           {app.href ? `${app.linkLabel} →` : 'Follow the build →'}
         </Link>

@@ -2,6 +2,26 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  /* Every link and control eases its colour the same way, so two things that
+     look alike never answer a hover differently. */
+  a,
+  button {
+    @apply transition-colors duration-150;
+  }
+
+  /* Headings break into even lines; paragraphs don't strand a last word. */
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+}
+
 .task-list-item::before {
   @apply hidden;
 }
@@ -54,9 +74,10 @@ input:-webkit-autofill:focus {
    NEWSLETTER — square, hairline, orange submit
    (pliny NewsletterForm / BlogNewsletterForm fallback styling;
    components/NewsletterForm.tsx is the designed one)
+   Scoped to pliny's own `#email-input` form: a bare `input[type='email']` /
+   `button[type='submit']` outranks utilities, and gave the designed field a
+   second hairline inside its border box.
    ============================================ */
-form input[type='email'],
-form input#email-input,
 input#email-input {
   @apply w-full border border-panel-line bg-transparent px-4 py-3 font-sans text-[15px] text-text-primary placeholder-text-tertiary focus:border-signal focus:outline-none focus:ring-0 dark:border-panel-dark-line dark:text-text-inverse dark:placeholder-text-inverse-tertiary dark:focus:border-signal;
   border-radius: 0;
@@ -66,13 +87,12 @@ form.flex input#email-input {
   @apply w-full sm:min-w-[280px] sm:flex-1;
 }
 
-form button[type='submit'],
-button[type='submit'] {
-  @apply w-full border border-signal bg-signal px-6 py-3 font-mono text-xs font-bold uppercase tracking-[0.16em] text-panel-dark-base transition-colors hover:bg-signal-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-signal;
+form:has(#email-input) button[type='submit'] {
+  @apply w-full border border-signal bg-signal px-6 py-3 font-mono text-xs font-bold uppercase tracking-[0.16em] text-panel-dark-base hover:bg-signal-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-signal active:border-signal-press active:bg-signal-press active:duration-0;
   border-radius: 0;
 }
 
-form.flex button[type='submit'] {
+form.flex:has(#email-input) button[type='submit'] {
   @apply sm:w-auto sm:flex-shrink-0;
 }
 
@@ -196,6 +216,48 @@ div[class*='text-center'][class*='text-gray-600'] {
   .animate-blink {
     animation: none;
   }
+}
+
+/* Light to dark is a full-screen brightness jump. ThemeSwitch cross-fades it
+   where the browser can; this only sets how long that takes. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 200ms;
+}
+
+/* ============================================
+   PRESS — feedback lands on pointer-down, not on release.
+   The state snaps in and eases back out. No scale: a scaled hairline goes
+   soft. These replace the browser's grey tap flash on touch.
+     .press        text links          ink goes to the held accent
+     .press-fill   cells, chips, outline buttons    the cell fills
+     .press-solid  signal buttons      the accent darkens
+   ============================================ */
+.press,
+.press-fill,
+.press-solid {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.press:active,
+.press-fill:active,
+.press-solid:active {
+  transition-duration: 0s;
+}
+
+/* !important: Tailwind emits its `hover:` and `dark:` variants after this file,
+   so at equal specificity a hover would otherwise outrank the press it is
+   under. A held control always shows as held. */
+.press:active {
+  @apply !text-signal-press;
+}
+
+.press-fill:active {
+  @apply !bg-panel-soft dark:!bg-panel-dark-sub2;
+}
+
+.press-solid:active {
+  @apply !border-signal-press !bg-signal-press;
 }
 
 /* ============================================

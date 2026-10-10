@@ -21,7 +21,7 @@ export default function Footer() {
             <Link
               key={social.label}
               href={social.href}
-              className="focus-ring inline-flex min-h-[44px] items-center transition-colors hover:text-signal sm:min-h-0"
+              className="focus-ring press inline-flex min-h-[44px] items-center hover:text-signal sm:min-h-0"
             >
               {social.label}
             </Link>

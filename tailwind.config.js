@@ -18,6 +18,11 @@ module.exports = {
     './data/**/*.mdx',
   ],
   darkMode: 'class',
+  // `hover:` only applies where there is a real pointer. On touch a hover sticks
+  // after the tap; press feedback there is the `.press-*` utilities' job.
+  future: {
+    hoverOnlyWhenSupported: true,
+  },
   theme: {
     extend: {
       lineHeight: {
@@ -41,6 +46,7 @@ module.exports = {
         signal: {
           DEFAULT: '#FF4D00',
           hover: '#FF6A29',
+          press: '#E64500', // the same accent, held down
           dark: '#FF4D00', // same accent in both themes
         },
         accent: {
@@ -285,14 +291,26 @@ module.exports = {
           },
         },
       }),
+      // ── Motion. The stock curves are too soft to read as deliberate, so
+      // `ease-out` (anything entering or leaving) and `ease-in-out` (anything
+      // moving on screen) are replaced. Nothing here uses `ease-in`.
+      transitionTimingFunction: {
+        out: 'cubic-bezier(0.23, 1, 0.32, 1)',
+        'in-out': 'cubic-bezier(0.77, 0, 0.175, 1)',
+      },
       keyframes: {
         blink: {
           '0%, 100%': { opacity: '1' },
           '50%': { opacity: '0.35' },
         },
+        // A gauge coming up from its baseline. Pair with `origin-bottom`.
+        rise: {
+          from: { transform: 'scaleY(0)' },
+        },
       },
       animation: {
         blink: 'blink 2.4s ease-in-out infinite',
+        rise: 'rise 500ms cubic-bezier(0.23, 1, 0.32, 1) backwards',
       },
     },
   },

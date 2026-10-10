@@ -55,7 +55,7 @@ export default async function Page() {
                 key={t}
                 href={`/tags/${slug(t)}`}
                 aria-label={`View posts tagged ${t}`}
-                className="focus-ring group flex min-h-[96px] flex-col justify-between border-b border-r border-panel-line px-5 py-4 transition-colors hover:bg-panel-sub dark:border-panel-dark-line dark:hover:bg-panel-dark-sub"
+                className="focus-ring press-fill group flex min-h-[96px] flex-col justify-between border-b border-r border-panel-line px-5 py-4 hover:bg-panel-sub dark:border-panel-dark-line dark:hover:bg-panel-dark-sub"
               >
                 <span
                   aria-hidden="true"
@@ -64,7 +64,7 @@ export default async function Page() {
                   {pad(i + 1)}
                 </span>
                 <span className="mt-5 flex items-baseline justify-between gap-3">
-                  <span className="min-w-0 break-words font-display text-[17px] font-bold tracking-[-0.02em] text-text-primary group-hover:text-signal dark:text-text-inverse">
+                  <span className="min-w-0 break-words font-display text-[17px] font-bold tracking-[-0.02em] text-text-primary transition-colors duration-150 group-hover:text-signal dark:text-text-inverse">
                     {t}
                   </span>
                   <span className="shrink-0 font-mono text-[11px] text-text-tertiary dark:text-text-inverse-tertiary">
@@ -85,7 +85,7 @@ export default async function Page() {
         <span aria-hidden="true" className="tick-rule-h hidden h-1 flex-1 md:block" />
         <Link
           href="/blog"
-          className="focus-ring inline-flex min-h-[44px] items-center text-signal hover:text-signal-hover"
+          className="focus-ring press inline-flex min-h-[44px] items-center text-signal hover:text-signal-hover"
         >
           The whole archive →
         </Link>

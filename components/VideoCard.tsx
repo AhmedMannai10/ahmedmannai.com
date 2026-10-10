@@ -8,7 +8,7 @@ import type { Video } from '@/data/videosData'
 
 export default function VideoCard({ title, youtubeId, description, publishedAt }: Video) {
   return (
-    <article className="overflow-hidden rounded-xl border border-stone/15 bg-paper transition-all hover:-translate-y-0.5 hover:shadow-lg dark:border-stone/20 dark:bg-graphite">
+    <article className="overflow-hidden rounded-xl border border-stone/15 bg-paper transition-colors duration-150 hover:border-stone/40 dark:border-stone/20 dark:bg-graphite dark:hover:border-stone/40">
       <a
         href={`https://www.youtube.com/watch?v=${youtubeId}`}
         target="_blank"
@@ -21,7 +21,7 @@ export default function VideoCard({ title, youtubeId, description, publishedAt }
           })
         }}
         aria-label={`Watch on YouTube: ${title}`}
-        className="focus-ring group block"
+        className="focus-ring press group block"
       >
         <div className="relative aspect-video w-full bg-graphite">
           <Image
@@ -31,8 +31,8 @@ export default function VideoCard({ title, youtubeId, description, publishedAt }
             sizes="(max-width: 640px) 100vw, 50vw"
             className="object-cover"
           />
-          <span className="absolute inset-0 flex items-center justify-center bg-black/20 transition-colors group-hover:bg-black/30">
-            <span className="flex h-14 w-14 items-center justify-center rounded-full bg-signal transition-colors group-hover:bg-signal-hover">
+          <span className="absolute inset-0 flex items-center justify-center bg-black/20 transition-colors duration-150 group-hover:bg-black/30 group-active:bg-black/40 group-active:duration-0">
+            <span className="flex h-14 w-14 items-center justify-center rounded-full bg-signal transition-colors duration-150 group-hover:bg-signal-hover group-active:bg-signal-press group-active:duration-0">
               <svg viewBox="0 0 24 24" className="ml-1 h-6 w-6 fill-paper dark:fill-graphite">
                 <path d="M8 5v14l11-7z" />
               </svg>

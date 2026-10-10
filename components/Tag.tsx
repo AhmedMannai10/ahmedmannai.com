@@ -13,7 +13,7 @@ const Tag = ({ text }: Props) => {
   return (
     <Link
       href={`/tags/${slug(text)}`}
-      className="focus-ring inline-flex min-h-[44px] items-center border border-panel-line px-3 font-mono text-[10px] uppercase tracking-[0.14em] text-text-tertiary transition-colors hover:border-signal hover:text-signal dark:border-panel-dark-line dark:text-text-inverse-tertiary md:min-h-[30px]"
+      className="focus-ring press-fill inline-flex min-h-[44px] items-center border border-panel-line px-3 font-mono text-[10px] uppercase tracking-[0.14em] text-text-tertiary hover:border-signal hover:text-signal dark:border-panel-dark-line dark:text-text-inverse-tertiary md:min-h-[30px]"
     >
       {text.split(' ').join('-')}
     </Link>

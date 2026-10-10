@@ -64,7 +64,7 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
       {/* ─── Breadcrumb ───────────────────────────────────────── */}
       <div className="flex items-center justify-between gap-4 border-b border-panel-line px-5 py-2.5 font-mono text-[10px] uppercase tracking-[0.16em] text-text-tertiary dark:border-panel-dark-line dark:text-text-inverse-tertiary md:px-10">
         <span className="flex min-w-0 items-center gap-2">
-          <Link href="/blog" className="focus-ring shrink-0 hover:text-signal">
+          <Link href="/blog" className="focus-ring press shrink-0 hover:text-signal">
             Writing
           </Link>
           <span aria-hidden="true">/</span>
@@ -147,7 +147,7 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
                   <a
                     key={heading.url}
                     href={heading.url}
-                    className="focus-ring flex min-h-[44px] items-start gap-3 border-b border-panel-line px-4.5 py-2.5 font-mono text-[11px] leading-[1.5] tracking-[0.04em] text-text-secondary transition-colors last:border-b-0 hover:text-signal dark:border-panel-dark-line dark:text-text-inverse-secondary"
+                    className="focus-ring press-fill flex min-h-[44px] items-start gap-3 border-b border-panel-line px-4.5 py-2.5 font-mono text-[11px] leading-[1.5] tracking-[0.04em] text-text-secondary last:border-b-0 hover:text-signal dark:border-panel-dark-line dark:text-text-inverse-secondary"
                   >
                     <span
                       aria-hidden="true"
@@ -167,13 +167,13 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
               <Link
                 href={discussUrl(path)}
                 rel="nofollow"
-                className="focus-ring inline-flex min-h-[44px] items-center hover:text-signal"
+                className="focus-ring press inline-flex min-h-[44px] items-center hover:text-signal"
               >
                 Discuss on X →
               </Link>
               <Link
                 href={editUrl(filePath)}
-                className="focus-ring inline-flex min-h-[44px] items-center hover:text-signal"
+                className="focus-ring press inline-flex min-h-[44px] items-center hover:text-signal"
               >
                 View source on GitHub →
               </Link>
@@ -212,14 +212,14 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
                 {author.twitter && (
                   <Link
                     href={author.twitter}
-                    className="focus-ring inline-flex min-h-[44px] items-center text-signal hover:text-signal-hover"
+                    className="focus-ring press inline-flex min-h-[44px] items-center text-signal hover:text-signal-hover"
                   >
                     Follow on X →
                   </Link>
                 )}
                 <Link
                   href="/blog"
-                  className="focus-ring inline-flex min-h-[44px] items-center text-text-secondary hover:text-signal dark:text-text-inverse-secondary"
+                  className="focus-ring press inline-flex min-h-[44px] items-center text-text-secondary hover:text-signal dark:text-text-inverse-secondary"
                 >
                   All {pad(totalEntries)} entries →
                 </Link>
@@ -247,7 +247,7 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
         {prev && prev.path ? (
           <Link
             href={`/${prev.path}`}
-            className="focus-ring inline-flex min-h-[44px] items-center text-text-secondary hover:text-signal dark:text-text-inverse-secondary"
+            className="focus-ring press inline-flex min-h-[44px] items-center text-text-secondary hover:text-signal dark:text-text-inverse-secondary"
           >
             ← Entry {entryNumber(prev.slug)} · {prev.title}
           </Link>
@@ -260,7 +260,7 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
         {next && next.path ? (
           <Link
             href={`/${next.path}`}
-            className="focus-ring inline-flex min-h-[44px] items-center text-right text-text-secondary hover:text-signal dark:text-text-inverse-secondary"
+            className="focus-ring press inline-flex min-h-[44px] items-center text-right text-text-secondary hover:text-signal dark:text-text-inverse-secondary"
           >
             Entry {entryNumber(next.slug)} · {next.title} →
           </Link>

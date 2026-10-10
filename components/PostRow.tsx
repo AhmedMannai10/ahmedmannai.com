@@ -39,7 +39,7 @@ export default function PostRow({ post }: { post: CoreContent<Blog> }) {
         </div>
 
         <h2 className="mt-2.5 font-display text-[22px] font-bold leading-[1.15] tracking-[-0.02em] text-text-primary dark:text-text-inverse md:mt-0 md:text-[26px]">
-          <Link href={`/${path}`} className="focus-ring hover:text-signal">
+          <Link href={`/${path}`} className="focus-ring press hover:text-signal">
             {title}
           </Link>
         </h2>
@@ -69,7 +69,7 @@ export default function PostRow({ post }: { post: CoreContent<Blog> }) {
         <Link
           href={`/${path}`}
           aria-label={`Read ${title}`}
-          className="focus-ring flex items-center justify-end px-4.5 py-3.5 font-mono text-[10px] uppercase tracking-[0.14em] text-signal hover:text-signal-hover"
+          className="focus-ring press-fill flex items-center justify-end px-4.5 py-3.5 font-mono text-[10px] uppercase tracking-[0.14em] text-signal hover:text-signal-hover"
         >
           Read entry →
         </Link>
